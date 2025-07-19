@@ -208,6 +208,18 @@ robertharris181109@gmail.com"
     let filledCount = 0;
 
     inputs.forEach((input) => {
+      const type = input.type ? input.type.toLowerCase() : '';
+      
+      // Handle checkboxes - automatically tick them
+      if (type === 'checkbox') {
+        if (!input.checked) {
+          input.checked = true;
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          filledCount++;
+        }
+        return;
+      }
+      
       // Skip if already filled
       if (input.value && input.value.trim() !== '') return;
 
@@ -317,20 +329,30 @@ robertharris181109@gmail.com"
     document.body.appendChild(btn);
   }
 
-  // Add the "Fill Form" button
+  // Add the "Fill Form" button with delete button
   function addFillFormButton() {
     // Remove any existing buttons first
     const existingBtn = document.querySelector('#autoFormFillerBtn');
     if (existingBtn) existingBtn.remove();
+    const existingDeleteBtn = document.querySelector('#deleteDataBtn');
+    if (existingDeleteBtn) existingDeleteBtn.remove();
 
-    const btn = document.createElement("button");
-    btn.id = "autoFormFillerBtn";
-    btn.textContent = "Fill Form";
-    btn.style.cssText = `
+    // Create container for buttons
+    const buttonContainer = document.createElement("div");
+    buttonContainer.style.cssText = `
       position: fixed;
       top: 10px;
       right: 10px;
       z-index: 10000;
+      display: flex;
+      gap: 5px;
+    `;
+
+    // Fill Form button
+    const fillBtn = document.createElement("button");
+    fillBtn.id = "autoFormFillerBtn";
+    fillBtn.textContent = "Fill Form";
+    fillBtn.style.cssText = `
       padding: 10px 15px;
       background: #4CAF50;
       color: white;
@@ -340,8 +362,48 @@ robertharris181109@gmail.com"
       font-size: 14px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     `;
-    btn.onclick = fillForm;
-    document.body.appendChild(btn);
+    fillBtn.onclick = fillForm;
+
+    // Delete Data button
+    const deleteBtn = document.createElement("button");
+    deleteBtn.id = "deleteDataBtn";
+    deleteBtn.textContent = "🗑️";
+    deleteBtn.title = "Delete saved data";
+    deleteBtn.style.cssText = `
+      padding: 10px 12px;
+      background: #f44336;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    `;
+    deleteBtn.onclick = deleteStoredData;
+
+    buttonContainer.appendChild(fillBtn);
+    buttonContainer.appendChild(deleteBtn);
+    document.body.appendChild(buttonContainer);
+  }
+
+  // Delete stored data function
+  function deleteStoredData() {
+    if (confirm('Are you sure you want to delete all saved data? This action cannot be undone.')) {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        alert('Data deleted successfully!');
+        
+        // Remove current buttons and show setup button
+        const existingBtn = document.querySelector('#autoFormFillerBtn');
+        if (existingBtn && existingBtn.parentElement) {
+          existingBtn.parentElement.remove();
+        }
+        
+        addSetupButton();
+      } catch (e) {
+        alert('Error deleting data: ' + e.message);
+      }
+    }
   }
 
   // Initialize the script
