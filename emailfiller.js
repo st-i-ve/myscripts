@@ -186,7 +186,33 @@ robertharris181109@gmail.com"
   // Simulate human typing for better form recognition
   function simulateTyping(input, text) {
     return new Promise((resolve) => {
-      // Clear the field first
+      const inputType = input.type ? input.type.toLowerCase() : '';
+      
+      // Handle date inputs specially
+      if (inputType === 'date') {
+        input.focus();
+        input.dispatchEvent(new Event('focus', { bubbles: true }));
+        
+        // For date inputs, convert DD/MM/YYYY to YYYY-MM-DD
+        let dateValue = text;
+        if (text && text.includes('/')) {
+          const parts = text.split('/');
+          if (parts.length === 3) {
+            // Convert DD/MM/YYYY to YYYY-MM-DD
+            dateValue = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+          }
+        }
+        
+        input.value = dateValue;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        input.dispatchEvent(new Event('blur', { bubbles: true }));
+        
+        setTimeout(resolve, 10);
+        return;
+      }
+      
+      // For regular text inputs - ultra-fast typing
       input.value = '';
       input.focus();
       
@@ -203,7 +229,7 @@ robertharris181109@gmail.com"
           input.dispatchEvent(new Event('keyup', { bubbles: true }));
           
           index++;
-          setTimeout(typeChar, 50); // 50ms delay between characters
+          setTimeout(typeChar, 2); // 2ms delay between characters - ultra fast!
         } else {
           // Final events after typing is complete
           input.dispatchEvent(new Event('change', { bubbles: true }));
@@ -212,7 +238,7 @@ robertharris181109@gmail.com"
         }
       };
       
-      setTimeout(typeChar, 100); // Initial delay
+      setTimeout(typeChar, 10); // Reduced initial delay
     });
   }
 
@@ -229,7 +255,7 @@ robertharris181109@gmail.com"
       lastName: ["last name", "lname", "last", "last_name", "family-name", "surname"],
       state: ["state", "province", "region"],
       city: ["city", "town", "locality"],
-      dob: ["dob", "birth", "date of birth", "date_of_birth", "birthday"],
+      dob: ["dob", "birth", "date of birth", "date_of_birth", "birthday", "dateofbirth", "bdate", "born"],
       school: ["school", "institution", "university", "college"],
       zip: ["zip", "postal", "postcode", "postal_code"],
       phone: ["phone", "tel", "telephone", "mobile", "sms_number"],
@@ -294,6 +320,14 @@ robertharris181109@gmail.com"
       if (!label && input.parentElement) {
         const parentLabel = input.parentElement.querySelector('label');
         if (parentLabel) label = parentLabel.innerText.toLowerCase();
+      }
+
+      // Special handling for date input types
+      if (type === 'date' && profile.dob) {
+        progressMsg.textContent = `🤖 Setting date...`;
+        await simulateTyping(input, profile.dob);
+        filledCount++;
+        continue;
       }
 
       for (let key in map) {
