@@ -183,8 +183,41 @@ robertharris181109@gmail.com"
     }
   }
 
-  // Enhanced form filling function
-  function fillForm() {
+  // Simulate human typing for better form recognition
+  function simulateTyping(input, text) {
+    return new Promise((resolve) => {
+      // Clear the field first
+      input.value = '';
+      input.focus();
+      
+      // Trigger focus event
+      input.dispatchEvent(new Event('focus', { bubbles: true }));
+      
+      let index = 0;
+      const typeChar = () => {
+        if (index < text.length) {
+          input.value += text[index];
+          
+          // Trigger input events for each character
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('keyup', { bubbles: true }));
+          
+          index++;
+          setTimeout(typeChar, 50); // 50ms delay between characters
+        } else {
+          // Final events after typing is complete
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+          input.dispatchEvent(new Event('blur', { bubbles: true }));
+          resolve();
+        }
+      };
+      
+      setTimeout(typeChar, 100); // Initial delay
+    });
+  }
+
+  // Enhanced form filling function with human-like typing
+  async function fillForm() {
     const profile = getStoredProfile();
     if (!profile) {
       alert('No profile data found. Please set up your data first.');
@@ -206,8 +239,26 @@ robertharris181109@gmail.com"
 
     const inputs = document.querySelectorAll("input, textarea, select");
     let filledCount = 0;
+    let checkboxCount = 0;
 
-    inputs.forEach((input) => {
+    // Show progress message
+    const progressMsg = document.createElement("div");
+    progressMsg.textContent = "🤖 Filling form...";
+    progressMsg.style.cssText = `
+      position: fixed;
+      top: 60px;
+      right: 10px;
+      background: #2196F3;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      z-index: 10000;
+      font-size: 14px;
+    `;
+    document.body.appendChild(progressMsg);
+
+    // Process inputs sequentially for better simulation
+    for (const input of inputs) {
       const type = input.type ? input.type.toLowerCase() : '';
       
       // Handle checkboxes - automatically tick them
@@ -215,13 +266,17 @@ robertharris181109@gmail.com"
         if (!input.checked) {
           input.checked = true;
           input.dispatchEvent(new Event("change", { bubbles: true }));
-          filledCount++;
+          input.dispatchEvent(new Event("click", { bubbles: true }));
+          checkboxCount++;
         }
-        return;
+        continue;
       }
       
-      // Skip if already filled
-      if (input.value && input.value.trim() !== '') return;
+      // Skip if already filled or not a fillable input
+      if ((input.value && input.value.trim() !== '') || 
+          type === 'submit' || type === 'button' || type === 'hidden' || type === 'radio') {
+        continue;
+      }
 
       const name = input.name?.toLowerCase() || "";
       const id = input.id?.toLowerCase() || "";
@@ -260,30 +315,27 @@ robertharris181109@gmail.com"
           }
           
           if (value) {
-            input.value = value;
-            
-            // Trigger multiple events to ensure the form recognizes the input
-            input.dispatchEvent(new Event("input", { bubbles: true }));
-            input.dispatchEvent(new Event("change", { bubbles: true }));
-            input.dispatchEvent(new Event("blur", { bubbles: true }));
-            
-            // For React forms, also trigger focus and keyup
-            input.dispatchEvent(new Event("focus", { bubbles: true }));
-            input.dispatchEvent(new Event("keyup", { bubbles: true }));
-            
+            progressMsg.textContent = `🤖 Typing ${key}...`;
+            await simulateTyping(input, value);
             filledCount++;
           }
           break;
         }
       }
-    });
+    }
 
-    if (filledCount > 0) {
-      console.log(`Auto Form Filler: Filled ${filledCount} fields`);
+    // Remove progress message
+    if (document.body.contains(progressMsg)) {
+      document.body.removeChild(progressMsg);
+    }
+
+    // Show final success message
+    const totalFilled = filledCount + checkboxCount;
+    if (totalFilled > 0) {
+      console.log(`Auto Form Filler: Filled ${filledCount} fields and checked ${checkboxCount} checkboxes`);
       
-      // Show success message
       const successMsg = document.createElement("div");
-      successMsg.textContent = `✓ Filled ${filledCount} fields`;
+      successMsg.textContent = `✓ Filled ${filledCount} fields, checked ${checkboxCount} boxes`;
       successMsg.style.cssText = `
         position: fixed;
         top: 60px;
@@ -301,7 +353,7 @@ robertharris181109@gmail.com"
         if (document.body.contains(successMsg)) {
           document.body.removeChild(successMsg);
         }
-      }, 3000);
+      }, 4000);
     } else {
       alert('No matching form fields found on this page.');
     }
@@ -386,22 +438,113 @@ robertharris181109@gmail.com"
     document.body.appendChild(buttonContainer);
   }
 
-  // Delete stored data function
-  function deleteStoredData() {
-    if (confirm('Are you sure you want to delete all saved data? This action cannot be undone.')) {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-        alert('Data deleted successfully!');
-        
-        // Remove current buttons and show setup button
-        const existingBtn = document.querySelector('#autoFormFillerBtn');
-        if (existingBtn && existingBtn.parentElement) {
-          existingBtn.parentElement.remove();
+  // Clear all form fields on the page
+  function clearFormFields() {
+    const inputs = document.querySelectorAll("input, textarea, select");
+    let clearedCount = 0;
+
+    inputs.forEach((input) => {
+      const type = input.type ? input.type.toLowerCase() : '';
+      
+      // Handle checkboxes and radio buttons
+      if (type === 'checkbox' || type === 'radio') {
+        if (input.checked) {
+          input.checked = false;
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          clearedCount++;
         }
+        return;
+      }
+      
+      // Skip non-fillable inputs
+      if (type === 'submit' || type === 'button' || type === 'hidden') {
+        return;
+      }
+
+      // Clear text inputs, textareas, and selects
+      if (input.value && input.value.trim() !== '') {
+        input.value = '';
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+        clearedCount++;
+      }
+    });
+
+    return clearedCount;
+  }
+
+  // Check if there are any filled form fields
+  function hasFilledFields() {
+    const inputs = document.querySelectorAll("input, textarea, select");
+    
+    for (const input of inputs) {
+      const type = input.type ? input.type.toLowerCase() : '';
+      
+      // Check checkboxes and radio buttons
+      if ((type === 'checkbox' || type === 'radio') && input.checked) {
+        return true;
+      }
+      
+      // Skip non-fillable inputs
+      if (type === 'submit' || type === 'button' || type === 'hidden') {
+        continue;
+      }
+
+      // Check text inputs, textareas, and selects
+      if (input.value && input.value.trim() !== '') {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  // Enhanced delete function with dual functionality
+  function deleteStoredData() {
+    // First check if there are filled fields on the page
+    if (hasFilledFields()) {
+      if (confirm('Clear all form fields on this page?')) {
+        const clearedCount = clearFormFields();
         
-        addSetupButton();
-      } catch (e) {
-        alert('Error deleting data: ' + e.message);
+        // Show success message
+        const successMsg = document.createElement("div");
+        successMsg.textContent = `🧹 Cleared ${clearedCount} fields`;
+        successMsg.style.cssText = `
+          position: fixed;
+          top: 60px;
+          right: 10px;
+          background: #FF9800;
+          color: white;
+          padding: 10px 15px;
+          border-radius: 5px;
+          z-index: 10000;
+          font-size: 14px;
+        `;
+        document.body.appendChild(successMsg);
+        
+        setTimeout(() => {
+          if (document.body.contains(successMsg)) {
+            document.body.removeChild(successMsg);
+          }
+        }, 3000);
+      }
+    } else {
+      // No filled fields, proceed to delete stored data
+      if (confirm('Are you sure you want to delete all saved profile data? This action cannot be undone.')) {
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          alert('Profile data deleted successfully!');
+          
+          // Remove current buttons and show setup button
+          const existingBtn = document.querySelector('#autoFormFillerBtn');
+          if (existingBtn && existingBtn.parentElement) {
+            existingBtn.parentElement.remove();
+          }
+          
+          addSetupButton();
+        } catch (e) {
+          alert('Error deleting data: ' + e.message);
+        }
       }
     }
   }
