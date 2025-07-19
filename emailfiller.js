@@ -242,6 +242,49 @@ robertharris181109@gmail.com"
     });
   }
 
+  // Specific function to handle ASA registration checkboxes
+  async function handleASACheckboxes() {
+    const asaCheckboxes = [
+      'accept_terms_and_conditions',
+      'accept_marketing'
+    ];
+    
+    let checkedCount = 0;
+    
+    for (const checkboxId of asaCheckboxes) {
+      const checkbox = document.getElementById(checkboxId);
+      if (checkbox && !checkbox.checked) {
+        // Multiple approaches to ensure the checkbox gets checked
+        checkbox.focus();
+        
+        // Method 1: Direct property setting with events
+        checkbox.checked = true;
+        checkbox.dispatchEvent(new Event("focus", { bubbles: true }));
+        checkbox.dispatchEvent(new Event("click", { bubbles: true }));
+        checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+        checkbox.dispatchEvent(new Event("input", { bubbles: true }));
+        
+        // Method 2: Simulate actual click on the element
+        const clickEvent = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true
+        });
+        checkbox.dispatchEvent(clickEvent);
+        
+        // Method 3: Try clicking the parent container (for custom styled checkboxes)
+        if (checkbox.parentElement) {
+          checkbox.parentElement.click();
+        }
+        
+        checkedCount++;
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+    
+    return checkedCount;
+  }
+
   // Enhanced form filling function with human-like typing
   async function fillForm() {
     const profile = getStoredProfile();
@@ -287,13 +330,30 @@ robertharris181109@gmail.com"
     for (const input of inputs) {
       const type = input.type ? input.type.toLowerCase() : '';
       
-      // Handle checkboxes - automatically tick them
+      // Handle checkboxes - automatically tick them with enhanced targeting
       if (type === 'checkbox') {
         if (!input.checked) {
+          // Focus the checkbox first
+          input.focus();
+          
+          // Set checked property
           input.checked = true;
-          input.dispatchEvent(new Event("change", { bubbles: true }));
+          
+          // Dispatch multiple events to ensure recognition
+          input.dispatchEvent(new Event("focus", { bubbles: true }));
           input.dispatchEvent(new Event("click", { bubbles: true }));
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+          
+          // Also try triggering on parent element if it exists
+          if (input.parentElement) {
+            input.parentElement.dispatchEvent(new Event("click", { bubbles: true }));
+          }
+          
           checkboxCount++;
+          
+          // Small delay to ensure the checkbox state is processed
+          await new Promise(resolve => setTimeout(resolve, 50));
         }
         continue;
       }
@@ -357,6 +417,11 @@ robertharris181109@gmail.com"
         }
       }
     }
+
+    // Special handling for ASA registration checkboxes
+    progressMsg.textContent = "🤖 Checking ASA checkboxes...";
+    const asaCheckedCount = await handleASACheckboxes();
+    checkboxCount += asaCheckedCount;
 
     // Remove progress message
     if (document.body.contains(progressMsg)) {
