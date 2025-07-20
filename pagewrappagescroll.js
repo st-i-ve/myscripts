@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Auto Scroll Toggle with Fallback
+// @name         Auto Scroll Toggle for iframe #page-wrap (Initially Disabled)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Auto-scroll #page-wrap div or whole page with enable/disable button
+// @version      1.2
+// @description  Toggleable auto-scroll for #page-wrap inside iframe only
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
@@ -10,11 +10,11 @@
 (function () {
   "use strict";
 
-  let enabled = true;
+  let enabled = false;
 
   // Create toggle button
   const btn = document.createElement("button");
-  btn.textContent = "⏸️ Disable Auto-Scroll";
+  btn.textContent = "▶️ Enable Auto-Scroll";
   Object.assign(btn.style, {
     position: "fixed",
     bottom: "20px",
@@ -38,19 +38,23 @@
       : "▶️ Enable Auto-Scroll";
   });
 
+  // Interval to scroll only the iframe's #page-wrap
   setInterval(() => {
     if (!enabled) return;
 
-    const el = document.querySelector("div.page-wrap#page-wrap");
-
-    if (el) {
-      el.scrollTop = el.scrollHeight;
-    } else {
-      // Fallback: scroll the entire page
-      window.scrollTo(
-        0,
-        document.body.scrollHeight || document.documentElement.scrollHeight
-      );
+    const iframes = document.querySelectorAll("iframe");
+    for (const iframe of iframes) {
+      try {
+        const el = iframe.contentDocument?.querySelector(
+          "div.page-wrap#page-wrap"
+        );
+        if (el) {
+          el.scrollTop = el.scrollHeight;
+        }
+      } catch (err) {
+        // Skip cross-origin iframes or ones that aren't ready yet
+        continue;
+      }
     }
-  }, 50);
+  }, 100); // Slightly slower to reduce load
 })();

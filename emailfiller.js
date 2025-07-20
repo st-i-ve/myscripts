@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         Auto Form Filler - Universal
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      3.0
 // @description  Fill form fields with saved profile data, including ASA registration and other sites
 // @author       You
 // @match        *://*/*
-// @grant        none
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_deleteValue
 // ==/UserScript==
 
 (function () {
@@ -13,6 +15,67 @@
 
   // Storage key for user profile
   const STORAGE_KEY = "autoFormFillerProfile";
+
+  // US States list for dropdown
+  const US_STATES = [
+    { value: "", text: "Select State..." },
+    { value: "Alabama", text: "Alabama" },
+    { value: "Alaska", text: "Alaska" },
+    { value: "Arizona", text: "Arizona" },
+    { value: "Arkansas", text: "Arkansas" },
+    { value: "California", text: "California" },
+    { value: "Colorado", text: "Colorado" },
+    { value: "Connecticut", text: "Connecticut" },
+    { value: "Delaware", text: "Delaware" },
+    { value: "Florida", text: "Florida" },
+    { value: "Georgia", text: "Georgia" },
+    { value: "Hawaii", text: "Hawaii" },
+    { value: "Idaho", text: "Idaho" },
+    { value: "Illinois", text: "Illinois" },
+    { value: "Indiana", text: "Indiana" },
+    { value: "Iowa", text: "Iowa" },
+    { value: "Kansas", text: "Kansas" },
+    { value: "Kentucky", text: "Kentucky" },
+    { value: "Louisiana", text: "Louisiana" },
+    { value: "Maine", text: "Maine" },
+    { value: "Maryland", text: "Maryland" },
+    { value: "Massachusetts", text: "Massachusetts" },
+    { value: "Michigan", text: "Michigan" },
+    { value: "Minnesota", text: "Minnesota" },
+    { value: "Mississippi", text: "Mississippi" },
+    { value: "Missouri", text: "Missouri" },
+    { value: "Montana", text: "Montana" },
+    { value: "Nebraska", text: "Nebraska" },
+    { value: "Nevada", text: "Nevada" },
+    { value: "New Hampshire", text: "New Hampshire" },
+    { value: "New Jersey", text: "New Jersey" },
+    { value: "New Mexico", text: "New Mexico" },
+    { value: "New York", text: "New York" },
+    { value: "North Carolina", text: "North Carolina" },
+    { value: "North Dakota", text: "North Dakota" },
+    { value: "Ohio", text: "Ohio" },
+    { value: "Oklahoma", text: "Oklahoma" },
+    { value: "Oregon", text: "Oregon" },
+    { value: "Pennsylvania", text: "Pennsylvania" },
+    { value: "Rhode Island", text: "Rhode Island" },
+    { value: "South Carolina", text: "South Carolina" },
+    { value: "South Dakota", text: "South Dakota" },
+    { value: "Tennessee", text: "Tennessee" },
+    { value: "Texas", text: "Texas" },
+    { value: "Utah", text: "Utah" },
+    { value: "Vermont", text: "Vermont" },
+    { value: "Virginia", text: "Virginia" },
+    { value: "Washington", text: "Washington" },
+    { value: "West Virginia", text: "West Virginia" },
+    { value: "Wisconsin", text: "Wisconsin" },
+    { value: "Wyoming", text: "Wyoming" },
+    { value: "District of Columbia", text: "District of Columbia" },
+    { value: "Puerto Rico", text: "Puerto Rico" },
+    { value: "US Virgin Islands", text: "US Virgin Islands" },
+    { value: "American Samoa", text: "American Samoa" },
+    { value: "Guam", text: "Guam" },
+    { value: "Northern Mariana Islands", text: "Northern Mariana Islands" }
+  ];
 
   // Default profile structure
   const defaultProfile = {
@@ -28,10 +91,10 @@
     password: "DefaultPass123!",
   };
 
-  // Get stored profile or return null if not exists
+  // Get stored profile using Tampermonkey storage (cross-domain persistent)
   function getStoredProfile() {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
+      const stored = GM_getValue(STORAGE_KEY, null);
       return stored ? JSON.parse(stored) : null;
     } catch (e) {
       console.error("Error reading stored profile:", e);
@@ -39,10 +102,10 @@
     }
   }
 
-  // Save profile to localStorage
+  // Save profile using Tampermonkey storage (cross-domain persistent)
   function saveProfile(profile) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+      GM_setValue(STORAGE_KEY, JSON.stringify(profile));
       return true;
     } catch (e) {
       console.error("Error saving profile:", e);
@@ -50,15 +113,20 @@
     }
   }
 
-  // Convert date from DD/MM/YYYY to YYYY-MM-DD
-  function convertDateFormat(dateStr) {
-    if (!dateStr) return "";
-    const parts = dateStr.split("/");
-    if (parts.length === 3) {
-      const [day, month, year] = parts;
-      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  // Delete stored profile using Tampermonkey storage
+  function deleteStoredProfile() {
+    try {
+      GM_deleteValue(STORAGE_KEY);
+      return true;
+    } catch (e) {
+      console.error("Error deleting stored profile:", e);
+      return false;
     }
-    return dateStr;
+  }
+
+  // Legacy function for date conversion (keeping for compatibility)
+  function convertDateFormat(dateStr) {
+    return convertDateToStorage(dateStr);
   }
 
   // Create data capture form
@@ -83,17 +151,86 @@
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      max-width: 500px;
+      max-width: 600px;
       width: 90%;
-      max-height: 80vh;
+      max-height: 85vh;
       overflow-y: auto;
     `;
 
+    // Generate state options
+    const stateOptions = US_STATES.map(state => 
+      `<option value="${state.value}">${state.text}</option>`
+    ).join('');
+
+    // Get existing profile data if available
+    const existingProfile = getStoredProfile() || defaultProfile;
+
     form.innerHTML = `
       <h2 style="margin-top: 0; color: #333; text-align: center;">Enter Your Information</h2>
-      <p style="color: #666; text-align: center; margin-bottom: 20px;">This data will be saved and used to fill forms automatically</p>
+      <p style="color: #666; text-align: center; margin-bottom: 20px;">This data will be saved across ALL websites and persist until you delete it</p>
       
-      <textarea id="userDataInput" placeholder="Paste your information here in this format:
+      <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        <!-- Individual Fields Column -->
+        <div style="flex: 1;">
+          <h3 style="color: #333; margin-bottom: 15px;">📝 Individual Fields</h3>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">First Name:</label>
+            <input type="text" id="firstNameInput" value="${existingProfile.firstName}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Last Name:</label>
+            <input type="text" id="lastNameInput" value="${existingProfile.lastName}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">State:</label>
+            <select id="stateSelect" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+              ${stateOptions}
+            </select>
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">City:</label>
+            <input type="text" id="cityInput" value="${existingProfile.city}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Date of Birth (DD/MM/YYYY):</label>
+            <input type="text" id="dobInput" value="${existingProfile.dob ? convertDateToDisplay(existingProfile.dob) : ''}" placeholder="18/11/2009" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">School:</label>
+            <input type="text" id="schoolInput" value="${existingProfile.school}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">ZIP Code:</label>
+            <input type="text" id="zipInput" value="${existingProfile.zip}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Phone:</label>
+            <input type="text" id="phoneInput" value="${existingProfile.phone}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Email:</label>
+            <input type="email" id="emailInput" value="${existingProfile.email}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+          
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Password:</label>
+            <input type="text" id="passwordInput" value="${existingProfile.password}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+          </div>
+        </div>
+        
+        <!-- Bulk Paste Column -->
+        <div style="flex: 1;">
+          <h3 style="color: #333; margin-bottom: 15px;">📋 Or Paste Bulk Data</h3>
+          <textarea id="userDataInput" placeholder="Paste your information here in this format:
 
 Name: Robert Harris
 State: Massachusetts
@@ -103,22 +240,35 @@ School: Boston Latin Academy
 ZIP: 02124
 PHONE: 4085554449
 password: Wright10*
-robertharris181109@gmail.com" 
-        style="width: 100%; height: 200px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: monospace; resize: vertical; box-sizing: border-box;"></textarea>
+robertharris181109@gmail.com
+
+Note: Individual fields above will override this data" 
+            style="width: 100%; height: 400px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: monospace; resize: vertical; box-sizing: border-box;"></textarea>
+        </div>
+      </div>
       
       <div style="margin-top: 20px; text-align: center;">
-        <button id="saveDataBtn" style="background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; margin-right: 10px; font-size: 16px;">Save Data</button>
-        <button id="cancelBtn" style="background: #f44336; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px;">Cancel</button>
+        <button id="saveDataBtn" style="background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; margin-right: 10px; font-size: 16px;">💾 Save Data</button>
+        <button id="cancelBtn" style="background: #f44336; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px;">❌ Cancel</button>
+      </div>
+      
+      <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px; font-size: 12px; color: #1976d2;">
+        <strong>💡 Storage Info:</strong> Your data is stored using Tampermonkey's cross-domain storage. It will persist across ALL websites and browser sessions until you explicitly delete it.
       </div>
     `;
 
     overlay.appendChild(form);
     document.body.appendChild(overlay);
 
+    // Set the current state value in dropdown
+    const stateSelect = document.getElementById("stateSelect");
+    if (existingProfile.state) {
+      stateSelect.value = existingProfile.state;
+    }
+
     // Handle save button
     document.getElementById("saveDataBtn").onclick = function() {
-      const inputData = document.getElementById("userDataInput").value.trim();
-      if (parseAndSaveData(inputData)) {
+      if (saveFormData()) {
         document.body.removeChild(overlay);
         addFillFormButton();
       }
@@ -137,8 +287,84 @@ robertharris181109@gmail.com"
     };
   }
 
-  // Parse the input data and save to profile
-  function parseAndSaveData(inputData) {
+  // Convert date from DD/MM/YYYY to YYYY-MM-DD for storage
+  function convertDateToStorage(dateStr) {
+    if (!dateStr) return "";
+    const parts = dateStr.split("/");
+    if (parts.length === 3) {
+      const [day, month, year] = parts;
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    }
+    return dateStr;
+  }
+
+  // Convert date from YYYY-MM-DD to DD/MM/YYYY for display
+  function convertDateToDisplay(dateStr) {
+    if (!dateStr) return "";
+    const parts = dateStr.split("-");
+    if (parts.length === 3) {
+      const [year, month, day] = parts;
+      return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
+    }
+    return dateStr;
+  }
+
+  // Save form data with priority to individual fields
+  function saveFormData() {
+    // Get individual field values
+    const firstName = document.getElementById("firstNameInput").value.trim();
+    const lastName = document.getElementById("lastNameInput").value.trim();
+    const state = document.getElementById("stateSelect").value;
+    const city = document.getElementById("cityInput").value.trim();
+    const dob = document.getElementById("dobInput").value.trim();
+    const school = document.getElementById("schoolInput").value.trim();
+    const zip = document.getElementById("zipInput").value.trim();
+    const phone = document.getElementById("phoneInput").value.trim();
+    const email = document.getElementById("emailInput").value.trim();
+    const password = document.getElementById("passwordInput").value.trim();
+    
+    // Get bulk data
+    const bulkData = document.getElementById("userDataInput").value.trim();
+    
+    // Start with parsed bulk data as base
+    let profile = { ...defaultProfile };
+    if (bulkData) {
+      const parsedBulk = parseUserData(bulkData);
+      if (parsedBulk) {
+        profile = parsedBulk;
+      }
+    }
+    
+    // Override with individual field values (if provided)
+    if (firstName) profile.firstName = firstName;
+    if (lastName) profile.lastName = lastName;
+    if (state) profile.state = state;
+    if (city) profile.city = city;
+    if (dob) {
+      // Convert display format (DD/MM/YYYY) to storage format
+      const convertedDob = convertDateToStorage(dob);
+      if (convertedDob) profile.dob = convertedDob;
+    }
+    if (school) profile.school = school;
+    if (zip) profile.zip = zip;
+    if (phone) profile.phone = phone;
+    if (email) profile.email = email;
+    if (password) profile.password = password;
+    
+    // Validate that we have at least some data
+    if (!profile.firstName && !profile.lastName && !profile.email) {
+      alert("Please provide at least a name or email address.");
+      return false;
+    }
+    
+    // Save the profile
+    saveProfile(profile);
+    alert("✅ Data saved successfully! It will persist across all websites and browser sessions.");
+    return true;
+  }
+
+  // Parse user data from text input
+  function parseUserData(inputData) {
     try {
       const lines = inputData.split('\n').map(line => line.trim()).filter(line => line);
       const profile = { ...defaultProfile };
@@ -155,7 +381,7 @@ robertharris181109@gmail.com"
           profile.city = line.substring(5).trim();
         } else if (line.toLowerCase().startsWith('dob:')) {
           const dobStr = line.substring(4).trim();
-          profile.dob = convertDateFormat(dobStr);
+          profile.dob = convertDateToStorage(dobStr);
         } else if (line.toLowerCase().startsWith('school:')) {
           profile.school = line.substring(7).trim();
         } else if (line.toLowerCase().startsWith('zip:')) {
@@ -164,21 +390,37 @@ robertharris181109@gmail.com"
           profile.phone = line.substring(6).trim();
         } else if (line.toLowerCase().startsWith('password:')) {
           profile.password = line.substring(9).trim();
-        } else if (line.includes('@')) {
+        } else if (line.includes('@') && !line.includes(':')) {
           profile.email = line.trim();
         }
       });
 
-      if (profile.firstName && profile.email) {
-        saveProfile(profile);
-        alert('Profile data saved successfully!');
-        return true;
-      } else {
-        alert('Please make sure to include at least Name and Email');
-        return false;
-      }
+      return profile;
     } catch (e) {
+      console.error('Error parsing data:', e);
+      return null;
+    }
+  }
+
+  // Parse and save user data (legacy function for compatibility)
+  function parseAndSaveData(inputData) {
+    if (!inputData) {
+      alert("Please enter your information.");
+      return false;
+    }
+
+    const profile = parseUserData(inputData);
+    if (!profile) {
       alert('Error parsing data. Please check the format.');
+      return false;
+    }
+
+    if (profile.firstName && profile.email) {
+      saveProfile(profile);
+      alert('Profile data saved successfully!');
+      return true;
+    } else {
+      alert('Please make sure to include at least Name and Email');
       return false;
     }
   }
@@ -387,6 +629,58 @@ robertharris181109@gmail.com"
         progressMsg.textContent = `🤖 Setting date...`;
         await simulateTyping(input, profile.dob);
         filledCount++;
+        continue;
+      }
+
+      // Special handling for select dropdowns (especially state)
+      if (input.tagName.toLowerCase() === 'select') {
+        for (let key in map) {
+          if (
+            map[key].some(
+              (keyword) =>
+                name.includes(keyword) ||
+                id.includes(keyword) ||
+                placeholder.includes(keyword) ||
+                label.includes(keyword) ||
+                autocomplete.includes(keyword)
+            )
+          ) {
+            let value = profile[key];
+            if (value) {
+              progressMsg.textContent = `🤖 Setting ${key}...`;
+              
+              // For select elements, try to match by value or text
+              const options = Array.from(input.options);
+              let matched = false;
+              
+              // First try exact value match
+              for (const option of options) {
+                if (option.value.toLowerCase() === value.toLowerCase()) {
+                  input.value = option.value;
+                  input.dispatchEvent(new Event('change', { bubbles: true }));
+                  matched = true;
+                  filledCount++;
+                  break;
+                }
+              }
+              
+              // If no exact match, try text content match
+              if (!matched) {
+                for (const option of options) {
+                  if (option.textContent.toLowerCase().includes(value.toLowerCase()) || 
+                      value.toLowerCase().includes(option.textContent.toLowerCase())) {
+                    input.value = option.value;
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                    matched = true;
+                    filledCount++;
+                    break;
+                  }
+                }
+              }
+            }
+            break;
+          }
+        }
         continue;
       }
 
