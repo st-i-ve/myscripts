@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Sorting Activity Hint Helper
+// @name         Sorting Activity Hint Helper with Card Dots
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Provides hints for sorting activities by highlighting the correct pile
+// @version      1.1
+// @description  Provides visual hint dots directly on cards based on category
 // @author       YourName
 // @match        *://*/*
 // @grant        GM_addStyle
@@ -11,30 +11,37 @@
 (function () {
   "use strict";
 
-  // Add custom CSS styles
+  // Add custom CSS for hint dots
   GM_addStyle(`
-        .correct-pile {
-            box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.5) !important;
-            transition: box-shadow 0.3s ease;
-        }
-        .playing-card:hover {
-            transform: scale(1.05) !important;
-            z-index: 1000 !important;
-            transition: transform 0.2s ease;
-        }
+      .hint-dot {
+          position: absolute;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          z-index: 10;
+          top: 6px;
+      }
+  
+      .dot-left {
+          left: 6px;
+          background-color: #00cc00; /* Green for Self-Limiting */
+      }
+  
+      .dot-right {
+          right: 6px;
+          background-color: #3399ff; /* Blue for Not Self-Limiting */
+      }
     `);
 
-  // Wait for the sorting activity to load
-  const checkActivity = setInterval(function () {
+  const checkActivity = setInterval(() => {
     const sortingActivity = document.querySelector(".sorting");
     if (sortingActivity) {
       clearInterval(checkActivity);
-      setupHints();
+      setupCardDots();
     }
   }, 500);
 
-  function setupHints() {
-    // Define which cards belong to which pile
+  function setupCardDots() {
     const selfLimitingBeliefs = [
       "I’ll never get this right",
       "I’m a failure",
@@ -47,30 +54,31 @@
       "I am frequently getting this wrong",
     ];
 
-    // Get all card elements
     const cards = document.querySelectorAll(".playing-card");
-    const selfLimitingPile = document.querySelectorAll(".pile__wrap")[0];
-    const notSelfLimitingPile = document.querySelectorAll(".pile__wrap")[1];
 
     cards.forEach((card) => {
-      const cardText = card
-        .querySelector(".playing-card__title")
-        .textContent.trim();
+      const textEl = card.querySelector(".playing-card__title .fr-view");
+      if (!textEl) return;
+      const cardText = textEl.textContent.trim();
 
-      card.addEventListener("mouseenter", function () {
-        if (selfLimitingBeliefs.includes(cardText)) {
-          selfLimitingPile.classList.add("correct-pile");
-        } else if (notSelfLimitingBeliefs.includes(cardText)) {
-          notSelfLimitingPile.classList.add("correct-pile");
-        }
-      });
+      // Avoid duplication
+      if (card.querySelector(".hint-dot")) return;
 
-      card.addEventListener("mouseleave", function () {
-        selfLimitingPile.classList.remove("correct-pile");
-        notSelfLimitingPile.classList.remove("correct-pile");
-      });
+      const dot = document.createElement("div");
+      dot.classList.add("hint-dot");
+
+      if (selfLimitingBeliefs.includes(cardText)) {
+        dot.classList.add("dot-left");
+      } else if (notSelfLimitingBeliefs.includes(cardText)) {
+        dot.classList.add("dot-right");
+      } else {
+        return; // No match, no dot
+      }
+
+      card.style.position = "relative"; // Ensure positioning context
+      card.appendChild(dot);
     });
 
-    console.log("Sorting activity hint helper activated!");
+    console.log("Card dots added based on belief category.");
   }
 })();
