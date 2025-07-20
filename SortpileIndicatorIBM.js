@@ -1,9 +1,8 @@
 // ==UserScript==
-// @name         Sorting Activity Hint Helper with Card Dots
+// @name         Universal Sorting Hint Dots (Live + Scalable)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Provides visual hint dots directly on cards based on category
-// @author       YourName
+// @version      3.1
+// @description  Continuously applies directional hint dots on sorting activity cards using a centralized config map for multiple rounds or exercises.
 // @match        *://*/*
 // @grant        GM_addStyle
 // ==/UserScript==
@@ -11,74 +10,77 @@
 (function () {
   "use strict";
 
-  // Add custom CSS for hint dots
+  // ✅ Config: Update this object to add more card texts
+  const sortingConfig = {
+    // Left (Self-Limiting Belief)
+    "I’ll never get this right": "left",
+    "I’m a failure": "left",
+    "I don’t deserve success": "left",
+    "I always get this wrong": "left",
+    "I’ll never be able to do this": "left",
+    "I’m not good enough": "left",
+    "I’m always wrong": "left",
+    "I don’t deserve something": "left",
+
+    // Right (Not a Self-Limiting Belief)
+    "I find this hard": "right",
+    "I am frequently getting this wrong": "right",
+    "I’m struggling": "right",
+    "This is taking me a long time to do": "right",
+  };
+
+  // ✅ Styling for the dots
   GM_addStyle(`
       .hint-dot {
-          position: absolute;
-          width: 14px;
-          height: 14px;
-          border-radius: 50%;
-          z-index: 10;
-          top: 6px;
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        top: 6px;
+        z-index: 10;
       }
-  
       .dot-left {
-          left: 6px;
-          background-color: #00cc00; /* Green for Self-Limiting */
+        left: 6px;
+        background-color: #00cc00; /* Green for Left */
       }
-  
       .dot-right {
-          right: 6px;
-          background-color: #3399ff; /* Blue for Not Self-Limiting */
+        right: 6px;
+        background-color: #3399ff; /* Blue for Right */
       }
     `);
 
-  const checkActivity = setInterval(() => {
-    const sortingActivity = document.querySelector(".sorting");
-    if (sortingActivity) {
-      clearInterval(checkActivity);
-      setupCardDots();
-    }
-  }, 500);
+  // ✅ Keep track of processed `.sorting` nodes
+  const processed = new WeakSet();
 
-  function setupCardDots() {
-    const selfLimitingBeliefs = [
-      "I’ll never get this right",
-      "I’m a failure",
-      "I don’t deserve success",
-      "I always get this wrong",
-    ];
-
-    const notSelfLimitingBeliefs = [
-      "I find this hard",
-      "I am frequently getting this wrong",
-    ];
-
-    const cards = document.querySelectorAll(".playing-card");
+  function applyDotsToActivity(activityRoot) {
+    const cards = activityRoot.querySelectorAll(".playing-card");
 
     cards.forEach((card) => {
-      const textEl = card.querySelector(".playing-card__title .fr-view");
-      if (!textEl) return;
-      const cardText = textEl.textContent.trim();
+      const titleEl = card.querySelector(".playing-card__title .fr-view");
+      if (!titleEl) return;
+      const cardText = titleEl.textContent.trim();
+      const direction = sortingConfig[cardText];
 
-      // Avoid duplication
-      if (card.querySelector(".hint-dot")) return;
+      if (!direction) return; // Not in config
+      if (card.querySelector(".hint-dot")) return; // Already has a dot
 
       const dot = document.createElement("div");
-      dot.classList.add("hint-dot");
-
-      if (selfLimitingBeliefs.includes(cardText)) {
-        dot.classList.add("dot-left");
-      } else if (notSelfLimitingBeliefs.includes(cardText)) {
-        dot.classList.add("dot-right");
-      } else {
-        return; // No match, no dot
-      }
-
-      card.style.position = "relative"; // Ensure positioning context
+      dot.className = `hint-dot ${
+        direction === "left" ? "dot-left" : "dot-right"
+      }`;
+      card.style.position = "relative"; // Ensure container has context
       card.appendChild(dot);
     });
-
-    console.log("Card dots added based on belief category.");
   }
+
+  // ✅ Continuously scan for new activities every second
+  setInterval(() => {
+    const activities = document.querySelectorAll(".sorting");
+    activities.forEach((activity) => {
+      if (!processed.has(activity)) {
+        applyDotsToActivity(activity);
+        processed.add(activity);
+      }
+    });
+  }, 1000);
 })();
