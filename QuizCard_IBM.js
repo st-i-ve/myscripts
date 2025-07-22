@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AI Quiz - Random Answer + Submit + NEXT Clicker (Updated Button)
+// @name         AI Quiz - Correct Answer Selector + Submit + NEXT Clicker
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Auto-selects random answer, submits, and clicks "NEXT" button inside iframe
+// @version      1.2
+// @description  Auto-selects correct answer, submits, and clicks NEXT inside iframe
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
@@ -14,32 +14,64 @@
   let nextClickTimeout = null;
   let nextClicked = false;
 
+  // Define correct answers map (lowercased keys for safe matching)
+  const correctAnswers = {
+    "which is an example of whole brain emulation where a machine can think and make decisions on many subjects?":
+      "General AI",
+    "what are the mathematical instructions that tell the machine how to go about finding solutions to a problem?":
+      "Algorithm",
+    "what is artificial intelligence?":
+      "Techniques that help machines and computers mimic human behavior",
+    "which of these is the basis for all ai systems and allows algorithms to reveal patterns and trends?":
+      "Data",
+    "which ai application gives computers the ability to understand human language as it is spoken?":
+      "Natural language processing",
+  };
+
   setInterval(() => {
     const iframe = document.querySelector("iframe");
     if (!iframe) return;
 
     try {
       const iframeDoc = iframe.contentDocument;
-      const iframeWin = iframe.contentWindow;
-      if (!iframeDoc || !iframeWin) return;
+      if (!iframeDoc) return;
 
-      // === ACTIVE QUIZ CARD ===
       const activeCard = iframeDoc.querySelector(
         ".quiz__wrap .quiz-item__card--active"
       );
       if (!activeCard) return;
 
-      // === RANDOM ANSWER SELECTION ===
+      const questionEl = activeCard.querySelector(".quiz-card__title");
+      if (!questionEl) return;
+
+      const questionText = questionEl.innerText.trim().toLowerCase();
+      const correctAnswer = correctAnswers[questionText];
+      if (!correctAnswer) {
+        console.warn("⚠️ No correct answer found for question:", questionText);
+        return;
+      }
+
       const options = activeCard.querySelectorAll(
-        '[role="radio"][aria-checked="false"], [role="checkbox"][aria-checked="false"]'
+        '[role="radio"], [role="checkbox"]'
       );
-      if (options.length > 0) {
-        const randomIndex = Math.floor(Math.random() * options.length);
-        const selected = options[randomIndex];
-        selected.dispatchEvent(
-          new MouseEvent("click", { bubbles: true, cancelable: true })
-        );
-        console.log("🎯 Selected a random answer");
+      let selected = false;
+
+      options.forEach((option) => {
+        const labelId = option.getAttribute("aria-labelledby");
+        const labelTextEl = iframeDoc.getElementById(labelId);
+        const answerText = labelTextEl?.innerText.trim().toLowerCase();
+
+        if (answerText && answerText === correctAnswer.toLowerCase()) {
+          option.dispatchEvent(
+            new MouseEvent("click", { bubbles: true, cancelable: true })
+          );
+          console.log(`✅ Selected correct answer: ${correctAnswer}`);
+          selected = true;
+        }
+      });
+
+      if (!selected) {
+        console.warn("❌ Correct answer not found in options:", correctAnswer);
       }
 
       // === SUBMIT BUTTON ===
@@ -75,8 +107,6 @@
         isInView(nextButton) &&
         !nextClicked
       ) {
-        console.log("✅ NEXT button ready");
-
         if (nextClickTimeout) clearTimeout(nextClickTimeout);
 
         nextClickTimeout = setTimeout(() => {
@@ -90,7 +120,7 @@
           nextClicked = true;
           setTimeout(() => {
             nextClicked = false;
-          }, 3000);
+          }, 100);
         }, 100);
       }
     } catch (err) {
