@@ -1,9 +1,8 @@
 // ==UserScript==
-// @name         Smart Quiz Auto-Answer
+// @name         Smart Quiz Auto-Answer + Submit + Next (Fast Mode)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Selects correct answer from a known list inside an iframe quiz
-// @author       OpenAI
+// @version      2.0
+// @description  Super fast auto-answer, submit, and advance for iframe-based quizzes
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
@@ -12,9 +11,6 @@
   "use strict";
 
   const answerPool = [
-    "Surveys and questionnaires.",
-    "Dispose of the data securely when it's no longer needed.",
-    "Clearly define objectives and align data collection methods with the objectives.",
     "Check whether the tools used for collecting data give stable results over time.",
     "Commercial transaction records",
     "Surveys and questionnaires",
@@ -24,9 +20,12 @@
     "Sensors and IoT devices",
   ];
 
+  const normalizeText = (text) =>
+    text.trim().replace(/\s+/g, " ").toLowerCase();
+
   function createControlButton() {
     const btn = document.createElement("button");
-    btn.textContent = "🎯 Answer Quiz";
+    btn.textContent = "⚡ Auto-Run Quiz (Fast)";
     Object.assign(btn.style, {
       position: "fixed",
       bottom: "20px",
@@ -49,60 +48,91 @@
       (iframe) => {
         try {
           return iframe.contentDocument.querySelector(".quiz-card--active");
-        } catch (e) {
+        } catch {
           return false;
         }
       }
     );
   }
 
-  function normalizeText(text) {
-    return text.trim().replace(/\s+/g, " ").toLowerCase();
+  function waitForNextButton(doc, callback) {
+    const checkInterval = setInterval(() => {
+      const nextBtn = doc.querySelector(
+        'button.quiz-card__button--next:not([aria-disabled="true"])'
+      );
+      if (nextBtn && !nextBtn.classList.contains("visually-hidden-always")) {
+        clearInterval(checkInterval);
+        callback(nextBtn);
+      }
+    }, 50); // 🔁 Fast polling
   }
 
-  function selectCorrectAnswerInIframe(iframe) {
+  function selectAnswersAndAdvance(iframe) {
     try {
       const doc = iframe.contentDocument || iframe.contentWindow.document;
       const activeCard = doc.querySelector(".quiz-card--active");
       if (!activeCard) return alert("❌ No active quiz card found.");
 
-      const options = activeCard.querySelectorAll(
-        "label.quiz-multiple-choice-option"
+      const labels = activeCard.querySelectorAll(
+        "label.quiz-multiple-choice-option, label.quiz-multiple-response-option"
       );
-      if (options.length === 0) return alert("❌ No answer options found.");
+      if (labels.length === 0) return alert("❌ No answer options found.");
 
-      let selected = false;
-      options.forEach((label) => {
+      let matchedAny = false;
+
+      labels.forEach((label) => {
         const input = label.querySelector("input");
-        const optionTextEl = label.querySelector(
-          ".quiz-multiple-choice-option__label"
+        const textEl = label.querySelector(
+          ".quiz-multiple-choice-option__label, .quiz-multiple-response-option__text"
         );
-        const rawText = optionTextEl?.innerText || "";
-        const normalizedText = normalizeText(rawText);
+        const rawText = textEl?.innerText || "";
+        const normalized = normalizeText(rawText);
 
-        const match = answerPool.find(
-          (ans) => normalizeText(ans) === normalizedText
+        const isMatch = answerPool.some(
+          (ans) => normalizeText(ans) === normalized
         );
-        if (match && !selected) {
-          input.scrollIntoView({ behavior: "smooth", block: "center" });
-          setTimeout(() => input.click(), 200);
-          selected = true;
-          console.log("✅ Matched and selected answer:", match);
+        if (isMatch) {
+          matchedAny = true;
+          input.click();
+          console.log("✅ Selected answer:", rawText);
         }
       });
 
-      if (!selected) {
-        console.warn("⚠️ No matching answer found, selecting random...");
+      if (!matchedAny) {
+        console.warn("⚠️ No match found. Selecting random...");
         const inputs = activeCard.querySelectorAll(
           'input[type="radio"], input[type="checkbox"]'
         );
-        if (inputs.length === 0) return alert("❌ No options to select.");
-        const randomInput = inputs[Math.floor(Math.random() * inputs.length)];
-        randomInput.scrollIntoView({ behavior: "smooth", block: "center" });
-        setTimeout(() => randomInput.click(), 200);
+        if (inputs.length > 0) {
+          inputs[Math.floor(Math.random() * inputs.length)].click();
+        }
       }
+
+      // Submit quickly
+      setTimeout(() => {
+        const submitButton = activeCard.querySelector(
+          "button.quiz-card__button"
+        );
+        if (submitButton && !submitButton.disabled) {
+          submitButton.click();
+          console.log("🚀 Submitted.");
+
+          // Wait for feedback → next
+          setTimeout(() => {
+            waitForNextButton(doc, (nextBtn) => {
+              nextBtn.click();
+              console.log("➡️ Next card.");
+
+              // Short delay before next cycle
+              setTimeout(() => selectAnswersAndAdvance(iframe), 200); // 10× faster loop
+            });
+          }, 200); // Shorter wait for feedback
+        } else {
+          console.warn("⚠️ Submit button not found or disabled.");
+        }
+      }, 100); // Fast submit
     } catch (err) {
-      console.error("Error selecting answer in iframe:", err);
+      console.error("❌ Error:", err);
       alert("❌ Could not access iframe content (possibly cross-origin).");
     }
   }
@@ -115,11 +145,9 @@
         alert("❌ Quiz iframe not found or inaccessible.");
         return;
       }
-      selectCorrectAnswerInIframe(iframe);
+      selectAnswersAndAdvance(iframe);
     });
   }
 
-  window.addEventListener("load", () => {
-    setTimeout(init, 2000);
-  });
+  window.addEventListener("load", () => setTimeout(init, 100)); // Faster boot
 })();
