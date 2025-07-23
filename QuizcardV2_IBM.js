@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AI Quiz - Section-Based Answer Selector (Normalized)
+// @name         AI Quiz - Section-Based Answer Selector (Debug Enabled)
 // @namespace    http://tampermonkey.net/
-// @version      2.1
-// @description  Auto-selects correct answer, submits, and clicks NEXT based on section heading
+// @version      2.2
+// @description  Auto-selects correct answer, submits, and clicks NEXT based on section heading, with debugging for unmatched options
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
@@ -14,7 +14,6 @@
   let nextClickTimeout = null;
   let nextClicked = false;
 
-  // ✅ Section-based answers (use exact section titles from .nav-sidebar-header__title)
   const sectionAnswers = {
     "what is artificial intelligence?": [
       "General AI",
@@ -31,7 +30,7 @@
       "using alternative power sources",
       "the protection and preservation of what exists today",
       "hybrid cloud",
-      "The town had to find other resources.", // ✅ with period
+      "The town had to find other resources.",
       "Environmental",
       "using renewable energy sources to power furnaces and other production equipment",
     ],
@@ -54,7 +53,7 @@
       "Ensure that graphics do not exclude certain cultures",
       "Consider the varying needs of students with different abilities to create an inclusive and accessible design",
     ],
-    pool: [
+    "digital literacy: the what, why, and how of digital data": [
       "Surveys and questionnaires.",
       "Dispose of the data securely when it's no longer needed.",
       "Clearly define objectives and align data collection methods with the objectives.",
@@ -68,7 +67,6 @@
     ],
   };
 
-  // ✅ Helper: Normalize text for comparison (case + punctuation insensitive)
   const normalize = (str) =>
     str
       .replace(/[^\w\s]|_/g, "")
@@ -92,6 +90,7 @@
 
       const sectionTitle = headerEl.innerText.trim().toLowerCase();
       const answerList = sectionAnswers[sectionTitle];
+
       if (!answerList || !Array.isArray(answerList)) {
         console.warn(`⚠️ No answers defined for section: "${sectionTitle}"`);
         return;
@@ -102,25 +101,41 @@
       );
       let selected = false;
 
+      const availableOptionsDebug = [];
+
       options.forEach((option) => {
         const labelId = option.getAttribute("aria-labelledby");
         const labelEl = iframeDoc.getElementById(labelId);
         const answerText = labelEl?.innerText.trim();
 
-        if (
-          answerText &&
-          answerList.some((ans) => normalize(ans) === normalize(answerText))
-        ) {
-          option.dispatchEvent(
-            new MouseEvent("click", { bubbles: true, cancelable: true })
-          );
-          console.log(`✅ Selected correct answer: ${answerText}`);
-          selected = true;
+        if (answerText) {
+          const normalizedAnswer = normalize(answerText);
+          availableOptionsDebug.push({
+            original: answerText,
+            normalized: normalizedAnswer,
+          });
+
+          if (answerList.some((ans) => normalize(ans) === normalizedAnswer)) {
+            option.dispatchEvent(
+              new MouseEvent("click", { bubbles: true, cancelable: true })
+            );
+            console.log(`✅ Selected correct answer: ${answerText}`);
+            selected = true;
+          }
         }
       });
 
       if (!selected) {
-        console.warn("❌ No matching answer found in options");
+        console.warn("❌ No matching answer found in options.");
+        console.group("🔍 Available options (for debugging):");
+        availableOptionsDebug.forEach((opt, idx) =>
+          console.log(
+            `#${idx + 1}: Original = "${opt.original}", Normalized = "${
+              opt.normalized
+            }"`
+          )
+        );
+        console.groupEnd();
       }
 
       // === SUBMIT BUTTON ===
