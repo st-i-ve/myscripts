@@ -42,7 +42,7 @@
       "hybrid cloud",
     "in the stillwater simulation, what was the result when you suggested selling the lumber in the forest and conserving the fish?":
       "the town had to find other resources",
-    "a national chain of coffeehouses starts an initiative to only provide compostable straws for their beverages. Which of the following is a potential sustainability goal for a newly built steel mill?":
+    "a national chain of coffeehouses starts an initiative to only provide compostable straws for their beverages. hich of the following is a potential sustainability goal for a newly built steel mill?":
       "using renewable energy sources to power furnaces and other production equipment",
   };
 
