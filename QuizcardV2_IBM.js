@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AI Quiz - Section-Based Answer Selector (Normalized)
+// @name         AI Quiz - Answer Picker by Section
 // @namespace    http://tampermonkey.net/
-// @version      2.1
-// @description  Auto-selects correct answer, submits, and clicks NEXT based on section heading
+// @version      2.0
+// @description  Selects correct answers based on quiz section header and predefined answers list
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
@@ -14,7 +14,7 @@
   let nextClickTimeout = null;
   let nextClicked = false;
 
-  // ✅ Section-based answers (use exact section titles from .nav-sidebar-header__title)
+  // Grouped answers based on section titles (lowercased for safe comparison)
   const sectionAnswers = {
     "what is artificial intelligence?": [
       "General AI",
@@ -31,22 +31,31 @@
       "using alternative power sources",
       "the protection and preservation of what exists today",
       "hybrid cloud",
-      "The town had to find other resources.", // ✅ with period
+      "The town had to find other resources",
       "Environmental",
       "using renewable energy sources to power furnaces and other production equipment",
+      "a storm destoyed the town",
     ],
-    resourcement: [
-      "The town had to find other resources.", // Optional: if a different section uses it
+    "applying ux design": [
+      "It helps designers present ideas effectively.",
+      "It helps designers advocate user needs to other members of their team.",
+      "It helps designers collaborate with other members of their team.",
+      "The current navigation isn't intuitive enough, as the users are unable to find the right plants easily.",
+      "Add elements such as stickers, avatars, and color-coded reports creatively to engage the students.",
+      "Use empathetic language and tone, encouragement and rewards, and accessibility features to encourage students with diverse abilities.",
+      "Research the age group’s physical and mental health challenges in forming healthy habits.",
+      "To adjust the heavy content automatically across devices, Rio should choose responsive design, as it uses a single code and thus, needs lesser effort.",
+      "To ensure smooth user experience across all devices, Rio should choose responsive design, as it will eliminate the need for user adjustments.",
+      "Ensure that users can seamlessly transition between different devices and platforms without encountering jarring differences in user experience.",
+      "Align branding, visual elements, and user flows for products that span multiple platforms.",
+      "An adaptive design focuses on creating multiple app layouts for specific devices or screen sizes through manual customization, while a responsive design uses a single design that adapts to various screens and devices automatically.",
+      "An adaptive design delivers better performance on specific devices, while a responsive design ensures consistent performance across devices.",
+      "Details of the selected project, potential user challenges, and the goal",
+      "Use age-appropriate images and icons suitable for middle school students",
+      "Ensure that graphics do not exclude certain cultures",
+      "Consider the varying needs of students with different abilities to create an inclusive and accessible design",
     ],
   };
-
-  // ✅ Helper: Normalize text for comparison (case + punctuation insensitive)
-  const normalize = (str) =>
-    str
-      .replace(/[^\w\s]|_/g, "")
-      .replace(/\s+/g, " ")
-      .toLowerCase()
-      .trim();
 
   setInterval(() => {
     const iframe = document.querySelector("iframe");
@@ -81,7 +90,9 @@
 
         if (
           answerText &&
-          answerList.some((ans) => normalize(ans) === normalize(answerText))
+          answerList.some(
+            (ans) => ans.toLowerCase() === answerText.toLowerCase()
+          )
         ) {
           option.dispatchEvent(
             new MouseEvent("click", { bubbles: true, cancelable: true })
