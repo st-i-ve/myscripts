@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AI Quiz - Answer Picker by Section
+// @name         AI Quiz - Section-Based Answer Selector (Normalized)
 // @namespace    http://tampermonkey.net/
-// @version      2.0
-// @description  Selects correct answers based on quiz section header and predefined answers list
+// @version      2.1
+// @description  Auto-selects correct answer, submits, and clicks NEXT based on section heading
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
@@ -14,7 +14,7 @@
   let nextClickTimeout = null;
   let nextClicked = false;
 
-  // Grouped answers based on section titles (lowercased for safe comparison)
+  // ✅ Section-based answers (use exact section titles from .nav-sidebar-header__title)
   const sectionAnswers = {
     "what is artificial intelligence?": [
       "General AI",
@@ -31,12 +31,22 @@
       "using alternative power sources",
       "the protection and preservation of what exists today",
       "hybrid cloud",
-      "The town had to find other resources",
+      "The town had to find other resources.", // ✅ with period
       "Environmental",
       "using renewable energy sources to power furnaces and other production equipment",
-      "a storm destoyed the town",
+    ],
+    resourcement: [
+      "The town had to find other resources.", // Optional: if a different section uses it
     ],
   };
+
+  // ✅ Helper: Normalize text for comparison (case + punctuation insensitive)
+  const normalize = (str) =>
+    str
+      .replace(/[^\w\s]|_/g, "")
+      .replace(/\s+/g, " ")
+      .toLowerCase()
+      .trim();
 
   setInterval(() => {
     const iframe = document.querySelector("iframe");
@@ -71,9 +81,7 @@
 
         if (
           answerText &&
-          answerList.some(
-            (ans) => ans.toLowerCase() === answerText.toLowerCase()
-          )
+          answerList.some((ans) => normalize(ans) === normalize(answerText))
         ) {
           option.dispatchEvent(
             new MouseEvent("click", { bubbles: true, cancelable: true })
