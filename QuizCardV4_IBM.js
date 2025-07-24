@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Hybrid - Section-Aware + Fast + Iframe-Aware + Pool Fallback
+// @name         Hybrid - Section-Aware + Retry + Iframe-Aware + Pool Fallback
 // @namespace    http://tampermonkey.net/
-// @version      3.2
-// @description  Section-based quiz auto-answer tool with fast speed, iframe awareness, manual control, and fallback pool
+// @version      3.3
+// @description  Section-based quiz auto-answer tool with retries, iframe awareness, and fallback pool
 // @match        *://*/*
 // @grant        none
 // ==/UserScript==
@@ -22,14 +22,12 @@
       "the needs of current and future generations",
       "ai analysis of building photos to identify signs of metal fatigue",
       "turning off lights and appliances not in use",
-      "ai analysis of building photos to identify signs of metal fatigue",
       "conservation of power use",
       "using alternative power sources",
       "the protection and preservation of what exists today",
       "hybrid cloud",
       "The town had to find other resources.",
       "Environmental",
-      "using alternative power sources",
       "using renewable energy sources to power furnaces and other production equipment",
     ],
     "applying ux design": [
@@ -104,8 +102,7 @@
     return Array.from(document.getElementsByTagName("iframe")).find(
       (iframe) => {
         try {
-          const doc = iframe.contentDocument;
-          return doc && doc.querySelector(".quiz__wrap");
+          return iframe.contentDocument?.querySelector(".quiz__wrap");
         } catch {
           return false;
         }
@@ -113,7 +110,7 @@
     );
   }
 
-  function runInIframe(iframe) {
+  function runInIframe(iframe, retries = 0) {
     try {
       const doc = iframe.contentDocument;
       const headerEl = doc.querySelector(".nav-sidebar-header__title");
@@ -127,32 +124,40 @@
       }
 
       const sectionTitle = normalize(headerEl.innerText);
-      const answerList = sectionAnswers[sectionTitle];
+      const sectionKeys = Object.keys(sectionAnswers);
+      const allAnswerSources = [
+        sectionTitle,
+        ...sectionKeys.filter((k) => k !== sectionTitle),
+      ];
 
       const options = activeCard.querySelectorAll(
         '[role="radio"], [role="checkbox"]'
       );
       let matched = false;
 
-      options.forEach((option) => {
-        const labelId = option.getAttribute("aria-labelledby");
-        const labelEl = doc.getElementById(labelId);
-        const answerText = labelEl?.innerText.trim();
+      for (let round = 0; round < 4 && !matched; round++) {
+        const currentSection =
+          allAnswerSources[round % allAnswerSources.length];
+        const answerList = sectionAnswers[currentSection] ?? [];
 
-        if (answerText) {
-          const normText = normalize(answerText);
-          const allAnswers = answerList ?? fallbackPool;
+        options.forEach((option) => {
+          const labelId = option.getAttribute("aria-labelledby");
+          const labelEl = doc.getElementById(labelId);
+          const answerText = labelEl?.innerText.trim();
 
-          if (allAnswers.some((a) => normalize(a) === normText)) {
+          if (
+            answerText &&
+            answerList.some((a) => normalize(a) === normalize(answerText))
+          ) {
             option.click();
-            console.log("✅ Selected answer:", answerText);
+            console.log(`✅ Matched with [${currentSection}]:`, answerText);
             matched = true;
           }
-        }
-      });
+        });
+      }
 
       if (!matched) {
-        console.warn("❌ No match found. Falling back to pool...");
+        console.warn("🔁 No match in sections. Trying fallback pool...");
 
         const fallback = Array.from(options).find((option) => {
           const labelId = option.getAttribute("aria-labelledby");
@@ -170,8 +175,8 @@
           fallback.click();
           console.log("✅ Fallback pool answer selected.");
         } else {
-          console.warn("❌ Still no match in pool.");
-          if (options.length) options[0].click(); // fallback click first option just in case
+          console.warn("❌ Still no match. Selecting first option...");
+          if (options.length) options[0].click();
         }
       }
 
