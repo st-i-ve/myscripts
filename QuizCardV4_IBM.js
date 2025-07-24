@@ -20,6 +20,7 @@
     ],
     "beyond conservation to sustainability": [
       "the needs of current and future generations",
+      "ai analysis of building photos to identify signs of metal fatigue",
       "turning off lights and appliances not in use",
       "ai analysis of building photos to identify signs of metal fatigue",
       "conservation of power use",
@@ -28,6 +29,7 @@
       "hybrid cloud",
       "The town had to find other resources.",
       "Environmental",
+      "using alternative power sources",
       "using renewable energy sources to power furnaces and other production equipment",
     ],
     "applying ux design": [
