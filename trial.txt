@@ -58,16 +58,65 @@
 
 
 
-
+https://ibmskillsbuild.skillsline.com/
 #ibm blocks
 class="block-text "skip
-class="blocks-accordion" open all acoordions
 class="block-statement" skip
-class="block-flashcards" flip cards
-class="block-labeled-graphic" open lables
+
 class="blocks-tabs"?
+
+class="block-flashcards" flip cards
+class="blocks-accordion" open all acoordions
+class="block-labeled-graphic" open lables
+class="continue-btn brand--ui"click the continue button
 
 class="block-knowledge"
 aria-label="Knowledge check: Multiple choice"
 aria-label="Knowledge check: Multiple choice"a
 aria-label="Knowledge check: Multiple response"
+
+prompt
+so each noOutline has one of the following classes in the div in it 
+they may be more than this
+class="block-text "
+class="blocks-accordion" 
+class="block-statement" 
+class="block-flashcards" 
+class="block-labeled-graphic" 
+class="blocks-tabs"
+
+ but for now lets concentrate on the 
+ones that need interaction
+
+class="blocks-tabs" open all tabs
+class="block-flashcards" flip cards
+class="blocks-accordion" open all acoordions
+class="block-labeled-graphic" open lables
+class="continue-btn brand--ui"click the continue button
+
+and 
+class="block-knowledge"
+
+now we have sub categories of block-knoledge below 
+each block knowledge has either of the two 
+
+aria-label="Knowledge check: Multiple choice" auto answer with  radio
+aria-label="Knowledge check: Multiple response"auto answer with  checkbox
+
+
+now i need a script another one for this case based of the previous one we made 
+instead of random scrolling 
+
+we should go from one noOutline to another highighting each category 1second delay then moving on to the next 
+if its not among the important ones lets just say general
+
+but if it has one of the classes above and their subcategories higlight it where we used the counter 
+so  where the counter was we could have 
+
+tabs-open all tabs 
+
+
+and if its the knowledge class 
+we just say "knowledge -answer with radio "
+or " knolwledge -answer with checkbox"
+
