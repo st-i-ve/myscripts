@@ -61,6 +61,15 @@
     "Holding or glancing at your phone": "right",
     "Crossing your arms": "right",
 
+    // 🧠 Listening skills
+    "Having an open, neutral stance": "left",
+    "Nodding your head": "left",
+    "Leaning forward": "left",
+
+    "Holding or glancing at your phone": "right",
+    "Crossing your arms": "right",
+    "Leaning away": "right",
+
     // 🟢 Environmental Initiative (LEFT)
     "Traffic congestion": "left",
     Pollution: "left",
