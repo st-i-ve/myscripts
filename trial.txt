@@ -52,3 +52,22 @@
       "Poison control": "right",
        "Traffic congestion": "right",
          "Hunting license": "right ",
+
+
+
+
+
+
+
+#ibm blocks
+class="block-text "skip
+class="blocks-accordion" open all acoordions
+class="block-statement" skip
+class="block-flashcards" flip cards
+class="block-labeled-graphic" open lables
+class="blocks-tabs"?
+
+class="block-knowledge"
+aria-label="Knowledge check: Multiple choice"
+aria-label="Knowledge check: Multiple choice"a
+aria-label="Knowledge check: Multiple response"
