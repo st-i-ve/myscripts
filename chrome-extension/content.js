@@ -202,6 +202,193 @@
     });
   }
 
+  // enhanced function to find the correct state option in custom dropdowns (li elements)
+  function findCustomDropdownOption(container, stateValue) {
+    if (!stateValue || !container) return null;
+    
+    // i look for list items that might contain state options
+    const listItems = container.querySelectorAll('li, .dropdown-item, .menu-item, [class*="dropdown"][class*="item"], [class*="menu"][class*="item"]');
+    const normalizedState = stateValue.trim().toLowerCase();
+    
+    // i create the same state mapping as before
+    const stateNames = {
+      'al': 'alabama', 'ak': 'alaska', 'az': 'arizona', 'ar': 'arkansas', 'ca': 'california',
+      'co': 'colorado', 'ct': 'connecticut', 'de': 'delaware', 'fl': 'florida', 'ga': 'georgia',
+      'hi': 'hawaii', 'id': 'idaho', 'il': 'illinois', 'in': 'indiana', 'ia': 'iowa',
+      'ks': 'kansas', 'ky': 'kentucky', 'la': 'louisiana', 'me': 'maine', 'md': 'maryland',
+      'ma': 'massachusetts', 'mi': 'michigan', 'mn': 'minnesota', 'ms': 'mississippi', 'mo': 'missouri',
+      'mt': 'montana', 'ne': 'nebraska', 'nv': 'nevada', 'nh': 'new hampshire', 'nj': 'new jersey',
+      'nm': 'new mexico', 'ny': 'new york', 'nc': 'north carolina', 'nd': 'north dakota', 'oh': 'ohio',
+      'ok': 'oklahoma', 'or': 'oregon', 'pa': 'pennsylvania', 'ri': 'rhode island', 'sc': 'south carolina',
+      'sd': 'south dakota', 'tn': 'tennessee', 'tx': 'texas', 'ut': 'utah', 'vt': 'vermont',
+      'va': 'virginia', 'wa': 'washington', 'wv': 'west virginia', 'wi': 'wisconsin', 'wy': 'wyoming'
+    };
+    
+    const reverseStateMap = {};
+    Object.keys(stateNames).forEach(abbrev => {
+      reverseStateMap[stateNames[abbrev]] = abbrev;
+    });
+    
+    // i try the same matching strategies but for list items
+    for (const item of listItems) {
+      const itemText = item.textContent.trim().toLowerCase();
+      const itemValue = item.getAttribute('value') || item.getAttribute('data-value') || '';
+      const normalizedItemValue = itemValue.toLowerCase();
+      
+      // strategy 1: exact match
+      if (itemText === normalizedState || normalizedItemValue === normalizedState) {
+        return item;
+      }
+      
+      // strategy 2: if stored state is abbreviation, try full name
+      if (stateNames[normalizedState] && itemText === stateNames[normalizedState]) {
+        return item;
+      }
+      
+      // strategy 3: if stored state is full name, try abbreviation
+      if (reverseStateMap[normalizedState] && itemText === reverseStateMap[normalizedState]) {
+        return item;
+      }
+      
+      // strategy 4: partial match
+      if (itemText.includes(normalizedState)) {
+        return item;
+      }
+      
+      // strategy 5: if stored is abbreviation, check if item contains full name
+      if (stateNames[normalizedState] && itemText.includes(stateNames[normalizedState])) {
+        return item;
+      }
+    }
+    
+    return null;
+  }
+
+  // function to handle custom state dropdowns (non-standard select elements)
+  async function handleCustomStateDropdowns(profile) {
+    if (!profile.state) return 0;
+    
+    let filledCount = 0;
+    
+    // i look for custom dropdown containers that might contain states
+    const dropdownContainers = document.querySelectorAll([
+      '[class*="dropdown"]',
+      '[class*="select"]', 
+      '[class*="menu"]',
+      '[class*="picker"]',
+      '[data-testid*="state"]',
+      '[data-testid*="dropdown"]'
+    ].join(', '));
+    
+    for (const container of dropdownContainers) {
+      // i check if this container might be for states
+      const containerText = container.textContent.toLowerCase();
+      const containerClasses = container.className.toLowerCase();
+      const containerAttributes = Array.from(container.attributes).map(attr => 
+        `${attr.name}="${attr.value}"`).join(' ').toLowerCase();
+      
+      const allContainerInfo = `${containerText} ${containerClasses} ${containerAttributes}`;
+      
+      if (allContainerInfo.includes('state') || 
+          allContainerInfo.includes('province') ||
+          allContainerInfo.includes('region') ||
+          // i also check if it contains multiple US state names (likely a state dropdown)
+          (containerText.includes('alabama') && containerText.includes('california') && containerText.includes('texas'))) {
+        
+        // i try to find the matching state option
+        const matchedItem = findCustomDropdownOption(container, profile.state);
+        
+        if (matchedItem) {
+          // i need to open the dropdown first if it's closed
+          const trigger = container.querySelector('[class*="dropdown"]:not([class*="menu"]), .select-trigger, .dropdown-trigger');
+          if (trigger && !container.querySelector('[class*="menu"]:not([style*="display: none"])')) {
+            trigger.click();
+            await new Promise(resolve => setTimeout(resolve, 200)); // wait for dropdown to open
+          }
+          
+          // i click on the matched item
+          matchedItem.click();
+          filledCount++;
+          console.log(`✅ filled custom state dropdown: ${profile.state} -> ${matchedItem.textContent.trim()}`);
+          
+          // i wait a bit for the selection to register
+          await new Promise(resolve => setTimeout(resolve, 100));
+          break; // i only fill one state dropdown
+        }
+      }
+    }
+    
+    return filledCount;
+  }
+
+  // enhanced function to handle various types of checkboxes
+  async function handleCheckboxes(profile) {
+    let checkedCount = 0;
+    
+    // i look for checkboxes that might need to be checked
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    
+    for (const checkbox of checkboxes) {
+      if (checkbox.checked) continue; // skip already checked boxes
+      
+      const checkboxId = checkbox.id ? checkbox.id.toLowerCase() : '';
+      const checkboxName = checkbox.name ? checkbox.name.toLowerCase() : '';
+      const checkboxClass = checkbox.className ? checkbox.className.toLowerCase() : '';
+      
+      // i look for labels associated with this checkbox
+      let labelText = '';
+      const label = document.querySelector(`label[for="${checkbox.id}"]`) || 
+                   checkbox.closest('label') ||
+                   checkbox.parentElement.querySelector('label');
+      if (label) {
+        labelText = label.textContent.toLowerCase();
+      }
+      
+      const allCheckboxInfo = `${checkboxId} ${checkboxName} ${checkboxClass} ${labelText}`.toLowerCase();
+      
+      // i check for common checkbox patterns that usually need to be checked
+      const shouldCheck = 
+        allCheckboxInfo.includes('terms') ||
+        allCheckboxInfo.includes('conditions') ||
+        allCheckboxInfo.includes('agree') ||
+        allCheckboxInfo.includes('accept') ||
+        allCheckboxInfo.includes('consent') ||
+        allCheckboxInfo.includes('privacy') ||
+        allCheckboxInfo.includes('policy') ||
+        allCheckboxInfo.includes('age') ||
+        allCheckboxInfo.includes('18') ||
+        allCheckboxInfo.includes('adult') ||
+        allCheckboxInfo.includes('marketing') ||
+        allCheckboxInfo.includes('newsletter') ||
+        // asa specific ones
+        checkboxId.includes('accept_terms') ||
+        checkboxId.includes('accept_marketing');
+      
+      if (shouldCheck) {
+        // i use multiple methods to ensure the checkbox gets checked
+        checkbox.focus();
+        checkbox.checked = true;
+        
+        // i dispatch various events to ensure compatibility
+        checkbox.dispatchEvent(new Event("focus", { bubbles: true }));
+        checkbox.dispatchEvent(new Event("click", { bubbles: true }));
+        checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+        checkbox.dispatchEvent(new Event("input", { bubbles: true }));
+        
+        // i also try clicking the parent container for custom styled checkboxes
+        if (checkbox.parentElement) {
+          checkbox.parentElement.click();
+        }
+        
+        checkedCount++;
+        console.log(`✅ checked checkbox: ${checkboxId || checkboxName || 'unnamed'}`);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+    
+    return checkedCount;
+  }
+
   // enhanced function to find the correct state option in dropdowns
   function findStateOption(selectElement, stateValue) {
     if (!stateValue || !selectElement) return null;
@@ -294,51 +481,6 @@
     }
     
     return null; // no match found
-  }
-
-  // specific function to handle asa registration checkboxes
-  async function handleASACheckboxes() {
-    const asaCheckboxes = [
-      'accept_terms_and_conditions',
-      'accept_marketing'
-    ];
-    
-    let checkedCount = 0;
-    
-    for (const checkboxId of asaCheckboxes) {
-      const checkbox = document.getElementById(checkboxId);
-      if (checkbox && !checkbox.checked) {
-        // multiple approaches to ensure the checkbox gets checked
-        checkbox.focus();
-        
-        // method 1: direct property setting with events
-        checkbox.checked = true;
-        checkbox.dispatchEvent(new Event("focus", { bubbles: true }));
-        checkbox.dispatchEvent(new Event("click", { bubbles: true }));
-        checkbox.dispatchEvent(new Event("change", { bubbles: true }));
-        checkbox.dispatchEvent(new Event("input", { bubbles: true }));
-        
-        // method 2: simulate actual click on the element
-        const clickEvent = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: true
-        });
-        checkbox.dispatchEvent(clickEvent);
-        
-        // method 3: try clicking the parent container (for custom styled checkboxes)
-        if (checkbox.parentElement) {
-          checkbox.parentElement.click();
-        }
-        
-        checkedCount++;
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-    }
-    
-    if (checkedCount > 0) {
-      console.log(`✅ checked ${checkedCount} asa checkboxes`);
-    }
   }
 
   // main form filling function
@@ -509,8 +651,13 @@
       }
     }
 
-    // handle asa specific checkboxes
-    await handleASACheckboxes();
+    // handle custom state dropdowns (for non-standard dropdowns like Vue components)
+    const customStateCount = await handleCustomStateDropdowns(profile);
+    filledCount += customStateCount;
+
+    // handle various checkboxes (enhanced version)
+    const checkboxCount = await handleCheckboxes(profile);
+    filledCount += checkboxCount;
 
     console.log(`🎉 form filling complete! filled ${filledCount} fields`);
     
