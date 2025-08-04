@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h2>🔄 auto form filler</h2>
+    <p class="subtitle">enter your information to auto-fill forms across all websites</p>
+    
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="individual">📝 individual fields</button>
+      <button class="tab-btn" data-tab="bulk">📋 bulk paste</button>
+    </div>
+    
+    <!-- individual fields tab -->
+    <div id="individual-tab" class="tab-content active">
+      <div class="form-group">
+        <label>first name:</label>
+        <input type="text" id="firstName" placeholder="enter first name">
+      </div>
+      
+      <div class="form-group">
+        <label>last name:</label>
+        <input type="text" id="lastName" placeholder="enter last name">
+      </div>
+      
+      <div class="form-group">
+        <label>state:</label>
+        <select id="state">
+          <option value="">select state...</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>city:</label>
+        <input type="text" id="city" placeholder="enter city">
+      </div>
+      
+      <div class="form-group">
+        <label>date of birth (dd/mm/yyyy):</label>
+        <input type="text" id="dob" placeholder="18/11/2009">
+      </div>
+      
+      <div class="form-group">
+        <label>school:</label>
+        <input type="text" id="school" placeholder="enter school name">
+      </div>
+      
+      <div class="form-group">
+        <label>zip code:</label>
+        <input type="text" id="zip" placeholder="enter zip code">
+      </div>
+      
+      <div class="form-group">
+        <label>phone:</label>
+        <input type="text" id="phone" placeholder="enter phone number">
+      </div>
+      
+      <div class="form-group">
+        <label>email:</label>
+        <input type="email" id="email" placeholder="enter email address">
+      </div>
+      
+      <div class="form-group">
+        <label>password:</label>
+        <input type="text" id="password" placeholder="enter default password">
+      </div>
+    </div>
+    
+    <!-- bulk paste tab -->
+    <div id="bulk-tab" class="tab-content">
+      <div class="form-group">
+        <label>paste your information:</label>
+        <textarea id="bulkData" placeholder="paste your information here in this format:
+
+Name: Robert Harris
+State: Massachusetts
+City: Boston
+DOB: 18/11/2009
+School: Boston Latin Academy
+ZIP: 02124
+PHONE: 4085554449
+password: Wright10*
+robertharris181109@gmail.com
+
+note: individual fields will override this data"></textarea>
+      </div>
+    </div>
+    
+    <div class="buttons">
+      <button id="saveBtn" class="btn primary">💾 save data</button>
+      <button id="deleteBtn" class="btn danger">🗑️ delete data</button>
+    </div>
+    
+    <div class="info">
+      <strong>💡 storage info:</strong> your data is stored using chrome's sync storage and will persist across all websites and devices where you're signed in.
+    </div>
+    
+    <div id="status" class="status"></div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
