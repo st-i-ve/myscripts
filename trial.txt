@@ -132,3 +132,30 @@ class="blocks-accordion" execute Notdone/Autoaccordion_IBM.js once(not trepeated
 class="block-labeled-graphic" execute Notdone/AutoOpenLabled_IBM.js once(not trepeatedly )
 class="continue-btn brand--ui"execute  Notdone/skillsautoclickcontinue_IBM.js once(not trepeatedly )
 class="block-knowledge"execute Notdone/Autoranomanswer+Next_IBM.js once(not trepeatedly )
+
+
+<button class="continue-btn brand--ui" data-continue-btn="" type="button"><div class=" brand--linkColor"><div class="fr-view rise-tiptap">Next</div></div></button>
+
+part 3
+
+i need some changes 
+so instead of retying 
+1 i need you to resort to scrolling down to the bottom of the page like we do here pagewrappagescroll_IMB.js
+and then try picking up the noOutline inview 
+
+so that is the first thing if it fails 
+second if we try clicking this  button 
+<button class="continue-btn brand--ui" data-continue-btn="" type="button"><div class=" brand--linkColor"><div class="fr-view rise-tiptap">Next</div></div></button>
+in the noOutline in view 
+
+then we go back to retrying if all that fails 
+
+we do not need to go back to the previous  noOutline as we implemented it earlier 
+lets just use the noOutline in view 
+
+next change
+instead of waiting for 1 second  
+id prefer a feed back from the selected function ie if the function returns executed we move on to the next noOutline 
+
+
+ 
