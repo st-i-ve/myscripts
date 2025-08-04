@@ -202,6 +202,100 @@
     });
   }
 
+  // enhanced function to find the correct state option in dropdowns
+  function findStateOption(selectElement, stateValue) {
+    if (!stateValue || !selectElement) return null;
+    
+    const options = selectElement.querySelectorAll('option');
+    const normalizedState = stateValue.trim().toLowerCase();
+    
+    // i create a mapping for state abbreviations to full names
+    const stateMap = {};
+    const reverseStateMap = {};
+    
+    US_STATES.forEach(state => {
+      const abbrev = state.toLowerCase();
+      // i assume the stored state is either abbreviation or we need to find the full name
+      // this is a simplified mapping - in a real app you'd have a complete state mapping
+      const stateNames = {
+        'al': 'alabama', 'ak': 'alaska', 'az': 'arizona', 'ar': 'arkansas', 'ca': 'california',
+        'co': 'colorado', 'ct': 'connecticut', 'de': 'delaware', 'fl': 'florida', 'ga': 'georgia',
+        'hi': 'hawaii', 'id': 'idaho', 'il': 'illinois', 'in': 'indiana', 'ia': 'iowa',
+        'ks': 'kansas', 'ky': 'kentucky', 'la': 'louisiana', 'me': 'maine', 'md': 'maryland',
+        'ma': 'massachusetts', 'mi': 'michigan', 'mn': 'minnesota', 'ms': 'mississippi', 'mo': 'missouri',
+        'mt': 'montana', 'ne': 'nebraska', 'nv': 'nevada', 'nh': 'new hampshire', 'nj': 'new jersey',
+        'nm': 'new mexico', 'ny': 'new york', 'nc': 'north carolina', 'nd': 'north dakota', 'oh': 'ohio',
+        'ok': 'oklahoma', 'or': 'oregon', 'pa': 'pennsylvania', 'ri': 'rhode island', 'sc': 'south carolina',
+        'sd': 'south dakota', 'tn': 'tennessee', 'tx': 'texas', 'ut': 'utah', 'vt': 'vermont',
+        'va': 'virginia', 'wa': 'washington', 'wv': 'west virginia', 'wi': 'wisconsin', 'wy': 'wyoming'
+      };
+      
+      if (stateNames[abbrev]) {
+        stateMap[abbrev] = stateNames[abbrev];
+        reverseStateMap[stateNames[abbrev]] = abbrev;
+      }
+    });
+    
+    // i try multiple matching strategies in order of preference
+    for (const option of options) {
+      const optionValue = option.value.trim().toLowerCase();
+      const optionText = option.textContent.trim().toLowerCase();
+      
+      // strategy 1: exact match with value or text
+      if (optionValue === normalizedState || optionText === normalizedState) {
+        return option;
+      }
+      
+      // strategy 2: if stored state is abbreviation, try full name
+      if (stateMap[normalizedState]) {
+        const fullName = stateMap[normalizedState];
+        if (optionValue === fullName || optionText === fullName) {
+          return option;
+        }
+      }
+      
+      // strategy 3: if stored state is full name, try abbreviation
+      if (reverseStateMap[normalizedState]) {
+        const abbrev = reverseStateMap[normalizedState];
+        if (optionValue === abbrev || optionText === abbrev) {
+          return option;
+        }
+      }
+      
+      // strategy 4: handle mixed formats like "CA - California" or "California (CA)"
+      if (stateMap[normalizedState]) {
+        const fullName = stateMap[normalizedState];
+        if (optionText.includes(normalizedState) && optionText.includes(fullName)) {
+          return option;
+        }
+      }
+      
+      if (reverseStateMap[normalizedState]) {
+        const abbrev = reverseStateMap[normalizedState];
+        if (optionText.includes(abbrev) && optionText.includes(normalizedState)) {
+          return option;
+        }
+      }
+      
+      // strategy 5: partial match (contains the state)
+      if (optionText.includes(normalizedState) || optionValue.includes(normalizedState)) {
+        return option;
+      }
+      
+      // strategy 6: if stored is abbreviation, check if option contains full name
+      if (stateMap[normalizedState] && optionText.includes(stateMap[normalizedState])) {
+        return option;
+      }
+      
+      // strategy 7: if stored is full name, check if option contains abbreviation
+      if (reverseStateMap[normalizedState] && optionText.includes(reverseStateMap[normalizedState])) {
+        return option;
+      }
+    }
+    
+    return null; // no match found
+  }
+
   // specific function to handle asa registration checkboxes
   async function handleASACheckboxes() {
     const asaCheckboxes = [
@@ -350,23 +444,22 @@
           }
         }
         
-        // state matching
+        // state matching - enhanced dropdown support
         else if (allIdentifiers.includes('state') || 
                  allIdentifiers.includes('province') ||
                  allIdentifiers.includes('region')) {
           if (profile.state && !input.value) {
             if (input.tagName.toLowerCase() === 'select') {
-              // for select dropdowns, try to find matching option
-              const options = input.querySelectorAll('option');
-              for (const option of options) {
-                if (option.value === profile.state || 
-                    option.textContent.trim() === profile.state) {
-                  input.value = option.value;
-                  input.dispatchEvent(new Event('change', { bubbles: true }));
-                  filledCount++;
-                  console.log(`✅ filled state dropdown: ${profile.state}`);
-                  break;
-                }
+              // i use the enhanced state matching function
+              const matchedOption = findStateOption(input, profile.state);
+              if (matchedOption) {
+                input.value = matchedOption.value;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                filledCount++;
+                console.log(`✅ filled state dropdown: ${profile.state} -> ${matchedOption.textContent.trim()}`);
+              } else {
+                console.log(`⚠️ could not find matching state option for: ${profile.state}`);
               }
             } else {
               await simulateTyping(input, profile.state);
