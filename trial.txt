@@ -120,3 +120,15 @@ and if its the knowledge class
 we just say "knowledge -answer with radio "
 or " knolwledge -answer with checkbox"
 
+
+part 2:
+Now i  need a new script for this second step i want another script that is more robust from this script 
+so intead of just highlighting the classes i want you to execute some functions for the interactive classes 
+
+so lets start with 
+
+class="block-flashcards" execute Notdone/Autoflipcards_IBM.js once(not trepeatedly )
+class="blocks-accordion" execute Notdone/Autoaccordion_IBM.js once(not trepeatedly )
+class="block-labeled-graphic" execute Notdone/AutoOpenLabled_IBM.js once(not trepeatedly )
+class="continue-btn brand--ui"execute  Notdone/skillsautoclickcontinue_IBM.js once(not trepeatedly )
+class="block-knowledge"execute Notdone/Autoranomanswer+Next_IBM.js once(not trepeatedly )
