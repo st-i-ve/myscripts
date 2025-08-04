@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         CONTINUE Clicker + Sorting Activity Dots
+// @name         CONTINUE Clicker + Sorting Activity Dots (Improved Card Stacking)
 // @namespace    http://tampermonkey.net/
-// @version      4.0
-// @description  Auto-click CONTINUE buttons + add sorting direction hint dots to cards (left/center/right) in both main page and iframe
+// @version      4.1
+// @description  Auto-click CONTINUE buttons + add sorting direction hint dots to cards (left/center/right) in both main page and iframe. Ensures card stacking order is top-down.
 // @match        *://*/*
 // @grant        GM_addStyle
 // ==/UserScript==
@@ -14,33 +14,31 @@
   const CLICKS_PER_RUN = 15;
   const CLICK_DELAY_MS = 100;
 
-  // ✅ CONTINUE button selectors
   const continueSelectors = [
     "button.scenario-block__text__continue",
     "button.scenario-block__dialogue__button.scenario-block__dialogue__button--appear-done.scenario-block__dialogue__button--enter-done",
   ];
 
-  // ✅ SORTING CONFIG: Card text → sorting direction
   const sortingConfig = {
-    // ⬅️ Environmental Initiative (LEFT - Green)
+    // Environmental Initiative (LEFT - Green)
     "A fishing fleet wants to develop nets that will capture and kill fewer dolphins":
       "left",
     "A company switches its delivery fleet to electric vehicles": "left",
     "A farm reduces chemical pesticide use": "left",
 
-    // ➡️ Governance Standard (RIGHT - Blue)
+    // Governance Standard (RIGHT - Blue)
     "An online retailer wants to keep fraudulent merchandise off its website":
       "right",
     "A business adopts transparent auditing procedures": "right",
     "A company enforces anti-bribery compliance": "right",
 
-    // ⬆️ Social Relationship (CENTER - Yellow)
+    // Social Relationship (CENTER - Yellow)
     "A restaurant chain wants to provide surplus food supplies to homeless shelters":
       "center",
     "A tech company promotes inclusivity in its hiring": "center",
     "Employees start a volunteer mentoring group": "center",
 
-    // 🧠 Original examples
+    // Mindset examples
     "I’ll never get this right": "left",
     "I’m a failure": "left",
     "I don’t deserve success": "left",
@@ -49,28 +47,21 @@
     "I’m not good enough": "left",
     "I’m always wrong": "left",
     "I don’t deserve something": "left",
-    "Having an open, neutral stance": "left",
-    "Nodding your head": "left",
-    "Leaning forward": "left",
 
     "I find this hard": "right",
     "I am frequently getting this wrong": "right",
     "I’m struggling": "right",
     "This is taking me a long time to do": "right",
-    "Leaning away": "right",
-    "Holding or glancing at your phone": "right",
-    "Crossing your arms": "right",
 
-    // 🧠 Listening skills
+    // Listening skills
     "Having an open, neutral stance": "left",
     "Nodding your head": "left",
     "Leaning forward": "left",
-
     "Holding or glancing at your phone": "right",
     "Crossing your arms": "right",
     "Leaning away": "right",
 
-    // 🟢 Environmental Initiative (LEFT)
+    // Environmental Initiative (LEFT)
     "Traffic congestion": "left",
     Pollution: "left",
     "Bird migration": "left",
@@ -78,18 +69,18 @@
     "Hunting license": "left",
     "Insect crop damage": "left",
 
-    // 🟡 Social Relationship (CENTER)
+    // Social Relationship (CENTER)
     "Skills training": "center",
     "Child adoption": "center",
     Education: "center",
     "Substance abuse": "center",
 
-    // 🔵 Governance Standard (RIGHT)
+    // Governance Standard (RIGHT)
     "Antibiotic approval": "right",
     "Poison control": "right",
   };
 
-  // ✅ Add visual hint dot styles
+  // ✅ Add custom styles
   GM_addStyle(`
     .hint-dot {
       position: absolute;
@@ -102,15 +93,21 @@
     .dot-left { left: 6px; background-color: #00cc00; }   /* Green */
     .dot-center { left: 50%; transform: translateX(-50%); background-color: #ffcc00; } /* Yellow */
     .dot-right { right: 6px; background-color: #3399ff; } /* Blue */
+
+    /* Optional: Force stacking layout for card piles */
+    .sorting {
+      display: block !important;
+    }
+    .playing-card {
+      position: relative !important;
+    }
   `);
 
-  // ✅ Check if element is in viewport
   function isInView(el) {
     const rect = el.getBoundingClientRect();
     return rect.top >= 0 && rect.bottom <= window.innerHeight;
   }
 
-  // ✅ Attempt to click CONTINUE buttons
   function tryClickContinueButtons(doc) {
     continueSelectors.forEach((selector) => {
       const btn = doc.querySelector(selector);
@@ -123,11 +120,17 @@
     });
   }
 
-  // ✅ Add sorting dots to card elements
   function applySortingDots(doc) {
     const sortingActivities = doc.querySelectorAll(".sorting");
     sortingActivities.forEach((activity) => {
       const cards = activity.querySelectorAll(".playing-card");
+
+      // Force card stack order: top card appears on top
+      cards.forEach((card, index) => {
+        card.style.position = "relative";
+        card.style.zIndex = cards.length - index; // Highest z-index on top card
+      });
+
       cards.forEach((card) => {
         const titleEl = card.querySelector(".playing-card__title .fr-view");
         if (!titleEl) return;
@@ -142,19 +145,15 @@
         else if (direction === "right") dot.classList.add("dot-right");
         else if (direction === "center") dot.classList.add("dot-center");
 
-        card.style.position = "relative";
         card.appendChild(dot);
       });
     });
   }
 
-  // ✅ Process main document and all iframes
   function scanDocumentAndIframes() {
-    // Main page
     tryClickContinueButtons(document);
     applySortingDots(document);
 
-    // Inside iframes
     const iframes = document.querySelectorAll("iframe");
     for (const iframe of iframes) {
       try {
@@ -170,6 +169,5 @@
     }
   }
 
-  // ✅ Loop every 300ms
   setInterval(scanDocumentAndIframes, CHECK_INTERVAL_MS);
 })();
