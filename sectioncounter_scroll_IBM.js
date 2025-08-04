@@ -19,7 +19,7 @@
   toggleBtn.textContent = "▶️ Enable Auto-Scroll";
   Object.assign(toggleBtn.style, {
     position: "fixed",
-    bottom: "20px",
+    bottom: "70px", // 70px from bottom as requested
     right: "20px",
     zIndex: 9999,
     padding: "10px 15px",
@@ -38,7 +38,7 @@
   counterDisplay.textContent = "Sections: 0";
   Object.assign(counterDisplay.style, {
     position: "fixed",
-    bottom: "70px", // positioned above the toggle button
+    bottom: "120px", // positioned above the toggle button (70px + 50px spacing)
     right: "20px",
     zIndex: 9999,
     padding: "8px 12px",
