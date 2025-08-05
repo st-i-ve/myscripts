@@ -500,7 +500,7 @@
         const direction = sortingConfig[cardText];
         if (!direction || card.querySelector(".hint-dot")) return;
 
-        const dot = document.createElement("div");
+        const dot = iframeDoc.createElement("div");
         dot.classList.add("hint-dot");
         if (direction === "left") dot.classList.add("dot-left");
         else if (direction === "right") dot.classList.add("dot-right");
