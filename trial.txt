@@ -165,3 +165,9 @@ block-sorting-activity-
 
 part 5
 class="block-scenario"
+
+part 6
+class="block-process"
+button with class="process-arrow process-arrow--right"
+
+<button aria-hidden="false" aria-label="Next" class="process-arrow process-arrow--right process-arrow--scrolling" type="button" data-testid="arrow-next" data-arrow="next" style="right: 62.6758px; top: 252.312px;"><svg aria-hidden="true" fill="currentColor" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7 5" class="process-arrow__icon"><path d="M3.104 3.896a.5.5 0 0 0 .707 0l2.543-2.542a.5.5 0 0 0-.708-.708L3.473 2.851 1.353.73a.5.5 0 1 0-.707.707l2.458 2.458Z"></path></svg></button>
