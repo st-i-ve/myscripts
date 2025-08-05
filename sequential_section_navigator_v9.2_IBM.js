@@ -110,17 +110,17 @@
     "Leaning away": "right",
 
     // Environmental Initiative (LEFT)
-    "Traffic congestion": "left",
-    Pollution: "left",
+    "Traffic congestion": "right",
+    "Pollution": "left",
     "Bird migration": "left",
     "Rain and flood": "left",
-    "Hunting license": "left",
+    "Hunting license": "right",
     "Insect crop damage": "left",
 
     // Social Relationship (CENTER)
     "Skills training": "center",
     "Child adoption": "center",
-    Education: "center",
+    "Education": "center",
     "Substance abuse": "center",
 
     // Governance Standard (RIGHT)
