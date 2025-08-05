@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "Sequential Section Navigator V9.5 - Modular",
+  "version": "9.5.0",
+  "description": "Navigate through noOutline sections on skillsline.com with modular architecture",
+  
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "*://skillsline.com/*",
+    "*://*.skillsline.com/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": [
+        "*://skillsline.com/*",
+        "*://*.skillsline.com/*"
+      ],
+      "js": [
+        "modules/config.js",
+        "modules/utils.js", 
+        "modules/ui.js",
+        "modules/blockHandlers.js",
+        "modules/core.js",
+        "content.js"
+      ],
+      "css": [
+        "styles/main.css"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png", 
+    "128": "icons/icon128.png"
+  },
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Sequential Section Navigator"
+  }
+}
