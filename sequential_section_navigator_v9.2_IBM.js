@@ -12,7 +12,7 @@
   "use strict";
 
   // i check if we're on skillsline.com domain
-  if (!window.location.hostname.includes('skillsline.com')) {
+  if (!window.location.hostname.includes("skillsline.com")) {
     console.log("🚫 Script only works on skillsline.com");
     return;
   }
@@ -111,7 +111,7 @@
 
     // Environmental Initiative (LEFT)
     "Traffic congestion": "left",
-    "Pollution": "left",
+    Pollution: "left",
     "Bird migration": "left",
     "Rain and flood": "left",
     "Hunting license": "left",
@@ -120,7 +120,7 @@
     // Social Relationship (CENTER)
     "Skills training": "center",
     "Child adoption": "center",
-    "Education": "center",
+    Education: "center",
     "Substance abuse": "center",
 
     // Governance Standard (RIGHT)
@@ -186,50 +186,50 @@
   // function to identify block type based on classes and attributes
   function identifyBlockType(element) {
     // check for sorting activity
-    if (element.querySelector('.block-sorting-activity')) {
+    if (element.querySelector(".block-sorting-activity")) {
       return "sorting activity - manual sorting";
     }
-    
+
     // check for scenario block
-    if (element.querySelector('.block-scenario')) {
+    if (element.querySelector(".block-scenario")) {
       return "scenario - auto continue";
     }
-    
+
     // check for process block
-    if (element.querySelector('.block-process')) {
+    if (element.querySelector(".block-process")) {
       return "process - auto click with next wait";
     }
-    
+
     // check for specific interactive classes
-    if (element.querySelector('.blocks-tabs')) {
+    if (element.querySelector(".blocks-tabs")) {
       return "tabs - open all tabs";
     }
-    if (element.querySelector('.block-flashcards')) {
+    if (element.querySelector(".block-flashcards")) {
       return "flashcards - flip cards";
     }
-    if (element.querySelector('.blocks-accordion')) {
+    if (element.querySelector(".blocks-accordion")) {
       return "accordion - open all accordions";
     }
-    if (element.querySelector('.block-labeled-graphic')) {
+    if (element.querySelector(".block-labeled-graphic")) {
       return "labeled graphic - open labels";
     }
-    if (element.querySelector('.continue-btn.brand--ui')) {
+    if (element.querySelector(".continue-btn.brand--ui")) {
       return "continue button - click";
     }
-    
+
     // check for knowledge blocks with specific aria-labels
-    const knowledgeBlock = element.querySelector('.block-knowledge');
+    const knowledgeBlock = element.querySelector(".block-knowledge");
     if (knowledgeBlock) {
-      const ariaLabel = knowledgeBlock.getAttribute('aria-label') || '';
-      if (ariaLabel.includes('Multiple choice')) {
+      const ariaLabel = knowledgeBlock.getAttribute("aria-label") || "";
+      if (ariaLabel.includes("Multiple choice")) {
         return "knowledge - answer with radio";
       }
-      if (ariaLabel.includes('Multiple response')) {
+      if (ariaLabel.includes("Multiple response")) {
         return "knowledge - answer with checkbox";
       }
       return "knowledge - general";
     }
-    
+
     return "general";
   }
 
@@ -240,12 +240,12 @@
       "scenario - auto continue",
       "process - auto click with next wait",
       "flashcards - flip cards",
-      "accordion - open all accordions", 
+      "accordion - open all accordions",
       "labeled graphic - open labels",
       "continue button - click",
       "knowledge - answer with radio",
       "knowledge - answer with checkbox",
-      "knowledge - general"
+      "knowledge - general",
     ];
     return interactiveTypes.includes(category);
   }
@@ -257,37 +257,48 @@
 
   // function to check if block type requires manual completion or next button wait
   function isManualBlock(category) {
-    return category === "sorting activity - manual sorting" || category === "process - auto click with next wait";
+    return (
+      category === "sorting activity - manual sorting" ||
+      category === "process - auto click with next wait"
+    );
   }
 
   // execution function for process blocks
   function executeProcess(element, iframeDoc, iframeWin) {
     return new Promise((resolve) => {
-      console.log("⚙️ Executing process logic - auto clicking process arrows until next button appears");
-      
+      console.log(
+        "⚙️ Executing process logic - auto clicking process arrows until next button appears"
+      );
+
       // selectors for process arrow buttons based on the HTML structure
       const PROCESS_SELECTORS = [
         "button.process-arrow.process-arrow--right.process-arrow--scrolling",
         "button[data-testid='arrow-next'][data-arrow='next']",
         "button.process-arrow[aria-label='Next']",
-        "button.process-arrow"
+        "button.process-arrow",
       ];
-      
+
       // selectors for next button (completion signal)
       const NEXT_BUTTON_SELECTORS = [
         'button[data-testid="arrow-next"]:not(.process-arrow)',
-        'button.next-btn',
+        "button.next-btn",
         'button[aria-label*="next"]:not(.process-arrow)',
         'button[aria-label*="Next"]:not(.process-arrow)',
-        'button.continue-btn',
-        'button[class*="next"]:not(.process-arrow)'
+        "button.continue-btn",
+        'button[class*="next"]:not(.process-arrow)',
       ];
-      
+
       let clickCount = 0;
       const maxClicks = 300; // safety limit (60 seconds at 200ms intervals)
-      
-      updateCategoryDisplay("process - auto click with next wait", currentIndex, noOutlineElements.length, false, "Auto-clicking process arrows...");
-      
+
+      updateCategoryDisplay(
+        "process - auto click with next wait",
+        currentIndex,
+        noOutlineElements.length,
+        false,
+        "Auto-clicking process arrows..."
+      );
+
       const clickProcess = () => {
         if (clickCount >= maxClicks) {
           console.log("⏰ Process clicking timeout reached");
@@ -298,22 +309,24 @@
           resolve(true);
           return;
         }
-        
+
         // i check if next button appeared (outside the process block)
         let nextButtonFound = false;
         for (const selector of NEXT_BUTTON_SELECTORS) {
           const nextButton = iframeDoc.querySelector(selector);
           if (nextButton && nextButton.offsetParent !== null) {
             // i make sure it's not inside the process block
-            const processBlock = element.querySelector('.block-process');
+            const processBlock = element.querySelector(".block-process");
             if (processBlock && !processBlock.contains(nextButton)) {
-              console.log("✅ Next button found outside process block, stopping clicks");
+              console.log(
+                "✅ Next button found outside process block, stopping clicks"
+              );
               nextButtonFound = true;
               break;
             }
           }
         }
-        
+
         if (nextButtonFound) {
           if (processClickingInterval) {
             clearInterval(processClickingInterval);
@@ -322,29 +335,35 @@
           resolve(true);
           return;
         }
-        
+
         // i look for process arrow buttons to click
         let buttonClicked = false;
         for (const selector of PROCESS_SELECTORS) {
           const processButton = element.querySelector(selector);
-          if (processButton && processButton.offsetParent !== null && isInViewport(processButton, iframeWin)) {
-            console.log(`⚙️ Clicking process arrow: ${selector} (click ${clickCount + 1})`);
+          if (
+            processButton &&
+            processButton.offsetParent !== null &&
+            isInViewport(processButton, iframeWin)
+          ) {
+            console.log(
+              `⚙️ Clicking process arrow: ${selector} (click ${clickCount + 1})`
+            );
             processButton.click();
             buttonClicked = true;
             clickCount++;
             break;
           }
         }
-        
+
         if (!buttonClicked) {
           console.log("⚠️ No process arrow button found to click");
         }
       };
-      
+
       // i start clicking immediately and then every 200ms
       clickProcess();
       processClickingInterval = setInterval(clickProcess, 200);
-      
+
       // i set a maximum timeout of 60 seconds
       setTimeout(() => {
         if (processClickingInterval) {
@@ -360,10 +379,10 @@
   // execution function for scenario blocks
   function executeScenario(element, iframeDoc, iframeWin) {
     console.log("🎬 Executing scenario logic - auto clicking continue buttons");
-    
+
     const CLICKS_PER_RUN = 15;
     const CLICK_DELAY_MS = 50;
-    
+
     const SELECTORS = [
       "button.scenario-block__text__continue",
       "button.scenario-block__dialogue__button.scenario-block__dialogue__button--appear-done.scenario-block__dialogue__button--enter-done",
@@ -376,7 +395,7 @@
       const button = iframeDoc.querySelector(selector);
       if (button && isInViewport(button, iframeWin)) {
         console.log(`🎬 Found scenario continue button: ${selector}`);
-        
+
         // i click the button 15 times with delays
         for (let i = 0; i < CLICKS_PER_RUN; i++) {
           setTimeout(() => {
@@ -389,17 +408,21 @@
       }
     }
 
-    console.log(`✅ Executed scenario auto-continue on ${totalClicked} buttons`);
+    console.log(
+      `✅ Executed scenario auto-continue on ${totalClicked} buttons`
+    );
     return totalClicked > 0;
   }
 
   // execution function for sorting activities
   function executeSortingActivity(element, iframeDoc) {
     console.log("🎯 Executing sorting activity logic - applying hint dots");
-    
-    const sortingActivities = element.querySelectorAll(".sorting, .block-sorting-activity");
+
+    const sortingActivities = element.querySelectorAll(
+      ".sorting, .block-sorting-activity"
+    );
     let processed = 0;
-    
+
     sortingActivities.forEach((activity) => {
       const cards = activity.querySelectorAll(".playing-card");
 
@@ -437,7 +460,7 @@
   // execution function for flashcards
   function executeFlashcards(element, iframeDoc) {
     console.log("🃏 Executing flashcards logic");
-    
+
     // unhide all slides
     const allSlides = element.querySelectorAll(".carousel-slide");
     allSlides.forEach((slide) => {
@@ -462,7 +485,7 @@
   // execution function for accordions
   function executeAccordion(element, iframeDoc) {
     console.log("📂 Executing accordion logic");
-    
+
     // expand accordions
     const accordions = element.querySelectorAll(".blocks-accordion__header");
     let expanded = 0;
@@ -481,7 +504,7 @@
   // execution function for labeled graphics
   function executeLabeledGraphic(element, iframeDoc) {
     console.log("🔘 Executing labeled graphic logic");
-    
+
     const markers = element.querySelectorAll(
       "button.labeled-graphic-marker:not(.labeled-graphic-marker--complete):not(.labeled-graphic-marker--active)"
     );
@@ -501,7 +524,7 @@
   // execution function for continue button
   function executeContinueButton(element, iframeDoc, iframeWin) {
     console.log("⏭️ Executing continue button logic");
-    
+
     const continueBtn = element.querySelector("button.continue-btn.brand--ui");
     if (continueBtn && isInViewport(continueBtn, iframeWin)) {
       console.log("✅ Clicking continue button");
@@ -512,12 +535,21 @@
   }
 
   // execution function for knowledge blocks (quiz logic)
-  function executeKnowledge(element, iframeDoc, iframeWin, executionNumber = 1) {
-    console.log(`🧠 Executing knowledge block logic (${executionNumber}${executionNumber === 1 ? 'st' : 'nd'} time)`);
-    
+  function executeKnowledge(
+    element,
+    iframeDoc,
+    iframeWin,
+    executionNumber = 1
+  ) {
+    console.log(
+      `🧠 Executing knowledge block logic (${executionNumber}${
+        executionNumber === 1 ? "st" : "nd"
+      } time)`
+    );
+
     const wrappers = element.querySelectorAll(".block-knowledge__wrapper");
     let processed = 0;
-    
+
     wrappers.forEach((wrapper) => {
       const quizCard = wrapper.querySelector(".quiz-card__main");
       if (!quizCard) return;
@@ -536,7 +568,9 @@
           chosen.dispatchEvent(
             new MouseEvent("click", { bubbles: true, cancelable: true })
           );
-          console.log(`🔘 Selected radio option (execution ${executionNumber})`);
+          console.log(
+            `🔘 Selected radio option (execution ${executionNumber})`
+          );
         }
       }
 
@@ -553,7 +587,9 @@
             new MouseEvent("click", { bubbles: true, cancelable: true })
           );
         });
-        console.log(`☑️ Selected ${picked.length} checkbox options (execution ${executionNumber})`);
+        console.log(
+          `☑️ Selected ${picked.length} checkbox options (execution ${executionNumber})`
+        );
       }
 
       // submit button with delay
@@ -562,7 +598,9 @@
           "button.quiz-card__button:not(.quiz-card__button--disabled)"
         );
         if (submitBtn) {
-          console.log(`📤 Clicking submit button (execution ${executionNumber})`);
+          console.log(
+            `📤 Clicking submit button (execution ${executionNumber})`
+          );
           submitBtn.click();
         }
       }, 300);
@@ -570,7 +608,9 @@
       processed++;
     });
 
-    console.log(`✅ Processed ${processed} knowledge blocks (execution ${executionNumber})`);
+    console.log(
+      `✅ Processed ${processed} knowledge blocks (execution ${executionNumber})`
+    );
     return processed > 0;
   }
 
@@ -578,12 +618,12 @@
   function scrollIntoViewAndWait(element) {
     return new Promise((resolve) => {
       // i scroll the element into view smoothly
-      element.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center',
-        inline: 'nearest'
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
       });
-      
+
       // i wait a bit for the scroll to complete
       setTimeout(resolve, 300);
     });
@@ -594,33 +634,39 @@
     return new Promise((resolve) => {
       console.log("⏳ Waiting for next button to appear after manual activity");
       isWaitingForNextButton = true;
-      
+
       let displayMessage = "MANUAL SORTING REQUIRED - Waiting for next button";
       if (category === "process - auto click with next wait") {
         displayMessage = "PROCESS COMPLETE - Waiting for next button";
       }
-      
-      updateCategoryDisplay(category, currentIndex, noOutlineElements.length, false, displayMessage);
-      
+
+      updateCategoryDisplay(
+        category,
+        currentIndex,
+        noOutlineElements.length,
+        false,
+        displayMessage
+      );
+
       const checkForNextButton = () => {
         if (!isWaitingForNextButton || !currentIframe) {
           resolve(false);
           return;
         }
-        
+
         try {
           const iframeDoc = currentIframe.contentDocument;
-          
+
           // i look for various next button patterns
           const nextButtonSelectors = [
             'button[data-testid="arrow-next"]',
-            'button.next-btn',
+            "button.next-btn",
             'button[aria-label*="next"]',
             'button[aria-label*="Next"]',
-            'button.continue-btn',
-            'button[class*="next"]'
+            "button.continue-btn",
+            'button[class*="next"]',
           ];
-          
+
           let nextButton = null;
           for (const selector of nextButtonSelectors) {
             nextButton = iframeDoc.querySelector(selector);
@@ -628,7 +674,7 @@
               break;
             }
           }
-          
+
           if (nextButton) {
             console.log("✅ Next button found, activity completed");
             isWaitingForNextButton = false;
@@ -646,10 +692,10 @@
           nextButtonTimeout = setTimeout(checkForNextButton, 500);
         }
       };
-      
+
       // i start checking immediately
       checkForNextButton();
-      
+
       // i set a maximum wait time of 60 seconds
       setTimeout(() => {
         if (isWaitingForNextButton) {
@@ -668,8 +714,8 @@
   // function to execute block function based on type
   async function executeBlockFunction(element, category) {
     if (!element || !currentIframe) return false;
-    
-    const blockId = element.getAttribute('data-block-id');
+
+    const blockId = element.getAttribute("data-block-id");
     if (executedBlocks.has(blockId)) {
       console.log(`⏭️ Block ${blockId} already executed, skipping`);
       return false;
@@ -678,12 +724,12 @@
     try {
       const iframeDoc = currentIframe.contentDocument;
       const iframeWin = currentIframe.contentWindow;
-      
+
       // i scroll interactive elements into view first and wait
       if (isInteractiveBlock(category)) {
         await scrollIntoViewAndWait(element);
       }
-      
+
       let executed = false;
 
       // execute based on category
@@ -722,21 +768,43 @@
         case "knowledge - general":
           // i execute knowledge blocks twice for better reliability
           console.log("🧠 Starting double execution for knowledge block");
-          
+
           // first execution
-          updateCategoryDisplay(category, currentIndex, noOutlineElements.length, false, "1st execution...");
-          const firstExecution = executeKnowledge(element, iframeDoc, iframeWin, 1);
-          
+          updateCategoryDisplay(
+            category,
+            currentIndex,
+            noOutlineElements.length,
+            false,
+            "1st execution..."
+          );
+          const firstExecution = executeKnowledge(
+            element,
+            iframeDoc,
+            iframeWin,
+            1
+          );
+
           // wait between executions
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
+          await new Promise((resolve) => setTimeout(resolve, 500));
+
           // second execution
-          updateCategoryDisplay(category, currentIndex, noOutlineElements.length, false, "2nd execution...");
-          const secondExecution = executeKnowledge(element, iframeDoc, iframeWin, 2);
-          
+          updateCategoryDisplay(
+            category,
+            currentIndex,
+            noOutlineElements.length,
+            false,
+            "2nd execution..."
+          );
+          const secondExecution = executeKnowledge(
+            element,
+            iframeDoc,
+            iframeWin,
+            2
+          );
+
           // wait after second execution
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
+          await new Promise((resolve) => setTimeout(resolve, 500));
+
           executed = firstExecution || secondExecution;
           console.log("✅ Double execution completed for knowledge block");
           break;
@@ -758,7 +826,13 @@
   }
 
   // function to update category display
-  function updateCategoryDisplay(category, index, total, executed = false, customStatus = "") {
+  function updateCategoryDisplay(
+    category,
+    index,
+    total,
+    executed = false,
+    customStatus = ""
+  ) {
     let status = "";
     if (customStatus) {
       status = ` - ${customStatus}`;
@@ -780,21 +854,25 @@
 
   // function to collect all noOutline elements from iframe
   function collectNoOutlineElements(iframeDoc) {
-    const elements = Array.from(iframeDoc.querySelectorAll('.noOutline[data-block-id]'));
-    
+    const elements = Array.from(
+      iframeDoc.querySelectorAll(".noOutline[data-block-id]")
+    );
+
     // i filter out elements we've already seen to avoid duplicates
-    const newElements = elements.filter(el => {
-      const blockId = el.getAttribute('data-block-id');
+    const newElements = elements.filter((el) => {
+      const blockId = el.getAttribute("data-block-id");
       return blockId && !seenBlockIds.has(blockId);
     });
-    
+
     // i add new block IDs to our seen set
-    newElements.forEach(el => {
-      const blockId = el.getAttribute('data-block-id');
+    newElements.forEach((el) => {
+      const blockId = el.getAttribute("data-block-id");
       seenBlockIds.add(blockId);
     });
-    
-    console.log(`📋 Found ${newElements.length} new noOutline elements (${elements.length} total)`);
+
+    console.log(
+      `📋 Found ${newElements.length} new noOutline elements (${elements.length} total)`
+    );
     return newElements;
   }
 
@@ -818,8 +896,12 @@
 
     // i identify the block type
     const category = identifyBlockType(element);
-    console.log(`🔍 Processing element ${currentIndex + 1}/${noOutlineElements.length}: ${category}`);
-    
+    console.log(
+      `🔍 Processing element ${currentIndex + 1}/${
+        noOutlineElements.length
+      }: ${category}`
+    );
+
     // i update the display
     updateCategoryDisplay(category, currentIndex, noOutlineElements.length);
 
@@ -832,13 +914,18 @@
 
     // i execute the appropriate function for this block type
     const executed = await executeBlockFunction(element, category);
-    
+
     // i update display to show execution status
-    updateCategoryDisplay(category, currentIndex, noOutlineElements.length, executed);
+    updateCategoryDisplay(
+      category,
+      currentIndex,
+      noOutlineElements.length,
+      executed
+    );
 
     // i move to next element
     currentIndex++;
-    
+
     // i continue navigation after a short delay
     navigationTimeout = setTimeout(navigateToNext, 1000);
   }
@@ -863,7 +950,7 @@
       }
       toggleBtn.textContent = "▶️ Start Execution";
       categoryDisplay.textContent = "Execution stopped";
-      
+
       // i remove highlight
       if (currentHighlightedElement) {
         currentHighlightedElement.style.outline = "";
@@ -872,42 +959,48 @@
     } else {
       // start navigation
       if (!currentIframe) {
-        alert("❌ No iframe found. Please make sure you're on a SkillsLine lesson page.");
+        alert(
+          "❌ No iframe found. Please make sure you're on a SkillsLine lesson page."
+        );
         return;
       }
-      
+
       try {
         const iframeDoc = currentIframe.contentDocument;
         const newElements = collectNoOutlineElements(iframeDoc);
-        
+
         if (newElements.length === 0) {
           alert("❌ No noOutline elements found in the current page.");
           return;
         }
-        
+
         // i add new elements to our collection
         noOutlineElements.push(...newElements);
-        
+
         enabled = true;
         toggleBtn.textContent = "⏸️ Stop Execution";
         categoryDisplay.textContent = "Starting execution...";
-        
-        console.log(`🚀 Starting navigation with ${noOutlineElements.length} total elements`);
+
+        console.log(
+          `🚀 Starting navigation with ${noOutlineElements.length} total elements`
+        );
         navigateToNext();
       } catch (err) {
         console.error("❌ Error accessing iframe:", err);
-        alert("❌ Cannot access iframe content. Please refresh the page and try again.");
+        alert(
+          "❌ Cannot access iframe content. Please refresh the page and try again."
+        );
       }
     }
   }
 
   // function to find iframe
   function findIframe() {
-    const iframes = document.querySelectorAll('iframe');
+    const iframes = document.querySelectorAll("iframe");
     for (const iframe of iframes) {
       try {
         const iframeDoc = iframe.contentDocument;
-        if (iframeDoc && iframeDoc.querySelector('.noOutline')) {
+        if (iframeDoc && iframeDoc.querySelector(".noOutline")) {
           return iframe;
         }
       } catch (err) {
@@ -923,24 +1016,27 @@
     if (mutationObserver) {
       mutationObserver.disconnect();
     }
-    
+
     mutationObserver = new MutationObserver((mutations) => {
       if (!enabled || !currentIframe) return;
-      
+
       let shouldUpdate = false;
       mutations.forEach((mutation) => {
-        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
           // i check if new noOutline elements were added
           mutation.addedNodes.forEach((node) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
-              if (node.classList?.contains('noOutline') || node.querySelector?.('.noOutline')) {
+              if (
+                node.classList?.contains("noOutline") ||
+                node.querySelector?.(".noOutline")
+              ) {
                 shouldUpdate = true;
               }
             }
           });
         }
       });
-      
+
       if (shouldUpdate) {
         console.log("🔄 New content detected, updating element list");
         try {
@@ -948,19 +1044,21 @@
           const newElements = collectNoOutlineElements(iframeDoc);
           if (newElements.length > 0) {
             noOutlineElements.push(...newElements);
-            console.log(`📋 Added ${newElements.length} new elements to navigation queue`);
+            console.log(
+              `📋 Added ${newElements.length} new elements to navigation queue`
+            );
           }
         } catch (err) {
           console.warn("❌ Error updating elements:", err);
         }
       }
     });
-    
+
     try {
       const iframeDoc = currentIframe.contentDocument;
       mutationObserver.observe(iframeDoc.body, {
         childList: true,
-        subtree: true
+        subtree: true,
       });
       console.log("👁️ Mutation observer setup complete");
     } catch (err) {
@@ -971,7 +1069,7 @@
   // function to initialize the script
   function initialize() {
     console.log("🔧 Initializing Sequential Section Navigator V9.2");
-    
+
     // i find the iframe
     currentIframe = findIframe();
     if (!currentIframe) {
@@ -979,21 +1077,20 @@
       setTimeout(initialize, 2000);
       return;
     }
-    
+
     console.log("✅ Found iframe, setting up navigation");
     setupMutationObserver();
-    
+
     // i add click handler to toggle button
-    toggleBtn.addEventListener('click', toggleNavigation);
-    
+    toggleBtn.addEventListener("click", toggleNavigation);
+
     console.log("🎯 Sequential Section Navigator V9.2 ready!");
   }
 
   // i start initialization when page loads
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initialize);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initialize);
   } else {
     initialize();
   }
-
 })();
