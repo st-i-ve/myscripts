@@ -60,17 +60,20 @@
   // sorting configuration from SortpileIndicator_IBM.js
   const sortingConfig = {
     // Environmental Initiative (LEFT - Green)
-    "A fishing fleet wants to develop nets that will capture and kill fewer dolphins": "left",
+    "A fishing fleet wants to develop nets that will capture and kill fewer dolphins":
+      "left",
     "A company switches its delivery fleet to electric vehicles": "left",
     "A farm reduces chemical pesticide use": "left",
 
     // Governance Standard (RIGHT - Blue)
-    "An online retailer wants to keep fraudulent merchandise off its website": "right",
+    "An online retailer wants to keep fraudulent merchandise off its website":
+      "right",
     "A business adopts transparent auditing procedures": "right",
     "A company enforces anti-bribery compliance": "right",
 
     // Social Relationship (CENTER - Yellow)
-    "A restaurant chain wants to provide surplus food supplies to homeless shelters": "center",
+    "A restaurant chain wants to provide surplus food supplies to homeless shelters":
+      "center",
     "A tech company promotes inclusivity in its hiring": "center",
     "Employees start a volunteer mentoring group": "center",
 
@@ -98,11 +101,11 @@
     "Leaning away": "right",
 
     // Environmental Initiative (LEFT)
-    "Traffic congestion": "left",
+    "Traffic congestion": "right",
     "Pollution": "left",
     "Bird migration": "left",
     "Rain and flood": "left",
-    "Hunting license": "left",
+    "Hunting license": "right",
     "Insect crop damage": "left",
 
     // Social Relationship (CENTER)
@@ -114,6 +117,16 @@
     // Governance Standard (RIGHT)
     "Antibiotic approval": "right",
     "Poison control": "right",
+
+    // Sustainable behaviors
+    "Walk or bicycle rather than drive.": "right",
+    "Bring reusable bags into stores.": "left",
+    "Take public transportation when possible.": "right",
+    "Buy only enough food to meet your needs.": "left",
+    "Avoid single-use water bottles and straws.": "left",
+    "Drive energy-efficient vehicles.": "right",
+    "Share rides, car-pool, and use public transportation.": "right",
+    "Buy energy-efficient electrical appliances.": "left",
   };
 
   // create toggle button
