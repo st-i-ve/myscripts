@@ -476,9 +476,52 @@
     });
   }
 
+  // function to inject hint dot styles into iframe
+  function injectHintDotStyles(iframeDoc) {
+    // i check if styles are already injected
+    if (iframeDoc.querySelector('#hint-dot-styles')) return;
+    
+    const style = iframeDoc.createElement('style');
+    style.id = 'hint-dot-styles';
+    style.textContent = `
+      .hint-dot {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        top: 6px;
+        z-index: 10;
+      }
+      .dot-left { 
+        left: 6px; 
+        background-color: #00cc00; 
+      }
+      .dot-center { 
+        left: 50%; 
+        transform: translateX(-50%); 
+        background-color: #ffcc00; 
+      }
+      .dot-right { 
+        right: 6px; 
+        background-color: #3399ff; 
+      }
+      .sorting {
+        display: block !important;
+      }
+      .playing-card {
+        position: relative !important;
+      }
+    `;
+    iframeDoc.head.appendChild(style);
+    console.log("✅ Injected hint dot styles into iframe");
+  }
+
   // execution function for sorting activities
   function executeSortingActivity(element, iframeDoc) {
     console.log("🎯 Executing sorting activity logic - applying hint dots");
+    
+    // i inject the hint dot styles first
+    injectHintDotStyles(iframeDoc);
     
     const sortingActivities = element.querySelectorAll(".sorting, .block-sorting-activity");
     let processed = 0;
