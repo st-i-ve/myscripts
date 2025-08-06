@@ -1,0 +1,24 @@
+<a class="nav-sidebar-header__title" href="#/">Introduction to Artificial Intelligence</a>
+
+answers
+
+
+AI systems make predictions.
+
+Unstructured
+
+Social media data contains a mix of structured and unstructured data.
+
+Machine learning offers probabilistic statements instead of binary decisions.
+
+Data that combines features of both structured and unstructured data, using metadata for organization
+
+Flight schedules
+
+General AI
+
+By providing probabilistic statements with confidence levels for different treatment options
+
+Reinforcement learning
+It performs millions of tiny calculations quickly, trying different routes through trial and error.
+
