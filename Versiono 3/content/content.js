@@ -19,8 +19,10 @@
   let executedBlocks = new Set();
   let isWaitingForNewContent = false;
   let isWaitingForNextButton = false;
+  let isPausingWhileListening = false;
   let waitingTimeout = null;
   let nextButtonTimeout = null;
+  let pauseListeningTimeout = null;
   let recentlyContinueClicked = false;
   let scenarioClickingInterval = null;
   let processClickingInterval = null;
@@ -791,6 +793,80 @@
     }
   }
 
+  // function to pause while listening for new content
+  function pauseWhileListening() {
+    return new Promise((resolve) => {
+      console.log("⏸️ Pausing for 20 seconds while listening for new content...");
+      isPausingWhileListening = true;
+      
+      updateCategoryDisplay("Pausing while listening", currentIndex, noOutlineElements.length, false, "Pausing while listening for new content...");
+      
+      const checkForNewContent = () => {
+        if (!isPausingWhileListening || !currentIframe) {
+          resolve(false);
+          return;
+        }
+        
+        try {
+          const iframeDoc = currentIframe.contentDocument;
+          
+          // i check for new noOutline elements
+          const newElements = collectNoOutlineElements();
+          if (newElements.length > 0) {
+            console.log("✅ Found new content during pause, resuming navigation");
+            noOutlineElements.push(...newElements);
+            isPausingWhileListening = false;
+            if (pauseListeningTimeout) {
+              clearTimeout(pauseListeningTimeout);
+              pauseListeningTimeout = null;
+            }
+            resolve(true);
+            return;
+          }
+          
+          // i check for continue button that might have appeared
+          const continueBtn = iframeDoc.querySelector('button.continue-btn.brand--ui');
+          if (continueBtn && continueBtn.offsetParent !== null && !recentlyContinueClicked) {
+            console.log("✅ Found continue button during pause, clicking it");
+            continueBtn.click();
+            recentlyContinueClicked = true;
+            
+            // i reset the flag after a delay
+            setTimeout(() => {
+              recentlyContinueClicked = false;
+            }, 2000);
+          }
+          
+          // i keep checking every 500ms during pause
+          if (isPausingWhileListening) {
+            pauseListeningTimeout = setTimeout(checkForNewContent, 500);
+          }
+        } catch (err) {
+          console.warn("❌ Error checking for new content during pause:", err);
+          if (isPausingWhileListening) {
+            pauseListeningTimeout = setTimeout(checkForNewContent, 500);
+          }
+        }
+      };
+      
+      // i start checking immediately
+      checkForNewContent();
+      
+      // i set the 20-second pause timeout
+      setTimeout(() => {
+        if (isPausingWhileListening) {
+          console.log("⏰ 20-second pause completed, continuing navigation");
+          isPausingWhileListening = false;
+          if (pauseListeningTimeout) {
+            clearTimeout(pauseListeningTimeout);
+            pauseListeningTimeout = null;
+          }
+          resolve(false);
+        }
+      }, 20000);
+    });
+  }
+
   // function to wait for new content or continue button
   function waitForNewContent() {
     return new Promise((resolve) => {
@@ -880,11 +956,11 @@
       
       // i check if we have elements to process
       if (currentIndex >= noOutlineElements.length) {
-        console.log("🔍 No more elements, checking for new content...");
-        const foundNewContent = await waitForNewContent();
+        console.log("🔍 No more elements, entering pause while listening mode...");
+        const foundNewContent = await pauseWhileListening();
         
         if (!foundNewContent) {
-          console.log("🏁 No new content found, navigation complete");
+          console.log("🏁 No new content found after pause, navigation complete");
           updateCategoryDisplay("Complete - No more sections", currentIndex, noOutlineElements.length);
           return;
         }
@@ -895,7 +971,7 @@
       if (!currentElement || !currentElement.offsetParent) {
         console.log("⚠️ Current element not visible, moving to next");
         currentIndex++;
-        setTimeout(navigateToNextSection, 100);
+        setTimeout(navigateToNextSection, 200);
         return;
       }
       
@@ -945,13 +1021,47 @@
       currentIndex++;
       
       // i continue navigation with appropriate delay
-      const delay = isKnowledgeBlock(category) ? 2000 : 100;
+      const delay = isKnowledgeBlock(category) ? 2000 : 200;
       setTimeout(navigateToNextSection, delay);
       
     } catch (err) {
       console.error("❌ Error in navigation:", err);
       currentIndex++;
       setTimeout(navigateToNextSection, 1000);
+    }
+  }
+
+  // function to find current visible element for resume
+  function findCurrentVisibleElement() {
+    if (!currentIframe) return -1;
+    
+    try {
+      const iframeDoc = currentIframe.contentDocument;
+      const iframeWin = currentIframe.contentWindow;
+      const allElements = Array.from(iframeDoc.querySelectorAll('.noOutline'));
+      
+      // i find the first element that's in viewport
+      for (let i = 0; i < allElements.length; i++) {
+        const element = allElements[i];
+        if (element.offsetParent && isInViewport(element, iframeWin)) {
+          console.log(`📍 Found visible element at index ${i} for resume`);
+          return i;
+        }
+      }
+      
+      // i fallback to first visible element
+      for (let i = 0; i < allElements.length; i++) {
+        const element = allElements[i];
+        if (element.offsetParent) {
+          console.log(`📍 Found first visible element at index ${i} for resume`);
+          return i;
+        }
+      }
+      
+      return 0;
+    } catch (err) {
+      console.warn("❌ Error finding current visible element:", err);
+      return 0;
     }
   }
 
@@ -963,15 +1073,25 @@
     }
     
     enabled = true;
-    currentIndex = 0;
-    noOutlineElements = [];
-    seenBlockIds.clear();
-    executedBlocks.clear();
+    
+    // i check if we're resuming or starting fresh
+    if (noOutlineElements.length === 0) {
+      // i start fresh
+      currentIndex = 0;
+      noOutlineElements = [];
+      seenBlockIds.clear();
+      executedBlocks.clear();
+      console.log("🚀 Starting navigation from beginning...");
+    } else {
+      // i resume from current visible element
+      const visibleIndex = findCurrentVisibleElement();
+      currentIndex = Math.max(visibleIndex, currentIndex);
+      console.log(`🔄 Resuming navigation from element ${currentIndex + 1}...`);
+    }
     
     toggleBtn.textContent = "⏸️ Stop Execution";
     toggleBtn.style.backgroundColor = "#dc3545";
     
-    console.log("🚀 Starting navigation...");
     navigateToNextSection();
   }
 
@@ -980,6 +1100,7 @@
     enabled = false;
     isWaitingForNewContent = false;
     isWaitingForNextButton = false;
+    isPausingWhileListening = false;
     
     // i clear all timeouts and intervals
     if (navigationTimeout) {
@@ -989,6 +1110,10 @@
     if (waitingTimeout) {
       clearTimeout(waitingTimeout);
       waitingTimeout = null;
+    }
+    if (pauseListeningTimeout) {
+      clearTimeout(pauseListeningTimeout);
+      pauseListeningTimeout = null;
     }
     if (nextButtonTimeout) {
       clearTimeout(nextButtonTimeout);
