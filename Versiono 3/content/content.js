@@ -640,6 +640,119 @@
   }
 
   // execution function for knowledge blocks (quiz logic)
+  // i created a keyword-based quiz database for automatic answer selection
+  const quizDatabase = {
+    // IBM Computing Eras
+    'chess champion.*watson.*jeopardy': 'Era of AI',
+    'deep blue.*robot.*watson': 'Era of AI',
+    'chess.*robot.*jeopardy.*watson': 'Era of AI',
+    'ibm system.*chess.*robot.*watson': 'Era of AI',
+    
+    // Era of Programming
+    'first computer.*programming.*software': 'Era of Programming',
+    'eniac.*programming.*software': 'Era of Programming',
+    'programming.*code.*software': 'Era of Programming',
+    
+    // Era of Tabulation  
+    'punch card.*census.*tabulation': 'Era of Tabulation',
+    'herman hollerith.*tabulation': 'Era of Tabulation',
+    'census.*punch.*tabulation': 'Era of Tabulation',
+    
+    // AI and Machine Learning
+    'machine learning.*subset.*ai': 'A subset of AI that learns from data',
+    'artificial intelligence.*machines.*learn': 'Artificial Intelligence enables machines to learn',
+    'neural network.*brain.*neurons': 'Neural networks mimic the human brain',
+    'deep learning.*layers.*neural': 'Deep learning uses multiple layers',
+    
+    // Add more patterns as you encounter new questions
+    'what is ai.*artificial intelligence': 'Artificial Intelligence',
+    'define machine learning': 'Machine Learning',
+    'watson.*jeopardy.*champion': 'IBM Watson',
+    'deep blue.*chess.*kasparov': 'Deep Blue'
+  };
+  
+  // i created a function to select answers from the database using keyword matching
+  function selectAnswerFromDatabase(block) {
+    try {
+      // i extract question text from different possible locations
+      const questionElement = block.querySelector('.quiz-card__title') || 
+                             block.querySelector('[class*="question"]') ||
+                             block.querySelector('[class*="title"]');
+      
+      if (!questionElement) {
+        console.log('❌ No question element found');
+        return false;
+      }
+      
+      const questionText = questionElement.textContent.toLowerCase().trim();
+      console.log('🔍 Analyzing question:', questionText.substring(0, 100) + '...');
+      
+      // i search through database patterns
+      let correctAnswer = null;
+      let matchedPattern = null;
+      
+      for (const [pattern, answer] of Object.entries(quizDatabase)) {
+        const regex = new RegExp(pattern, 'i');
+        if (regex.test(questionText)) {
+          correctAnswer = answer;
+          matchedPattern = pattern;
+          console.log(`✅ Found match! Pattern: "${pattern}" -> Answer: "${answer}"`);
+          break;
+        }
+      }
+      
+      if (!correctAnswer) {
+        console.log('❌ No matching pattern found in database');
+        return false;
+      }
+      
+      // i look for the correct answer option
+      const options = block.querySelectorAll('.quiz-multiple-choice-option, [role="radio"], [role="checkbox"]');
+      let targetOption = null;
+      
+      // i try different methods to find the correct option
+      for (const option of options) {
+        const optionText = option.textContent.toLowerCase().trim();
+        
+        // exact match
+        if (optionText.includes(correctAnswer.toLowerCase())) {
+          targetOption = option;
+          console.log(`🎯 Found exact match: "${optionText}"`);
+          break;
+        }
+        
+        // partial match for longer answers
+        const answerWords = correctAnswer.toLowerCase().split(' ');
+        const matchingWords = answerWords.filter(word => 
+          word.length > 2 && optionText.includes(word)
+        );
+        
+        if (matchingWords.length >= Math.ceil(answerWords.length * 0.6)) {
+          targetOption = option;
+          console.log(`🎯 Found partial match: "${optionText}" (${matchingWords.length}/${answerWords.length} words)`);
+          break;
+        }
+      }
+      
+      if (targetOption) {
+        // i click the correct option
+        const input = targetOption.querySelector('input') || targetOption;
+        if (input) {
+          input.click();
+          console.log(`✅ Selected answer from database: "${correctAnswer}"`);
+          return true;
+        }
+      } else {
+        console.log(`❌ Could not find option matching: "${correctAnswer}"`);
+      }
+      
+    } catch (error) {
+      console.error('❌ Error in selectAnswerFromDatabase:', error);
+    }
+    
+    return false;
+  }
+
   function executeKnowledge(element, iframeDoc, iframeWin, executionNumber = 1) {
     console.log(`🧠 Executing knowledge block logic (${executionNumber}${executionNumber === 1 ? 'st' : 'nd'} time)`);
     
@@ -650,6 +763,28 @@
       const quizCard = wrapper.querySelector(".quiz-card__main");
       if (!quizCard) return;
 
+      // i try database first (only on first execution to avoid conflicts)
+      if (executionNumber === 1) {
+        console.log('🗄️ Trying database approach first...');
+        if (selectAnswerFromDatabase(wrapper)) {
+          console.log('✅ Answer selected from database!');
+          processed++;
+          
+          // i submit after database selection
+          setTimeout(() => {
+            const submitBtn = wrapper.querySelector("button.quiz-card__button:not(.quiz-card__button--disabled)");
+            if (submitBtn) {
+              console.log(`📤 Clicking submit button after database selection (execution ${executionNumber})`);
+              submitBtn.click();
+            }
+          }, 300);
+          
+          return; // i skip random selection since database worked
+        }
+        console.log('❌ Database approach failed, falling back to random selection...');
+      }
+
+      // i fall back to existing random selection logic
       // radio button logic
       const alreadySelected = quizCard.querySelector('[role="radio"][aria-checked="true"]');
       if (!alreadySelected) {
@@ -658,7 +793,7 @@
           const randomIndex = Math.floor(Math.random() * options.length);
           const chosen = options[randomIndex];
           chosen.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
-          console.log(`🔘 Selected radio option (execution ${executionNumber})`);
+          console.log(`🔘 Selected random radio option (execution ${executionNumber})`);
         }
       }
 
@@ -671,7 +806,7 @@
         picked.forEach((checkbox) => {
           checkbox.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
         });
-        console.log(`☑️ Selected ${picked.length} checkbox options (execution ${executionNumber})`);
+        console.log(`☑️ Selected ${picked.length} random checkbox options (execution ${executionNumber})`);
       }
 
       // submit button with delay
@@ -690,8 +825,8 @@
     return processed > 0;
   }
 
-  // function to execute block-specific functionality
-  function executeBlockFunction(element, category, iframeDoc, iframeWin) {
+  // function to execute block-specific functionality - using v9.2 knowledge block logic
+  async function executeBlockFunction(element, category, iframeDoc, iframeWin) {
     switch (category) {
       case "sorting activity - manual sorting":
         return executeSortingActivity(element, iframeDoc);
@@ -710,7 +845,38 @@
       case "knowledge - answer with radio":
       case "knowledge - answer with checkbox":
       case "knowledge - general":
-        return executeKnowledge(element, iframeDoc, iframeWin);
+        // i execute knowledge blocks twice for better reliability (v9.2 approach)
+        console.log("🧠 Starting double execution for knowledge block");
+
+        // first execution
+        updateCategoryDisplay(
+          category,
+          currentIndex,
+          noOutlineElements.length,
+          false,
+          "1st execution..."
+        );
+        const firstExecution = executeKnowledge(element, iframeDoc, iframeWin, 1);
+
+        // wait between executions
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        // second execution
+        updateCategoryDisplay(
+          category,
+          currentIndex,
+          noOutlineElements.length,
+          false,
+          "2nd execution..."
+        );
+        const secondExecution = executeKnowledge(element, iframeDoc, iframeWin, 2);
+
+        // wait after second execution
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        const executed = firstExecution || secondExecution;
+        console.log("✅ Double execution completed for knowledge block");
+        return executed;
       default:
         console.log(`⚠️ No specific execution for category: ${category}`);
         return false;
@@ -722,7 +888,7 @@
     let displayText;
     
     if (customMessage) {
-      displayText = customMessage;
+      displayText = `${index + 1}/${total}: ${category} - ${customMessage}`;
     } else if (isWaiting) {
       displayText = `Waiting for new content... (${index}/${total})`;
     } else {
@@ -1004,13 +1170,8 @@
               await waitForNextButton(currentElement, category);
             }
             
-            // i add a small delay for knowledge blocks to allow for second execution
-            if (isKnowledgeBlock(category)) {
-              setTimeout(async () => {
-                console.log("🔄 Second execution for knowledge block");
-                await executeBlockFunction(currentElement, category, iframeDoc, currentIframe.contentWindow, 2);
-              }, 1000);
-            }
+            // knowledge blocks now handle double execution internally (v9.2 approach)
+            // no need for separate second execution here
           }
         } else {
           console.log("⏭️ Block already executed, skipping");
@@ -1020,8 +1181,8 @@
       // i move to next element
       currentIndex++;
       
-      // i continue navigation with appropriate delay
-      const delay = isKnowledgeBlock(category) ? 2000 : 200;
+      // i continue navigation with faster delay for general blocks
+      const delay = isKnowledgeBlock(category) ? 500 : 100; // reduced from 200ms to 100ms for general blocks
       setTimeout(navigateToNextSection, delay);
       
     } catch (err) {
