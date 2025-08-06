@@ -22,3 +22,126 @@ By providing probabilistic statements with confidence levels for different treat
 Reinforcement learning
 It performs millions of tiny calculations quickly, trying different routes through trial and error.
 
+
+A Taste of Agile - Implementation and Trends
+
+answers
+
+How can I get better today?
+
+Agile program pattern
+
+Agile operations pattern
+
+Agile strategy and governance pattern
+
+Agile strategy and governance pattern
+
+Understand
+
+Explore the required changes and strategies
+
+Agile is limited to software work.
+
+
+
+Introduction to Cybersecurity
+answers
+The cybersecurity field welcomes a wide range of skills.
+
+Whether retaliation against cybercriminals is justifiable
+
+Encryption on all hard disk drives
+
+Consequence × Likelihood
+
+Integrity
+
+Encryption helps ensure confidentiality by making data unreadable to unauthorized parties.
+
+
+
+Applying Artificial Intelligence
+answers
+To determine which set of algorithms predicted defaults most effectively
+
+To be able to edit the code and algorithms
+
+A preview of the data to used when training your model
+
+Run them all on the identical batches of new data, then compare their performance.
+
+The chatbot will use ML algorithms to learn from previous interactions and improve its responses over time.
+The chatbot will be able to understand and respond to inputs from her classmates.
+
+Robotic process automation (RPA)
+
+Deep learning
+
+Review the AI tool’s privacy policies to understand data handling practices.
+
+Use AI to analyze historical climate data and identify patterns that can enhance the predictive accuracy of climate models.
+Use AI to test different climate scenarios and see how they affect the future.
+
+
+Run AI Models with IBM Watson Studio
+
+answers
+Database storage
+
+Continue using it with additional data.
+
+Catalog
+
+True negative
+
+Because predicting risk or no risk has only two options
+
+Trusted
+
+To determine which set of algorithms predicted defaults most effectively
+
+To be able to edit the code and algorithms
+
+A preview of the data to used when training your model
+
+Run them all on the identical batches of new data, then compare their performance.
+
+
+Introduction to UX Design
+answers
+
+UX design focuses on how users engage with products, by organizing all aspects for a meaningful user experience.
+
+Analyze the existing version of the app to identify usability issues, create the updated design, evaluate it, and then implement the changes in the design.
+
+Accessibility issues.
+
+Iterative.
+
+IA organizes and structures the information in a way that users easily find what they need.
+
+The design step to create a prototype of the app to make sure the user interface and experience meet his users’ expectations and goals.
+
+UI design creates inclusive, accessible, pleasant, and aesthetically pleasing digital interfaces, while UX design focuses on making the entire user experience positive, from start to finish.
+
+Information architecture (IA).
+
+
+A Taste of Agile - Implementation and Trends
+answers
+How can I get better today?
+
+Agile program pattern
+
+Agile operations pattern
+
+Agile strategy and governance pattern
+
+Agile strategy and governance pattern
+
+Understand
+
+Explore the required changes and strategies
+
+Agile is limited to software work.
