@@ -25,7 +25,8 @@ What are the mathematical instructions that tell the machine how to go about fin
 Which AI application gives computers the ability to understand human language as it is spoken?  Natural language processing
 
 
-**Apply UX Design**
+**Applying UX Design**
+
 You are a UX designer tasked with creating a new e-commerce app.
 Which guidelines should you follow to design a consistent user experience across different platforms?
 
@@ -38,9 +39,9 @@ Details of the selected project, potential user challenges, and the goal
 
 Why is good communication a key skill for UX designers?
 Select all that apply.   
- It helps designers present ideas effectively.
- It helps designers advocate user needs to other members of their team.
-  It helps designers collaborate with other members of their team.
+✅  It helps designers present ideas effectively.
+✅  It helps designers advocate user needs to other members of their team.
+✅  It helps designers collaborate with other members of their team.
 
 
 In the example case study you reviewed for LittleSeed Plants, why are users finding the current navigation complex?    The current navigation isn't intuitive enough, as the users are unable to find the right plants easily.
@@ -49,11 +50,12 @@ In the example case study you reviewed for LittleSeed Plants, why are users find
 What is the difference between adaptive and responsive design?
 Select all that apply.
 ✅ An adaptive design delivers better performance on specific devices, while a responsive design ensures consistent performance across devices.
- ✅ An adaptive design focuses on creating multiple app layouts for specific devices or screen sizes through manual customization, while a responsive design uses a single design that adapts to various screens and devices automatically.
+✅ An adaptive design focuses on creating multiple app layouts for specific devices or screen sizes through manual customization, while a responsive design uses a single design that adapts to various screens and devices automatically.
+
+
 Kwame, a UX designer, needs to create an app for middle and high school students to build healthy habits. The app will help the students track the habits that impact their health, such as their screen time, hours of sleep, and daily steps. They’ll also be able to record their food intake, study time, and recreation activities. 
 How can Kwame use empathy, creativity, and accessibility considerations to ensure the app has an inclusive design for the students?
 Select all that apply.
-
 ✅ Research the age group’s physical and mental health challenges in forming healthy habits.
 ✅ Use empathetic language and tone, encouragement and rewards, and accessibility features to encourage students with diverse abilities.
 ✅ Add elements such as stickers, avatars, and color-coded reports creatively to engage the students.
@@ -61,7 +63,8 @@ Select all that apply.
 
 Ricky is designing the user experience of an app that teaches mathematics to middle school students from different cultures.
 What are some key points he should keep in mind?
-Select all that apply.    ✅ Use age-appropriate images and icons suitable for middle school students
+Select all that apply. 
+ ✅ Use age-appropriate images and icons suitable for middle school students
  ✅ Ensure that graphics do not exclude certain cultures
  ✅ Consider the varying needs of students with different abilities to create an inclusive and accessible design
  
@@ -73,10 +76,10 @@ Select all that apply.
 
 
 ✅ To adjust the heavy content automatically across devices, Rio should choose responsive design, as it uses a single code and thus, needs lesser effort.
- ✅ To ensure smooth user experience across all devices, Rio should choose responsive design, as it will eliminate the need for user adjustments.
+✅ To ensure smooth user experience across all devices, Rio should choose responsive design, as it will eliminate the need for user adjustments.
 
 
-**Learn About Sustainability**
+**Beyond Conservation to Sustainability**
 Steel-framed windows have been falling from a newly built skyscraper in a large city.
 What advanced technology might help solve this problem?    AI analysis of building photos to identify signs of metal fatigue
 
@@ -129,7 +132,7 @@ Fill in the blank. The UCD process is ___________ so UX designers can continuous
 Zeyad is a UX designer, and his team is working on a new exercise app for their client. He just completed a report that analyzes the users, including their preferences, pain points with other exercise apps, and times in which they’ll use the app.
 What’s the next step in the UCD process that he should perform?  The design step to create a prototype of the app to make sure the user interface and experience meet his users’ expectations and goals.
 
-**Digital Literacy Foundations**
+**Digital Literacy: The what, why, and how of digital data**
 Ravi is a data analyst for a company that has collected a large amount of customer data over the past year. He needs to analyze the data to provide insights to the marketing team.
 What critical step does Ravi need to take to ensure the reliability of his data analysis?   Check whether the tools used for collecting data give stable results over time.
 
@@ -140,6 +143,7 @@ Which of the following methods would be most effective for gathering data on cus
 ✅ Surveys and questionnaires
  ✅ Public data set and government repositories
  ✅ Commercial transaction records
+
 Layla has analyzed a large amount of data and discovered insights that could help her company improve its product offerings. Now, Layla needs to present these insights to the executive team.
 What’s an effective strategy for Layla to present her data analysis findings to the executive team?   Use visualizations to show patterns, trends, and key insights.
 
@@ -151,7 +155,7 @@ Which data gathering method would be most appropriate for Dara’s task?  Sensor
 Sara has collected a vast amount of internal and external data on customer purchasing habits over the past six months. She needs to analyze this data to identify trends and patterns.
 What’s a key consideration Sara needs to keep in mind during data analysis to ensure the validity of the results? Check her information by comparing it with data from different methods or sources.
 
-**Agile Implementation and Trends**
+**A Taste of Agile - Implementation and Trends**
 Winny manages the payroll system for a company and needs to handle the monthly process of distributing salaries to employees. 
 Which Agile pattern should Winny use to effectively manage this repeatable process?
 Agile operations pattern
@@ -173,7 +177,7 @@ As an Agile practitioner, what is the central question you should always ask you
 Which Agile pattern helps business leaders develop the company’s direction? Agile strategy and governance pattern
 
 
-**Agile Principles and Practices**
+**A Taste of Agile - Principles and Practices**
 What is the first step to act on the iteration and learning principle? Start by doing and trying small pieces of work.
 
 Which of the following principles emphasizes the importance of groups that are empowered to manage their own work? Self-directed teams
@@ -249,10 +253,6 @@ Which AI technology would best help Timothy achieve his goals?  Robotic process 
 
 As a healthcare professional, Taraji is integrating an AI diagnostic tool into her patient assessment workflow. She wants to ensure that the tool’s recommendations are accurate and respect patient privacy.
 What should Taraji do to maintain patient privacy while using the AI diagnostic tool? Review the AI tool’s privacy policies to understand data handling practices.
-
-
-
-
 
 
 
@@ -430,7 +430,7 @@ What set of skills should you elaborate on? Python, TensorFlow, and machine lear
 
 Which of the following statements is true about industries in which AI professionals work?Most industries have already hired or are in the process of hiring AI professionals.
 
-**Learn Natural Language Processing**
+**All About Natural Language Processing**
 Which of the following grammatical terms best describes an entity in relation to chatbots?Noun
 
 Which of the following describes how chatbots differ from more general AI systems in their capabilities?Chatbots are focused on answering specific questions in a limited domain.
