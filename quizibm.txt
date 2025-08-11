@@ -9,3 +9,454 @@ Notdone/QuizcardV2_IBM.js
 
 
 
+
+
+**What is Artificial Intelligence?**
+
+Which is an example of whole brain emulation where a machine can think and make decisions on many subjects?  General AI
+
+
+What is artificial intelligence? Techniques that help machines and computers mimic human behavior
+
+Which of these is the basis for all AI systems and allows algorithms to reveal patterns and trends?   Data
+
+What are the mathematical instructions that tell the machine how to go about finding solutions to a problem?   Algorithm
+
+Which AI application gives computers the ability to understand human language as it is spoken?  Natural language processing
+
+
+**Apply UX Design**
+You are a UX designer tasked with creating a new e-commerce app.
+Which guidelines should you follow to design a consistent user experience across different platforms?
+Ensure that users can seamlessly transition between different devices and platforms without encountering jarring differences in user experience
+
+Align branding, visual elements, and user flows for products that span multiple platforms.
+
+When designing a UX design case study, which of the following details should UX designers provide during the first step, Define project requirements?
+Details of the selected project, potential user challenges, and the goal
+
+Why is good communication a key skill for UX designers?
+Select all that apply.    It helps designers present ideas effectively.
+ ✅ It helps designers advocate user needs to other members of their team.
+ ✅ It helps designers collaborate with other members of their team.
+
+
+In the example case study you reviewed for LittleSeed Plants, why are users finding the current navigation complex?    The current navigation isn't intuitive enough, as the users are unable to find the right plants easily.
+
+
+What is the difference between adaptive and responsive design?
+Select all that apply.
+✅ An adaptive design delivers better performance on specific devices, while a responsive design ensures consistent performance across devices.
+ ✅ An adaptive design focuses on creating multiple app layouts for specific devices or screen sizes through manual customization, while a responsive design uses a single design that adapts to various screens and devices automatically.
+Kwame, a UX designer, needs to create an app for middle and high school students to build healthy habits. The app will help the students track the habits that impact their health, such as their screen time, hours of sleep, and daily steps. They’ll also be able to record their food intake, study time, and recreation activities. 
+How can Kwame use empathy, creativity, and accessibility considerations to ensure the app has an inclusive design for the students?
+Select all that apply.
+
+✅ Research the age group’s physical and mental health challenges in forming healthy habits.
+✅ Use empathetic language and tone, encouragement and rewards, and accessibility features to encourage students with diverse abilities.
+✅ Add elements such as stickers, avatars, and color-coded reports creatively to engage the students.
+
+
+Ricky is designing the user experience of an app that teaches mathematics to middle school students from different cultures.
+What are some key points he should keep in mind?
+Select all that apply.    ✅ Use age-appropriate images and icons suitable for middle school students
+ ✅ Ensure that graphics do not exclude certain cultures
+ ✅ Consider the varying needs of students with different abilities to create an inclusive and accessible design
+ 
+
+
+A multinational news organization is looking to redesign its website to better serve a global audience with varying devices and screen sizes. Rio, the UX designer for this website, is tasked with analyzing the project and listing its requirements. Given that a news website is content heavy, Rio identifies that some of the key needs for the website are logical organization of headlines, fast loading time, minimal distractions, and visual consistency.
+Which design approach should Rio choose and why?
+Select all that apply.
+
+
+✅ To adjust the heavy content automatically across devices, Rio should choose responsive design, as it uses a single code and thus, needs lesser effort.
+ ✅ To deliver better performance on specific devices, Rio should choose adaptive design, as the design is optimized for the specific screen or device.
+ ✅ To ensure smooth user experience across all devices, Rio should choose responsive design, as it will eliminate the need for user adjustments.
+
+
+**Learn About Sustainability**
+Steel-framed windows have been falling from a newly built skyscraper in a large city.
+What advanced technology might help solve this problem?    AI analysis of building photos to identify signs of metal fatigue
+
+What does sustainability typically focus on? The needs of current and future generations
+
+What does conservation typically focus on? The protection and preservation of what exists today
+
+Which of the following is a sustainability practice you can do at home?  Turning off lights and appliances not in use
+
+A national chain of coffeehouses starts an initiative to only provide compostable straws for their beverages.
+Which pillar of ESG does this represent?  Environmental
+
+In the Stillwater simulation, what was the result when you suggested selling the lumber in the forest and conserving the fish? A storm destroyed the town.
+
+You’re the chief technical officer of a healthcare organization that has a problem to solve: keeping patient records confidential, while sharing life-saving new research data with other healthcare providers.
+
+Which of the following technologies would help you accomplish both goals? Hybrid cloud
+
+Which of the following is a potential sustainability goal for a newly built steel mill?Using renewable energy sources to power furnaces and other production equipment
+Complete the sentence. An example of an environmental initiative is __________.conservation of power use
+
+You’re explaining ESG initiatives to a friend. 
+Which of the following actions would you include in your discussion?
+Using alternative power sources
+
+**Introduction to UX Design**
+
+Which of the following statements is correct about UX design?  UX design focuses on how users will engage with products, by organizing all aspects for a meaningful user experience.
+
+Raj is the UX designer who is working to improve the usability of an instant messaging app.
+What is the correct UCD process that he should follow?  analyze the existing version of the app to identify usability issues, create the updated design, evaluate it, and then implement the changes in the desig
+
+
+Which fundamental concept of UX design organizes and structures information in a way that users can easily find what they need?  Information architecture (IA)
+
+
+
+Rukia designed the UX of an online shopping app. The customer feedback shows that the font in the app is too small for some users to read. There are other users who aren't able to navigate the app effectively or identify elements due to color contrast.
+What type of issue are users telling Rukia they are experiencing?  Accessibility issues
+
+Which of the following statements is correct about the difference between UI and UX design?
+
+Sam, a UX designer, recently worked on a groceries app. The customer feedback shows that they find it hard to locate items, as the items are not logically categorized.
+How can information architecture (IA) help in this scenario?IA helps to create the architecture of the software application.
+
+
+Fill in the blank. The UCD process is ___________ so UX designers can continuously gather and fix elements based on user feedback to ensure the final product meets user needs and provides an ideal user experience. Iterative
+
+
+Zeyad is a UX designer, and his team is working on a new exercise app for their client. He just completed a report that analyzes the users, including their preferences, pain points with other exercise apps, and times in which they’ll use the app.
+What’s the next step in the UCD process that he should perform?  The design step to create a prototype of the app to make sure the user interface and experience meet his users’ expectations and goals.
+
+**Digital Literacy Foundations**
+Ravi is a data analyst for a company that has collected a large amount of customer data over the past year. He needs to analyze the data to provide insights to the marketing team.
+What critical step does Ravi need to take to ensure the reliability of his data analysis?   Check whether the tools used for collecting data give stable results over time.
+
+
+Justine is a business analyst for a new start-up company that wants to understand customer behavior patterns to tailor their product offerings better. She needs to design a data gathering strategy.
+Which of the following methods would be most effective for gathering data on customer behavior and preferences?
+(Select all that apply)
+✅ Surveys and questionnaires
+ ✅ Public data set and government repositories
+ ✅ Commercial transaction records
+Layla has analyzed a large amount of data and discovered insights that could help her company improve its product offerings. Now, Layla needs to present these insights to the executive team.
+What’s an effective strategy for Layla to present her data analysis findings to the executive team?   Use visualizations to show patterns, trends, and key insights.
+
+
+Dara is a data scientist working for a weather forecasting company. He needs to gather real-time data on weather conditions across different regions.
+Which data gathering method would be most appropriate for Dara’s task?  Sensors and IoT devices
+
+
+Sara has collected a vast amount of internal and external data on customer purchasing habits over the past six months. She needs to analyze this data to identify trends and patterns.
+What’s a key consideration Sara needs to keep in mind during data analysis to ensure the validity of the results? Check her information by comparing it with data from different methods or sources.
+
+**Agile Implementation and Trends**
+Winny manages the payroll system for a company and needs to handle the monthly process of distributing salaries to employees. 
+Which Agile pattern should Winny use to effectively manage this repeatable process?
+Agile operations pattern
+
+What is the first step in Agile patterns, regardless of the specific pattern being used?   Mobilize
+
+Which Agile pattern is suitable for managing project work with a defined start and end?  Agile program pattern
+
+Lily is the head of a non-profit organization that aims to expand its reach and impact over the next five years. She wants to develop a clear direction for the organization to achieve this.
+Which Agile pattern should Lily use in this scenario? Agile strategy and governance pattern
+
+
+After the team understands the problems, challenges, and desired outcomes, what is the next step in the Agile pattern? Explore the required changes and strategies
+
+Which of the following statements is false? Agile is limited to software work.
+
+As an Agile practitioner, what is the central question you should always ask yourself? How can I get better today?
+
+Which Agile pattern helps business leaders develop the company’s direction? Agile strategy and governance pattern
+
+
+**Agile Principles and Practices**
+What is the first step to act on the iteration and learning principle? Start by doing and trying small pieces of work.
+
+Which of the following principles emphasizes the importance of groups that are empowered to manage their own work? Self-directed teams
+
+Jordan and his friends are planning a camping trip. Jordan starts by clearly defining the goal of the trip, which is to have a relaxing and enjoyable experience. Throughout the planning process, Jordan ensures that every decision, from choosing the campsite to organizing activities, aligns with this goal.
+ Which Agile principle is Jordan applying?Clarity of outcome
+
+
+What is the correct sequence of steps to act on the clarity of outcome principle?  Define the problem, determine the user outcome, and keep the user outcome in sight 
+
+John is preparing a new recipe for a community potluck. After cooking a small batch, he shares it with his friends. They taste it and provide their feedback.
+What should be John’s next step to ensure the recipe is well-received at the potluck? Adjust the recipe based on the feedback.
+
+
+Which Agile practice allows a team to review their performance and reflect on ways to improve? Retrospective
+
+
+When creating a social contract, which step involves writing down ideas on sticky notes and sticking them anywhere on the wall? Brainstorm individually
+
+During a team meeting, Maxim introduces mood marbles and asks each team member to select a marble that represents their current emotional state and drop it into a jar.
+What is Maxim’s purpose of using mood marbles in this scenario? To evaluate how the team is feeling 
+
+
+After gathering everyone for a stand-up meeting, what is the next step? Have team members give their status updates
+
+In which Shuhari stage do you move away from traditional methods, develop a new approach, and teach it to others? Ri
+
+
+**Run AI Models with IBM Watson Studio**
+When you first save a notebook, it displays in editable form, but it is not  trusted
+
+
+Why did Watson AutoAI select Binary Classification as your Prediction Type? Because predicting risk or no risk has only two options
+
+Look at the confusion matrix generated by your AI model. Which of the following best 
+describes the cell representing No Risk Predicted and No Risk Observed? True positive
+
+
+When you selected the CSV file in All assets, what did you see? A list of possible storage locations
+Which of the following services did you provision first for your project? Database storage
+
+
+After you provisioned the database (Cloud Object Storage) what did you select to access AI/Machine Learning? Catalog
+Why did Watson test four different algorithms for this AI model? To determine which set of algorithms predicted defaults most effectively
+
+
+You’ve run several versions of an AI machine learning model for a client that wants to anticipate repair needs for a machine on their assembly line. You’ve identified the version most likely to suit their needs. Now they're asking you to save it in its current form without any changes. 
+What does that tell you they plan to do with it? Continue using it with additional data.
+Why would you save your model as a Jupyter Notebook (ipynb) file? t o be able to edit the code and algorithms , To be able to use it with a different data set
+
+
+Your AI team has developed several models to visually spot defects in building construction and trained them all on the same data. Now they’re about to generate a confusion matrix to select the best one. 
+What steps will this involve?
+Run them all on the identical batches of new data, then compare their performance.
+
+
+**Applying Artificial Intelligence**
+Olivia is an agricultural scientist looking to monitor crop health and optimize yields through advanced technologies. She needs an AI system that can analyze complex data from various sources and make predictions about crop performance.
+Which AI technology is most suitable for analyzing these aerial images? Deep learning
+
+Dr. Smith is a climate scientist who works on predicting environmental changes. He is considering using AI to enhance the accuracy of climate models, thereby improving predictions of future environmental conditions.
+How can Dr. Smith use AI to address the complex issue of climate modeling?
+Select all that apply.  
+Use AI to analyze historical climate data and identify patterns that can enhance the predictive accuracy of climate models.
+
+
+Use AI to test different climate scenarios and see how they affect the future
+Timothy is a manager at a finance company. He is looking for ways to improve efficiency and reduce errors in repetitive tasks such as data entry and invoice processing.
+Which AI technology would best help Timothy achieve his goals?  Robotic process automation (RPA)
+
+
+
+
+As a healthcare professional, Taraji is integrating an AI diagnostic tool into her patient assessment workflow. She wants to ensure that the tool’s recommendations are accurate and respect patient privacy.
+What should Taraji do to maintain patient privacy while using the AI diagnostic tool? Review the AI tool’s privacy policies to understand data handling practices.
+
+
+
+
+
+
+
+
+For her high school science fair project, Sophia wants to create an AI chatbot to help her classmates with their homework. She needs to explain to her teacher how the chatbot will simulate human intelligence.
+Which points should she include?
+The chatbot will use ML algorithms to learn from previous interactions and improve its responses over time.
+The chatbot will be able to understand and respond to inputs from her classmates.
+
+
+
+**Introduction to Artificial Intelligence**
+In which of the following eras of computing did an IBM system beat a chess champion, a robot drive itself down a 131-mile desert trail, and IBM Watson beat two Jeopardy! grand champions?  Era of AI
+
+Which of the following types of data is categorized as qualitative data, and cannot be processed and analyzed by conventional data tools and methods?
+Unstructured data
+
+Which of the following is a likely consequence of AI becoming more pervasive across industries?  Enhanced productivity and the creation of new opportunities
+
+You’re working for an employer who wants to learn from social media what customers say about her products and services.
+Which of the following is the best reason to support moving to an AI system?
+Social media data contains a mix of structured and unstructured data.
+
+
+Which of the following statements most accurately describes semi-structured data?Data that combines features of both structured and unstructured data, using metadata for organization
+
+
+Which of the following types of data can be analyzed more quickly by machine learning than by a programmable computer?Unstructured
+
+
+Which of the following is a key attribute of an artificial intelligence system?
+AI systems make predictions.
+
+
+Which of the following is an example of structured data?Flight schedules
+
+Which of the following methods of learning describes how an AI system learns using trial and error?Reinforcement learning
+
+Which level of AI refers to machines that can perform any intellectual task that a human can?General AI
+
+Which of the following explains why an AI trained with machine learning can rapidly map the best route between two points on a map? It performs millions of tiny calculations quickly, trying different routes through trial and error.
+
+You are working on an AI system to help doctors treat patients. While describing your system to a group of doctors, you are asked the following question, “How does machine learning enable decision-making in complex scenarios, such as medical treatment choices?”
+Which of the following is the best response? By providing probabilistic statements with confidence levels for different treatment options
+
+
+Which of the following describes how machine learning differs from classical systems in structuring unstructured data?Machine learning offers probabilistic statements instead of binary decisions.
+
+
+**Intro to Cybersecurity**
+Lakshmi’s job pays her $1000 every week. But when she checks her most recent pay stub, she notices that she earned only $900. Her company investigates the issue and finds that Lakshmi’s earnings have been altered without authorization.
+Which objective of the CIA triad best describes the company’s need to protect payroll data from unauthorized modification? Integrity
+
+
+John is a risk assessment specialist. Recently, his company’s vulnerability analyst identified a vulnerability in a crucial system that the company relies on for its operations. John needs to assess this risk to determine whether it requires urgent attention. 
+ Which equation should John use to calculate the risk value? Consequence × Likelihood
+
+
+Rafael is a cybersecurity consultant. His client is a new startup company. He recommends that they set up multiple technical controls to protect systems and sensitive data. 
+Which of the following controls relates to the technology element of cybersecurity?  Encryption on all hard disk drives
+
+
+One rigorously debated topic in cybersecurity ethics is the concept of active defense. 
+What is the ethical debate surrounding active defense in cybersecurity? Whether retaliation against cybercriminals is justifiable
+
+
+Cheluchi is a first-year university student considering a career in cybersecurity. She attends a campus job fair and speaks with a cybersecurity analyst, Sven. She asks Sven, “What skills do I need to work in cybersecurity?” The cybersecurity field welcomes a wide range of skills.
+
+**AI Ethics**
+When looking at a list of promotion candidates generated by an AI system, which of the following might be an indicator that there is unwanted bias in the system? 
+Select the two that apply.  A group receives a systematic disadvantage,
+A group receives a systematic advantage
+
+Which of the following is true about bias in AI systems?Unwanted bias is a systematic error in AI systems that may result in unfair outcomes.
+
+Which of the following describes a robust AI system?The AI system can effectively handle malicious attacks without causing unintentional harm.
+
+Which of the following are examples of adversarial attacks on an AI system? Poisoning    Evasion
+
+Interpretability is the degree to which an observer can understand the cause of a decision.
+
+Which of the following describes an AI system, in which everyday people, who do not have any special training in AI, can understand how and why the system came to a particular prediction or recommendation? Explainable
+
+Sheldon is creating an AI recommendation system. Which of the following facts about the system should he share to ensure transparency? What data is collected,,,,Who has access to the data  
+
+Complete the sentence. In order to be trustworthy, an AI system must be _______________ .transparent
+
+Ahbed wants to employ privacy controls before his model is deployed. 
+Which of the following should he use?  Model anonymization,,,,Differential privacy
+
+
+Shirley was arrested for protesting when she in college. 
+Which of the following would this be an example of? Sensitive personal information (SPI)
+
+
+When you asked her why there were so many romantic comedies in her Netflix recommendations, your grandmother explained that Netflix looks at the movies she watches and the movies she likes. She said they use that information to look for other movies to recommend. Since she watches a lot of romantic comedies, she gets a lot of them recommended to her. Which pillar of AI ethics is Netflix adhering to in this example? Explainability
+
+
+Rutherford is trying to implement a privacy control to fortify the AI system that he is working on. He decides to limit the amount of personal and sensitive data that is collected and takes steps to ensure that the data collected is only as granular as needed. 
+Which of the following privacy controls is Rutherford using? Data minimization
+
+
+Rose is working as an auditor on a large AI project. In an effort to provide transparency, she is creating a framework to map key details of the system to the people who can provide that information. 
+Which of the following teams is responsible for the algorithms used to train the AI?Model team
+
+
+Maria is on a team creating an AI model to help recruit engineers. Maria wants to ensure that the data set does not include specific attributes such as race, age, sex at birth, and ethnicity. What type of attributes are these examples of?Protected attributes
+Lester is working on an AI team that is concerned with making sure that all the people in his company receive equitable treatment. 
+In which of the following areas of AI ethics is Lester’s team working?Fairness
+Imagine you’re building an AI-powered tutor for students. To personalize learning experiences, the system needs access to some student data. However, you prioritize protecting student privacy and don’t want to use anything that could be considered personal information (PI). 
+Which of the following would be considered personal information (PI)?Home address
+
+
+Uma works for a large travel booking company. She is responsible for disclosing all information related to the data her company uses to build their vacation recommendation AI system. 
+Which of the following is Uma in charge of? Transparency
+
+
+Which of the following terms describes systematic errors in AI systems that, intentionally or not, generate unfair decisions?Bias
+
+
+Daniel is trying to get into nursing school. His resume is excellent, but he was turned down by all the schools he applied to. When he looked into the admissions process, he found that all the schools used the same AI model to process the applications. When Daniel looked at the data for the past 10 years, he found that in every year no less than 60% of applicants were female and the rest were male. He also found that every year at least 90% of the students accepted were female. 
+According to this data, which of the following seems to be true? Females are a privileged group.
+
+
+Which of the following adds random noise during model training to reduce the impact of any single individual on the model’s outcomes and to give a guarantee that an individual in the training data set could not be identified?Differential privacy
+
+
+The first x-ray in the following graphic shows no disease. An adversary adds noise to the data and then sends the data through the AI model, which results in an x-ray showing disease present. 
+Which of the following areas of AI ethics is involved in defending against such an attack?Robustness
+
+
+Clara has been brought in to evaluate an AI system. Based on the following graphic, she finds that Model B is more interpretable than Model A. 
+Which of the following best describes why Model B is more interpretable than Model A? Model B’s flow is clear and easy to understand.
+
+
+While preparing a data set for an AI system dealing with patient data, Nora needs to determine which of the following information qualifies as sensitive personal information (SPI) and needs to be removed from the data set.
+Which of the following would be considered SPI? Patient name
+
+
+Which of the following business roles is responsible for the deployment of AI models?AI Ops Engineer
+Bao is reviewing a diagnostic AI model when he notices something strange. The data set is larger than it should be. After reviewing the activity over the past weeks, he notices that extra items were placed in the data set that could have resulted in the AI model rendering incorrect diagnoses. However, the AI model was able to process the bogus data and still render accurate and correct diagnoses for each data item. 
+This is an example of which of the following? Robustness
+
+
+**All About Computer Vision**
+Which of the following is the best use of computer vision in a self-driving car? Detecting a stop sign
+
+
+Which of the following processes is used by AI to analyze only small parts of an image at a time, making it possible for visual recognition systems to identify parts of an image?Convolutional neural network (CNN)
+
+
+Which of the following is a convolutional neural network (CNN) used for when an AI system processes images to derive meaning from them?Identifying patterns and features in images
+
+
+If a doctor asks you to suggest an AI capability that can help analyze X-rays, which computer vision technology would you suggest?Convolutional neural network (CNN)
+
+
+You are working on a project that has two convolutional neural networks (CNNs) working against each other. One CNN (the generator) creates new data, while the other CNN (the discriminator) tries to identify if the data is real or generated. This competitive process helps the generator create increasingly realistic outputs. 
+Which of the following best describes what you are working on?Generative adversarial network (GAN)
+
+**Your Future in AI: The Job Landscape**
+What is the primary job role of a business intelligence developer?
+To analyze complex data, looking at business and market trends to increase profitability of their organization
+
+Which AI professional specializes in human language and works on voice assistants and speech recognition?Natural language processing engineer
+
+You’re applying for an entry-level job as an AI professional. The interviewer asks you about your workplace skills.
+Which of the following skills should you elaborate on? Communication and teamwork
+
+
+You’re in a job interview and you are asked to describe your advanced AI technical skills. 
+What set of skills should you elaborate on? Python, TensorFlow, and machine learning
+
+
+
+Which of the following statements is true about industries in which AI professionals work?Most industries have already hired or are in the process of hiring AI professionals.
+
+**Learn Natural Language Processing**
+Which of the following grammatical terms best describes an entity in relation to chatbots?Noun
+
+Which of the following describes how chatbots differ from more general AI systems in their capabilities?Chatbots are focused on answering specific questions in a limited domain.
+
+Which of the following terms is used to describe the reason why a user sends a message in a chatbot?Intent
+
+Which of the following explains how detecting emotions can help an AI system in user interactions? It enables the AI to detect when a customer is frustrated or angry and escalate the issue to a human agent.   
+
+When handling unstructured information, computers begin with one sentence at a time using sentence segmentation. Computers then break the information into smaller chunks that can be individually classified and sorted into a structure for natural language processing to work with them.
+Which of the following is the term used to refer to those smaller chunks?Tokens
+ 
+
+Imagine you want to create a new AI application. Which of the following would be the most suitable use of NLP for the application?An AI-powered customer service chatbot that can handle complex inquiries and resolve customer issues
+
+You are reading reviews of the latest blockbuster movie. One review says, “This movie is fantastic!” Another review says, “Worst movie ever!” 
+Which of the following best describes the process that an AI system would use to classify the reviews?Sentiment analysis
+
+
+Natural language processing is the field of computer science concerned with which of the following?    Understanding and manipulating spoken and written language
+
+
+Which of the following is the messaging channel of a chatbot that interacts with the user who is asking the question?Frontend
+Complete the sentence. _______________ can be more difficult for an AI system than identifying tokens because so much of it depends on the context of the sentence. For example, compare “I went to the docks to ship my box” to “I went to the station to ship my box”.   Classification
+
+
+Imagine you are the CEO of a large retail company. You are considering implementing chatbots on your website to interact with customers. 
+Which of the following situations would be the most appropriate use of a chatbot?
+Answering frequently asked questions (FAQs) about store policy, product availability, and return procedures
+
+

@@ -3,7 +3,7 @@
   "use strict";
 
   // i check if we're on skillsline.com domain
-  if (!window.location.hostname.includes('skillsline.com')) {
+  if (!window.location.hostname.includes("skillsline.com")) {
     console.log("🚫 Extension only works on skillsline.com");
     return;
   }
@@ -30,17 +30,20 @@
   // sorting configuration from original script
   const sortingConfig = {
     // Environmental Initiative (LEFT - Green)
-    "A fishing fleet wants to develop nets that will capture and kill fewer dolphins": "left",
+    "A fishing fleet wants to develop nets that will capture and kill fewer dolphins":
+      "left",
     "A company switches its delivery fleet to electric vehicles": "left",
     "A farm reduces chemical pesticide use": "left",
 
     // Governance Standard (RIGHT - Blue)
-    "An online retailer wants to keep fraudulent merchandise off its website": "right",
+    "An online retailer wants to keep fraudulent merchandise off its website":
+      "right",
     "A business adopts transparent auditing procedures": "right",
     "A company enforces anti-bribery compliance": "right",
 
     // Social Relationship (CENTER - Yellow)
-    "A restaurant chain wants to provide surplus food supplies to homeless shelters": "center",
+    "A restaurant chain wants to provide surplus food supplies to homeless shelters":
+      "center",
     "A tech company promotes inclusivity in its hiring": "center",
     "Employees start a volunteer mentoring group": "center",
 
@@ -69,7 +72,7 @@
 
     // Environmental Initiative (LEFT)
     "Traffic congestion": "right",
-    "Pollution": "left",
+    Pollution: "left",
     "Bird migration": "left",
     "Rain and flood": "left",
     "Hunting license": "right",
@@ -78,7 +81,7 @@
     // Social Relationship (CENTER)
     "Skills training": "center",
     "Child adoption": "center",
-    "Education": "center",
+    Education: "center",
     "Substance abuse": "center",
 
     // Governance Standard (RIGHT)
@@ -114,58 +117,62 @@
     return (
       rect.top >= 0 &&
       rect.left >= 0 &&
-      rect.bottom <= (iframeWindow.innerHeight || iframeWindow.document.documentElement.clientHeight) &&
-      rect.right <= (iframeWindow.innerWidth || iframeWindow.document.documentElement.clientWidth)
+      rect.bottom <=
+        (iframeWindow.innerHeight ||
+          iframeWindow.document.documentElement.clientHeight) &&
+      rect.right <=
+        (iframeWindow.innerWidth ||
+          iframeWindow.document.documentElement.clientWidth)
     );
   }
 
   // function to identify block type based on classes and attributes
   function identifyBlockType(element) {
     // check for sorting activity
-    if (element.querySelector('.block-sorting-activity')) {
+    if (element.querySelector(".block-sorting-activity")) {
       return "sorting activity - manual sorting";
     }
-    
+
     // check for process block - enhanced with next wait
-    if (element.querySelector('.block-process')) {
+    if (element.querySelector(".block-process")) {
       return "process - auto click with next wait";
     }
-    
+
     // check for scenario block - enhanced with next wait
-    if (element.querySelector('.block-scenario')) {
+    if (element.querySelector(".block-scenario")) {
       return "scenario - auto continue with next wait";
     }
-    
+
     // check for specific interactive classes
-    if (element.querySelector('.blocks-tabs')) {
+    if (element.querySelector(".blocks-tabs")) {
       return "tabs - open all tabs";
     }
-    if (element.querySelector('.block-flashcards')) {
+    if (element.querySelector(".block-flashcards")) {
       return "flashcards - flip cards";
     }
-    if (element.querySelector('.blocks-accordion')) {
+    if (element.querySelector(".blocks-accordion")) {
       return "accordion - open all accordions";
     }
-    if (element.querySelector('.block-labeled-graphic')) {
+    if (element.querySelector(".block-labeled-graphic")) {
       return "labeled graphic - open labels";
     }
-    if (element.querySelector('.continue-btn.brand--ui')) {
+    if (element.querySelector(".continue-btn.brand--ui")) {
       return "continue button - click";
     }
-    
+
     // check for knowledge blocks with specific aria-labels
-    const knowledgeBlock = element.querySelector('.block-knowledge');
+    const knowledgeBlock = element.querySelector(".block-knowledge");
     if (knowledgeBlock) {
-      const ariaLabel = knowledgeBlock.getAttribute('aria-label') || '';
-      if (ariaLabel.includes('Multiple choice')) {
+      const ariaLabel = knowledgeBlock.getAttribute("aria-label") || "";
+      if (ariaLabel.includes("Multiple choice")) {
         return "knowledge - answer with radio";
       }
-      if (ariaLabel.includes('Multiple response')) {
+      if (ariaLabel.includes("Multiple response")) {
         return "knowledge - answer with checkbox";
       }
       return "knowledge - general";
     }
-    
+
     return "general";
   }
 
@@ -176,12 +183,12 @@
       "process - auto click with next wait",
       "scenario - auto continue with next wait",
       "flashcards - flip cards",
-      "accordion - open all accordions", 
+      "accordion - open all accordions",
       "labeled graphic - open labels",
       "continue button - click",
       "knowledge - answer with radio",
       "knowledge - answer with checkbox",
-      "knowledge - general"
+      "knowledge - general",
     ];
     return interactiveTypes.includes(category);
   }
@@ -193,21 +200,23 @@
 
   // function to check if block type requires manual completion or next button wait
   function isManualBlock(category) {
-    return category === "sorting activity - manual sorting" || 
-           category === "process - auto click with next wait" ||
-           category === "scenario - auto continue with next wait";
+    return (
+      category === "sorting activity - manual sorting" ||
+      category === "process - auto click with next wait" ||
+      category === "scenario - auto continue with next wait"
+    );
   }
 
   // function to scroll element into view and wait
   function scrollIntoViewAndWait(element) {
     return new Promise((resolve) => {
       // i scroll the element into view smoothly
-      element.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center',
-        inline: 'nearest'
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
       });
-      
+
       // i wait a bit for the scroll to complete
       setTimeout(resolve, 300);
     });
@@ -218,35 +227,41 @@
     return new Promise((resolve) => {
       console.log("⏳ Waiting for next button to appear after manual activity");
       isWaitingForNextButton = true;
-      
+
       let displayMessage = "MANUAL SORTING REQUIRED - Waiting for next button";
       if (category === "process - auto click with next wait") {
         displayMessage = "PROCESS COMPLETE - Waiting for next button";
       } else if (category === "scenario - auto continue with next wait") {
         displayMessage = "SCENARIO COMPLETE - Waiting for next button";
       }
-      
-      updateCategoryDisplay(category, currentIndex, noOutlineElements.length, false, displayMessage);
-      
+
+      updateCategoryDisplay(
+        category,
+        currentIndex,
+        noOutlineElements.length,
+        false,
+        displayMessage
+      );
+
       const checkForNextButton = () => {
         if (!isWaitingForNextButton || !currentIframe) {
           resolve(false);
           return;
         }
-        
+
         try {
           const iframeDoc = currentIframe.contentDocument;
-          
+
           // i look for various next button patterns
           const nextButtonSelectors = [
             'button[data-testid="arrow-next"]',
-            'button.next-btn',
+            "button.next-btn",
             'button[aria-label*="next"]',
             'button[aria-label*="Next"]',
-            'button.continue-btn',
-            'button[class*="next"]'
+            "button.continue-btn",
+            'button[class*="next"]',
           ];
-          
+
           let nextButton = null;
           for (const selector of nextButtonSelectors) {
             nextButton = iframeDoc.querySelector(selector);
@@ -254,7 +269,7 @@
               break;
             }
           }
-          
+
           if (nextButton) {
             console.log("✅ Next button found, activity completed");
             isWaitingForNextButton = false;
@@ -272,10 +287,10 @@
           nextButtonTimeout = setTimeout(checkForNextButton, 500);
         }
       };
-      
+
       // i start checking immediately
       checkForNextButton();
-      
+
       // i set a maximum wait time of 60 seconds
       setTimeout(() => {
         if (isWaitingForNextButton) {
@@ -294,7 +309,9 @@
   // execution function for process blocks - using V9.2 logic
   function executeProcess(element, iframeDoc, iframeWin) {
     return new Promise((resolve) => {
-      console.log("⚙️ Executing process logic - auto clicking process arrows until next button appears");
+      console.log(
+        "⚙️ Executing process logic - auto clicking process arrows until next button appears"
+      );
 
       // selectors for process arrow buttons based on the HTML structure
       const PROCESS_SELECTORS = [
@@ -317,7 +334,13 @@
       let clickCount = 0;
       const maxClicks = 300; // safety limit (60 seconds at 200ms intervals)
 
-      updateCategoryDisplay("process - auto click with next wait", currentIndex, noOutlineElements.length, false, "Auto-clicking process arrows...");
+      updateCategoryDisplay(
+        "process - auto click with next wait",
+        currentIndex,
+        noOutlineElements.length,
+        false,
+        "Auto-clicking process arrows..."
+      );
 
       const clickProcess = () => {
         if (clickCount >= maxClicks) {
@@ -338,7 +361,9 @@
             // i make sure it's not inside the process block
             const processBlock = element.querySelector(".block-process");
             if (processBlock && !processBlock.contains(nextButton)) {
-              console.log("✅ Next button found outside process block, stopping clicks");
+              console.log(
+                "✅ Next button found outside process block, stopping clicks"
+              );
               nextButtonFound = true;
               break;
             }
@@ -358,8 +383,14 @@
         let buttonClicked = false;
         for (const selector of PROCESS_SELECTORS) {
           const processButton = element.querySelector(selector);
-          if (processButton && processButton.offsetParent !== null && isInViewport(processButton, iframeWin)) {
-            console.log(`⚙️ Clicking process arrow: ${selector} (click ${clickCount + 1})`);
+          if (
+            processButton &&
+            processButton.offsetParent !== null &&
+            isInViewport(processButton, iframeWin)
+          ) {
+            console.log(
+              `⚙️ Clicking process arrow: ${selector} (click ${clickCount + 1})`
+            );
             processButton.click();
             buttonClicked = true;
             clickCount++;
@@ -391,28 +422,36 @@
   // enhanced execution function for scenario blocks with continuous clicking
   function executeScenario(element, iframeDoc, iframeWin) {
     return new Promise((resolve) => {
-      console.log("🎬 Executing enhanced scenario logic - continuous clicking until next button appears");
-      
+      console.log(
+        "🎬 Executing enhanced scenario logic - continuous clicking until next button appears"
+      );
+
       const SCENARIO_SELECTORS = [
         "button.scenario-block__text__continue",
         "button.scenario-block__dialogue__button.scenario-block__dialogue__button--appear-done.scenario-block__dialogue__button--enter-done",
       ];
-      
+
       // selectors for next button (completion signal)
       const NEXT_BUTTON_SELECTORS = [
         'button[data-testid="arrow-next"]',
-        'button.next-btn',
+        "button.next-btn",
         'button[aria-label*="next"]',
         'button[aria-label*="Next"]',
-        'button.continue-btn',
-        'button[class*="next"]'
+        "button.continue-btn",
+        'button[class*="next"]',
       ];
-      
+
       let clickCount = 0;
       const maxClicks = 300; // safety limit (60 seconds at 200ms intervals)
-      
-      updateCategoryDisplay("scenario - auto continue with next wait", currentIndex, noOutlineElements.length, false, "Auto-clicking continue buttons...");
-      
+
+      updateCategoryDisplay(
+        "scenario - auto continue with next wait",
+        currentIndex,
+        noOutlineElements.length,
+        false,
+        "Auto-clicking continue buttons..."
+      );
+
       const clickScenario = () => {
         if (clickCount >= maxClicks) {
           console.log("⏰ Scenario clicking timeout reached");
@@ -423,7 +462,7 @@
           resolve(true);
           return;
         }
-        
+
         // i check if next button appeared
         let nextButtonFound = false;
         for (const selector of NEXT_BUTTON_SELECTORS) {
@@ -434,7 +473,7 @@
             break;
           }
         }
-        
+
         if (nextButtonFound) {
           if (scenarioClickingInterval) {
             clearInterval(scenarioClickingInterval);
@@ -443,29 +482,37 @@
           resolve(true);
           return;
         }
-        
+
         // i look for scenario continue buttons to click
         let buttonClicked = false;
         for (const selector of SCENARIO_SELECTORS) {
           const continueButton = element.querySelector(selector);
-          if (continueButton && continueButton.offsetParent !== null && isInViewport(continueButton, iframeWin)) {
-            console.log(`🎬 Clicking scenario continue: ${selector} (click ${clickCount + 1})`);
+          if (
+            continueButton &&
+            continueButton.offsetParent !== null &&
+            isInViewport(continueButton, iframeWin)
+          ) {
+            console.log(
+              `🎬 Clicking scenario continue: ${selector} (click ${
+                clickCount + 1
+              })`
+            );
             continueButton.click();
             buttonClicked = true;
             clickCount++;
             break;
           }
         }
-        
+
         if (!buttonClicked) {
           console.log("⚠️ No scenario continue button found to click");
         }
       };
-      
+
       // i start clicking immediately and then every 200ms
       clickScenario();
       scenarioClickingInterval = setInterval(clickScenario, 200);
-      
+
       // i set a maximum timeout of 60 seconds
       setTimeout(() => {
         if (scenarioClickingInterval) {
@@ -481,10 +528,10 @@
   // function to inject hint dot styles into iframe
   function injectHintDotStyles(iframeDoc) {
     // i check if styles are already injected
-    if (iframeDoc.querySelector('#hint-dot-styles')) return;
-    
-    const style = iframeDoc.createElement('style');
-    style.id = 'hint-dot-styles';
+    if (iframeDoc.querySelector("#hint-dot-styles")) return;
+
+    const style = iframeDoc.createElement("style");
+    style.id = "hint-dot-styles";
     style.textContent = `
       .hint-dot {
         position: absolute;
@@ -521,13 +568,15 @@
   // execution function for sorting activities
   function executeSortingActivity(element, iframeDoc) {
     console.log("🎯 Executing sorting activity logic - applying hint dots");
-    
+
     // i inject the hint dot styles first
     injectHintDotStyles(iframeDoc);
-    
-    const sortingActivities = element.querySelectorAll(".sorting, .block-sorting-activity");
+
+    const sortingActivities = element.querySelectorAll(
+      ".sorting, .block-sorting-activity"
+    );
     let processed = 0;
-    
+
     sortingActivities.forEach((activity) => {
       const cards = activity.querySelectorAll(".playing-card");
 
@@ -565,7 +614,7 @@
   // execution function for flashcards
   function executeFlashcards(element, iframeDoc) {
     console.log("🃏 Executing flashcards logic");
-    
+
     // unhide all slides
     const allSlides = element.querySelectorAll(".carousel-slide");
     allSlides.forEach((slide) => {
@@ -590,7 +639,7 @@
   // execution function for accordions
   function executeAccordion(element, iframeDoc) {
     console.log("📂 Executing accordion logic");
-    
+
     // expand accordions
     const accordions = element.querySelectorAll(".blocks-accordion__header");
     let expanded = 0;
@@ -609,7 +658,7 @@
   // execution function for labeled graphics
   function executeLabeledGraphic(element, iframeDoc) {
     console.log("🔘 Executing labeled graphic logic");
-    
+
     const markers = element.querySelectorAll(
       "button.labeled-graphic-marker:not(.labeled-graphic-marker--complete):not(.labeled-graphic-marker--active)"
     );
@@ -629,7 +678,7 @@
   // execution function for continue button
   function executeContinueButton(element, iframeDoc, iframeWin) {
     console.log("⏭️ Executing continue button logic");
-    
+
     const continueBtn = element.querySelector("button.continue-btn.brand--ui");
     if (continueBtn && isInViewport(continueBtn, iframeWin)) {
       console.log("✅ Clicking continue button");
@@ -643,100 +692,86 @@
   // i created a keyword-based quiz database for automatic answer selection
   const quizDatabase = {
     // IBM Computing Eras
-    'chess champion.*watson.*jeopardy': 'Era of AI',
-    'deep blue.*robot.*watson': 'Era of AI',
-    'chess.*robot.*jeopardy.*watson': 'Era of AI',
-    'ibm system.*chess.*robot.*watson': 'Era of AI',
-    
-    // Era of Programming
-    'first computer.*programming.*software': 'Era of Programming',
-    'eniac.*programming.*software': 'Era of Programming',
-    'programming.*code.*software': 'Era of Programming',
-    
-    // Era of Tabulation  
-    'punch card.*census.*tabulation': 'Era of Tabulation',
-    'herman hollerith.*tabulation': 'Era of Tabulation',
-    'census.*punch.*tabulation': 'Era of Tabulation',
-    
-    // AI and Machine Learning
-    'machine learning.*subset.*ai': 'A subset of AI that learns from data',
-    'artificial intelligence.*machines.*learn': 'Artificial Intelligence enables machines to learn',
-    'neural network.*brain.*neurons': 'Neural networks mimic the human brain',
-    'deep learning.*layers.*neural': 'Deep learning uses multiple layers',
-    
-    // Add more patterns as you encounter new questions
-    'what is ai.*artificial intelligence': 'Artificial Intelligence',
-    'define machine learning': 'Machine Learning',
-    'watson.*jeopardy.*champion': 'IBM Watson',
-    'deep blue.*chess.*kasparov': 'Deep Blue'
+    "chess champion.*watson.*jeopardy": "Era of AI",
+    "categorized.*qualitative data.*cannot be processed": "Unstructured data",
   };
-  
+
   // i created a function to select answers from the database using keyword matching
   function selectAnswerFromDatabase(block) {
     try {
       // i extract question text from different possible locations
-      const questionElement = block.querySelector('.quiz-card__title') || 
-                             block.querySelector('[class*="question"]') ||
-                             block.querySelector('[class*="title"]');
-      
+      const questionElement =
+        block.querySelector(".quiz-card__title") ||
+        block.querySelector('[class*="question"]') ||
+        block.querySelector('[class*="title"]');
+
       if (!questionElement) {
-        console.log('❌ No question element found');
+        console.log("❌ No question element found");
         return false;
       }
-      
+
       const questionText = questionElement.textContent.toLowerCase().trim();
-      console.log('🔍 Analyzing question:', questionText.substring(0, 100) + '...');
-      
+      console.log(
+        "🔍 Analyzing question:",
+        questionText.substring(0, 100) + "..."
+      );
+
       // i search through database patterns
       let correctAnswer = null;
       let matchedPattern = null;
-      
+
       for (const [pattern, answer] of Object.entries(quizDatabase)) {
-        const regex = new RegExp(pattern, 'i');
+        const regex = new RegExp(pattern, "i");
         if (regex.test(questionText)) {
           correctAnswer = answer;
           matchedPattern = pattern;
-          console.log(`✅ Found match! Pattern: "${pattern}" -> Answer: "${answer}"`);
+          console.log(
+            `✅ Found match! Pattern: "${pattern}" -> Answer: "${answer}"`
+          );
           break;
         }
       }
-      
+
       if (!correctAnswer) {
-        console.log('❌ No matching pattern found in database');
+        console.log("❌ No matching pattern found in database");
         return false;
       }
-      
+
       // i look for the correct answer option
-      const options = block.querySelectorAll('.quiz-multiple-choice-option, [role="radio"], [role="checkbox"]');
+      const options = block.querySelectorAll(
+        '.quiz-multiple-choice-option, [role="radio"], [role="checkbox"]'
+      );
       let targetOption = null;
-      
+
       // i try different methods to find the correct option
       for (const option of options) {
         const optionText = option.textContent.toLowerCase().trim();
-        
+
         // exact match
         if (optionText.includes(correctAnswer.toLowerCase())) {
           targetOption = option;
           console.log(`🎯 Found exact match: "${optionText}"`);
           break;
         }
-        
+
         // partial match for longer answers
-        const answerWords = correctAnswer.toLowerCase().split(' ');
-        const matchingWords = answerWords.filter(word => 
-          word.length > 2 && optionText.includes(word)
+        const answerWords = correctAnswer.toLowerCase().split(" ");
+        const matchingWords = answerWords.filter(
+          (word) => word.length > 2 && optionText.includes(word)
         );
-        
+
         if (matchingWords.length >= Math.ceil(answerWords.length * 0.6)) {
           targetOption = option;
-          console.log(`🎯 Found partial match: "${optionText}" (${matchingWords.length}/${answerWords.length} words)`);
+          console.log(
+            `🎯 Found partial match: "${optionText}" (${matchingWords.length}/${answerWords.length} words)`
+          );
           break;
         }
       }
-      
+
       if (targetOption) {
         // i click the correct option
-        const input = targetOption.querySelector('input') || targetOption;
+        const input = targetOption.querySelector("input") || targetOption;
         if (input) {
           input.click();
           console.log(`✅ Selected answer from database: "${correctAnswer}"`);
@@ -745,17 +780,25 @@
       } else {
         console.log(`❌ Could not find option matching: "${correctAnswer}"`);
       }
-      
     } catch (error) {
-      console.error('❌ Error in selectAnswerFromDatabase:', error);
+      console.error("❌ Error in selectAnswerFromDatabase:", error);
     }
-    
+
     return false;
   }
 
-  function executeKnowledge(element, iframeDoc, iframeWin, executionNumber = 1) {
-    console.log(`🧠 Executing knowledge block logic (${executionNumber}${executionNumber === 1 ? 'st' : 'nd'} time)`);
-    
+  function executeKnowledge(
+    element,
+    iframeDoc,
+    iframeWin,
+    executionNumber = 1
+  ) {
+    console.log(
+      `🧠 Executing knowledge block logic (${executionNumber}${
+        executionNumber === 1 ? "st" : "nd"
+      } time)`
+    );
+
     const wrappers = element.querySelectorAll(".block-knowledge__wrapper");
     let processed = 0;
 
@@ -765,55 +808,79 @@
 
       // i try database first (only on first execution to avoid conflicts)
       if (executionNumber === 1) {
-        console.log('🗄️ Trying database approach first...');
+        console.log("🗄️ Trying database approach first...");
         if (selectAnswerFromDatabase(wrapper)) {
-          console.log('✅ Answer selected from database!');
+          console.log("✅ Answer selected from database!");
           processed++;
-          
+
           // i submit after database selection
           setTimeout(() => {
-            const submitBtn = wrapper.querySelector("button.quiz-card__button:not(.quiz-card__button--disabled)");
+            const submitBtn = wrapper.querySelector(
+              "button.quiz-card__button:not(.quiz-card__button--disabled)"
+            );
             if (submitBtn) {
-              console.log(`📤 Clicking submit button after database selection (execution ${executionNumber})`);
+              console.log(
+                `📤 Clicking submit button after database selection (execution ${executionNumber})`
+              );
               submitBtn.click();
             }
           }, 300);
-          
+
           return; // i skip random selection since database worked
         }
-        console.log('❌ Database approach failed, falling back to random selection...');
+        console.log(
+          "❌ Database approach failed, falling back to random selection..."
+        );
       }
 
       // i fall back to existing random selection logic
       // radio button logic
-      const alreadySelected = quizCard.querySelector('[role="radio"][aria-checked="true"]');
+      const alreadySelected = quizCard.querySelector(
+        '[role="radio"][aria-checked="true"]'
+      );
       if (!alreadySelected) {
-        const options = quizCard.querySelectorAll('[role="radio"][aria-checked="false"]');
+        const options = quizCard.querySelectorAll(
+          '[role="radio"][aria-checked="false"]'
+        );
         if (options.length > 0) {
           const randomIndex = Math.floor(Math.random() * options.length);
           const chosen = options[randomIndex];
-          chosen.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
-          console.log(`🔘 Selected random radio option (execution ${executionNumber})`);
+          chosen.dispatchEvent(
+            new MouseEvent("click", { bubbles: true, cancelable: true })
+          );
+          console.log(
+            `🔘 Selected random radio option (execution ${executionNumber})`
+          );
         }
       }
 
       // checkbox logic
-      const checkboxOptions = quizCard.querySelectorAll('[role="checkbox"][aria-checked="false"]');
+      const checkboxOptions = quizCard.querySelectorAll(
+        '[role="checkbox"][aria-checked="false"]'
+      );
       if (checkboxOptions.length > 0) {
         const shuffled = [...checkboxOptions].sort(() => 0.5 - Math.random());
         const pickCount = Math.min(2, shuffled.length);
         const picked = shuffled.slice(0, pickCount);
         picked.forEach((checkbox) => {
-          checkbox.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+          checkbox.dispatchEvent(
+            new MouseEvent("click", { bubbles: true, cancelable: true })
+          );
         });
-        console.log(`☑️ Selected ${picked.length} random checkbox options (execution ${executionNumber})`);
+        console.log(
+          `☑️ Selected ${picked.length} random checkbox options (execution ${executionNumber})`
+        );
       }
 
       // submit button with delay
       setTimeout(() => {
-        const submitBtn = wrapper.querySelector("button.quiz-card__button:not(.quiz-card__button--disabled)");
+        const submitBtn = wrapper.querySelector(
+          "button.quiz-card__button:not(.quiz-card__button--disabled)"
+        );
         if (submitBtn) {
-          console.log(`📤 Clicking submit button (execution ${executionNumber})`);
+          console.log(
+            `📤 Clicking submit button (execution ${executionNumber})`
+          );
           submitBtn.click();
         }
       }, 300);
@@ -821,7 +888,9 @@
       processed++;
     });
 
-    console.log(`✅ Processed ${processed} knowledge blocks (execution ${executionNumber})`);
+    console.log(
+      `✅ Processed ${processed} knowledge blocks (execution ${executionNumber})`
+    );
     return processed > 0;
   }
 
@@ -856,7 +925,12 @@
           false,
           "1st execution..."
         );
-        const firstExecution = executeKnowledge(element, iframeDoc, iframeWin, 1);
+        const firstExecution = executeKnowledge(
+          element,
+          iframeDoc,
+          iframeWin,
+          1
+        );
 
         // wait between executions
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -869,7 +943,12 @@
           false,
           "2nd execution..."
         );
-        const secondExecution = executeKnowledge(element, iframeDoc, iframeWin, 2);
+        const secondExecution = executeKnowledge(
+          element,
+          iframeDoc,
+          iframeWin,
+          2
+        );
 
         // wait after second execution
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -884,9 +963,15 @@
   }
 
   // function to update category display
-  function updateCategoryDisplay(category, index, total, isWaiting = false, customMessage = null) {
+  function updateCategoryDisplay(
+    category,
+    index,
+    total,
+    isWaiting = false,
+    customMessage = null
+  ) {
     let displayText;
-    
+
     if (customMessage) {
       displayText = `${index + 1}/${total}: ${category} - ${customMessage}`;
     } else if (isWaiting) {
@@ -894,9 +979,9 @@
     } else {
       displayText = `${category} (${index + 1}/${total})`;
     }
-    
+
     categoryDisplay.textContent = displayText;
-    
+
     // i update background color based on category
     if (category.includes("manual sorting") || category.includes("MANUAL")) {
       categoryDisplay.style.backgroundColor = "#dc3545"; // red for manual
@@ -914,29 +999,31 @@
   // function to collect noOutline elements
   function collectNoOutlineElements() {
     if (!currentIframe) return [];
-    
+
     try {
       const iframeDoc = currentIframe.contentDocument;
-      const elements = Array.from(iframeDoc.querySelectorAll('.noOutline'));
-      
+      const elements = Array.from(iframeDoc.querySelectorAll(".noOutline"));
+
       console.log(`📋 Found ${elements.length} noOutline elements`);
-      
+
       // i filter out elements we've already seen
-      const newElements = elements.filter(el => {
-        const blockId = el.getAttribute('data-block-id') || 
-                       el.querySelector('[data-block-id]')?.getAttribute('data-block-id') ||
-                       el.innerHTML.substring(0, 100);
+      const newElements = elements.filter((el) => {
+        const blockId =
+          el.getAttribute("data-block-id") ||
+          el.querySelector("[data-block-id]")?.getAttribute("data-block-id") ||
+          el.innerHTML.substring(0, 100);
         return !seenBlockIds.has(blockId);
       });
-      
+
       // i mark new elements as seen
-      newElements.forEach(el => {
-        const blockId = el.getAttribute('data-block-id') || 
-                       el.querySelector('[data-block-id]')?.getAttribute('data-block-id') ||
-                       el.innerHTML.substring(0, 100);
+      newElements.forEach((el) => {
+        const blockId =
+          el.getAttribute("data-block-id") ||
+          el.querySelector("[data-block-id]")?.getAttribute("data-block-id") ||
+          el.innerHTML.substring(0, 100);
         seenBlockIds.add(blockId);
       });
-      
+
       console.log(`🆕 Found ${newElements.length} new noOutline elements`);
       return newElements;
     } catch (err) {
@@ -949,12 +1036,12 @@
   function highlightElement(element) {
     // i remove previous highlight
     if (currentHighlightedElement) {
-      currentHighlightedElement.classList.remove('nav-highlighted');
+      currentHighlightedElement.classList.remove("nav-highlighted");
     }
-    
+
     // i add new highlight
     if (element) {
-      element.classList.add('nav-highlighted');
+      element.classList.add("nav-highlighted");
       currentHighlightedElement = element;
     }
   }
@@ -962,24 +1049,34 @@
   // function to pause while listening for new content
   function pauseWhileListening() {
     return new Promise((resolve) => {
-      console.log("⏸️ Pausing for 20 seconds while listening for new content...");
+      console.log(
+        "⏸️ Pausing for 20 seconds while listening for new content..."
+      );
       isPausingWhileListening = true;
-      
-      updateCategoryDisplay("Pausing while listening", currentIndex, noOutlineElements.length, false, "Pausing while listening for new content...");
-      
+
+      updateCategoryDisplay(
+        "Pausing while listening",
+        currentIndex,
+        noOutlineElements.length,
+        false,
+        "Pausing while listening for new content..."
+      );
+
       const checkForNewContent = () => {
         if (!isPausingWhileListening || !currentIframe) {
           resolve(false);
           return;
         }
-        
+
         try {
           const iframeDoc = currentIframe.contentDocument;
-          
+
           // i check for new noOutline elements
           const newElements = collectNoOutlineElements();
           if (newElements.length > 0) {
-            console.log("✅ Found new content during pause, resuming navigation");
+            console.log(
+              "✅ Found new content during pause, resuming navigation"
+            );
             noOutlineElements.push(...newElements);
             isPausingWhileListening = false;
             if (pauseListeningTimeout) {
@@ -989,20 +1086,26 @@
             resolve(true);
             return;
           }
-          
+
           // i check for continue button that might have appeared
-          const continueBtn = iframeDoc.querySelector('button.continue-btn.brand--ui');
-          if (continueBtn && continueBtn.offsetParent !== null && !recentlyContinueClicked) {
+          const continueBtn = iframeDoc.querySelector(
+            "button.continue-btn.brand--ui"
+          );
+          if (
+            continueBtn &&
+            continueBtn.offsetParent !== null &&
+            !recentlyContinueClicked
+          ) {
             console.log("✅ Found continue button during pause, clicking it");
             continueBtn.click();
             recentlyContinueClicked = true;
-            
+
             // i reset the flag after a delay
             setTimeout(() => {
               recentlyContinueClicked = false;
             }, 2000);
           }
-          
+
           // i keep checking every 500ms during pause
           if (isPausingWhileListening) {
             pauseListeningTimeout = setTimeout(checkForNewContent, 500);
@@ -1014,10 +1117,10 @@
           }
         }
       };
-      
+
       // i start checking immediately
       checkForNewContent();
-      
+
       // i set the 20-second pause timeout
       setTimeout(() => {
         if (isPausingWhileListening) {
@@ -1038,18 +1141,23 @@
     return new Promise((resolve) => {
       console.log("⏳ Waiting for new content or continue button...");
       isWaitingForNewContent = true;
-      
-      updateCategoryDisplay("general", currentIndex, noOutlineElements.length, true);
-      
+
+      updateCategoryDisplay(
+        "general",
+        currentIndex,
+        noOutlineElements.length,
+        true
+      );
+
       const checkForContent = () => {
         if (!isWaitingForNewContent || !currentIframe) {
           resolve(false);
           return;
         }
-        
+
         try {
           const iframeDoc = currentIframe.contentDocument;
-          
+
           // i check for new noOutline elements
           const newElements = collectNoOutlineElements();
           if (newElements.length > 0) {
@@ -1063,24 +1171,30 @@
             resolve(true);
             return;
           }
-          
+
           // i check for continue button that might have appeared
-          const continueBtn = iframeDoc.querySelector('button.continue-btn.brand--ui');
-          if (continueBtn && continueBtn.offsetParent !== null && !recentlyContinueClicked) {
+          const continueBtn = iframeDoc.querySelector(
+            "button.continue-btn.brand--ui"
+          );
+          if (
+            continueBtn &&
+            continueBtn.offsetParent !== null &&
+            !recentlyContinueClicked
+          ) {
             console.log("✅ Found continue button, clicking it");
             continueBtn.click();
             recentlyContinueClicked = true;
-            
+
             // i reset the flag after a delay
             setTimeout(() => {
               recentlyContinueClicked = false;
             }, 2000);
-            
+
             // i continue waiting for new content after clicking continue
             waitingTimeout = setTimeout(checkForContent, 1000);
             return;
           }
-          
+
           // i keep checking every 1 second
           waitingTimeout = setTimeout(checkForContent, 1000);
         } catch (err) {
@@ -1088,14 +1202,16 @@
           waitingTimeout = setTimeout(checkForContent, 1000);
         }
       };
-      
+
       // i start checking immediately
       checkForContent();
-      
+
       // i set a maximum wait time of 10 seconds
       setTimeout(() => {
         if (isWaitingForNewContent) {
-          console.log("⏰ Timeout waiting for new content, proceeding to next section");
+          console.log(
+            "⏰ Timeout waiting for new content, proceeding to next section"
+          );
           isWaitingForNewContent = false;
           if (waitingTimeout) {
             clearTimeout(waitingTimeout);
@@ -1110,28 +1226,36 @@
   // main navigation function
   async function navigateToNextSection() {
     if (!enabled || !currentIframe) return;
-    
+
     try {
       const iframeDoc = currentIframe.contentDocument;
-      
+
       // i collect fresh noOutline elements if we don't have any
       if (noOutlineElements.length === 0) {
         noOutlineElements = collectNoOutlineElements();
         currentIndex = 0;
       }
-      
+
       // i check if we have elements to process
       if (currentIndex >= noOutlineElements.length) {
-        console.log("🔍 No more elements, entering pause while listening mode...");
+        console.log(
+          "🔍 No more elements, entering pause while listening mode..."
+        );
         const foundNewContent = await pauseWhileListening();
-        
+
         if (!foundNewContent) {
-          console.log("🏁 No new content found after pause, navigation complete");
-          updateCategoryDisplay("Complete - No more sections", currentIndex, noOutlineElements.length);
+          console.log(
+            "🏁 No new content found after pause, navigation complete"
+          );
+          updateCategoryDisplay(
+            "Complete - No more sections",
+            currentIndex,
+            noOutlineElements.length
+          );
           return;
         }
       }
-      
+
       // i get current element
       const currentElement = noOutlineElements[currentIndex];
       if (!currentElement || !currentElement.offsetParent) {
@@ -1140,36 +1264,48 @@
         setTimeout(navigateToNextSection, 200);
         return;
       }
-      
+
       // i scroll to and highlight the element
       await scrollIntoViewAndWait(currentElement);
       highlightElement(currentElement);
-      
+
       // i identify the block type
       const category = identifyBlockType(currentElement);
-      console.log(`📍 Processing element ${currentIndex + 1}/${noOutlineElements.length}: ${category}`);
-      
+      console.log(
+        `📍 Processing element ${currentIndex + 1}/${
+          noOutlineElements.length
+        }: ${category}`
+      );
+
       updateCategoryDisplay(category, currentIndex, noOutlineElements.length);
-      
+
       // i execute block-specific functionality
       if (isInteractiveBlock(category)) {
-        const blockId = currentElement.getAttribute('data-block-id') || 
-                       currentElement.querySelector('[data-block-id]')?.getAttribute('data-block-id') ||
-                       currentElement.innerHTML.substring(0, 100);
-        
+        const blockId =
+          currentElement.getAttribute("data-block-id") ||
+          currentElement
+            .querySelector("[data-block-id]")
+            ?.getAttribute("data-block-id") ||
+          currentElement.innerHTML.substring(0, 100);
+
         if (!executedBlocks.has(blockId)) {
           console.log(`🎯 Executing interactive block: ${category}`);
-          
-          const executed = await executeBlockFunction(currentElement, category, iframeDoc, currentIframe.contentWindow);
-          
+
+          const executed = await executeBlockFunction(
+            currentElement,
+            category,
+            iframeDoc,
+            currentIframe.contentWindow
+          );
+
           if (executed) {
             executedBlocks.add(blockId);
-            
+
             // i wait for next button if it's a manual block
             if (isManualBlock(category)) {
               await waitForNextButton(currentElement, category);
             }
-            
+
             // knowledge blocks now handle double execution internally (v9.2 approach)
             // no need for separate second execution here
           }
@@ -1177,14 +1313,13 @@
           console.log("⏭️ Block already executed, skipping");
         }
       }
-      
+
       // i move to next element
       currentIndex++;
-      
+
       // i continue navigation with faster delay for general blocks
       const delay = isKnowledgeBlock(category) ? 500 : 100; // reduced from 200ms to 100ms for general blocks
       setTimeout(navigateToNextSection, delay);
-      
     } catch (err) {
       console.error("❌ Error in navigation:", err);
       currentIndex++;
@@ -1195,12 +1330,12 @@
   // function to find current visible element for resume
   function findCurrentVisibleElement() {
     if (!currentIframe) return -1;
-    
+
     try {
       const iframeDoc = currentIframe.contentDocument;
       const iframeWin = currentIframe.contentWindow;
-      const allElements = Array.from(iframeDoc.querySelectorAll('.noOutline'));
-      
+      const allElements = Array.from(iframeDoc.querySelectorAll(".noOutline"));
+
       // i find the first element that's in viewport
       for (let i = 0; i < allElements.length; i++) {
         const element = allElements[i];
@@ -1209,16 +1344,18 @@
           return i;
         }
       }
-      
+
       // i fallback to first visible element
       for (let i = 0; i < allElements.length; i++) {
         const element = allElements[i];
         if (element.offsetParent) {
-          console.log(`📍 Found first visible element at index ${i} for resume`);
+          console.log(
+            `📍 Found first visible element at index ${i} for resume`
+          );
           return i;
         }
       }
-      
+
       return 0;
     } catch (err) {
       console.warn("❌ Error finding current visible element:", err);
@@ -1232,9 +1369,9 @@
       console.log("❌ No iframe found");
       return;
     }
-    
+
     enabled = true;
-    
+
     // i check if we're resuming or starting fresh
     if (noOutlineElements.length === 0) {
       // i start fresh
@@ -1249,10 +1386,10 @@
       currentIndex = Math.max(visibleIndex, currentIndex);
       console.log(`🔄 Resuming navigation from element ${currentIndex + 1}...`);
     }
-    
+
     toggleBtn.textContent = "⏸️ Stop Execution";
     toggleBtn.style.backgroundColor = "#dc3545";
-    
+
     navigateToNextSection();
   }
 
@@ -1262,7 +1399,7 @@
     isWaitingForNewContent = false;
     isWaitingForNextButton = false;
     isPausingWhileListening = false;
-    
+
     // i clear all timeouts and intervals
     if (navigationTimeout) {
       clearTimeout(navigationTimeout);
@@ -1288,33 +1425,34 @@
       clearInterval(processClickingInterval);
       processClickingInterval = null;
     }
-    
+
     // i remove highlight
     if (currentHighlightedElement) {
-      currentHighlightedElement.classList.remove('nav-highlighted');
+      currentHighlightedElement.classList.remove("nav-highlighted");
       currentHighlightedElement = null;
     }
-    
+
     toggleBtn.textContent = "▶️ Start Execution";
     toggleBtn.style.backgroundColor = "#0043ce";
     categoryDisplay.textContent = "Stopped (SkillsLine Only)";
     categoryDisplay.style.backgroundColor = "#6c757d";
-    
+
     console.log("⏹️ Navigation stopped");
   }
 
   // function to find iframe
   function findIframe() {
-    const iframe = document.querySelector('iframe[src*="skillsline.com"]') || 
-                  document.querySelector('iframe[src*="content"]') ||
-                  document.querySelector('iframe');
-    
+    const iframe =
+      document.querySelector('iframe[src*="skillsline.com"]') ||
+      document.querySelector('iframe[src*="content"]') ||
+      document.querySelector("iframe");
+
     if (iframe && iframe.contentDocument) {
       currentIframe = iframe;
       console.log("✅ Found iframe");
       return true;
     }
-    
+
     console.log("❌ No accessible iframe found");
     return false;
   }
@@ -1325,7 +1463,9 @@
       if (findIframe()) {
         startNavigation();
       } else {
-        alert("No accessible iframe found. Make sure you're on a SkillsLine lesson page.");
+        alert(
+          "No accessible iframe found. Make sure you're on a SkillsLine lesson page."
+        );
       }
     } else {
       stopNavigation();
@@ -1337,5 +1477,7 @@
     findIframe();
   }, 2000);
 
-  console.log("🎯 Sequential Section Navigator V9.5 Chrome Extension loaded - SkillsLine Only");
+  console.log(
+    "🎯 Sequential Section Navigator V9.5 Chrome Extension loaded - SkillsLine Only"
+  );
 })();
