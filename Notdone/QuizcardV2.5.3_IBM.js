@@ -496,7 +496,7 @@
         ],
       },
     ],
-    "intro to cybersecurity": [
+    "introduction to cybersecurity": [
       {
         question:
           /lakshmi.*job.*pay stub.*earnings.*altered.*cia triad.*protect.*payroll data.*unauthorized modification/i,
