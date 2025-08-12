@@ -161,16 +161,24 @@
     ],
     "introduction to ux design": [
       {
-        question: /which.*statements.*correct.*ux design/i,
+        question: /which.*statements?.*correct.*(ui|ux) design/i,
         answers: [
-          "UX design focuses on how users will engage with products, by organizing all aspects for a meaningful user experience",
+          "UI design creates inclusive, accessible, pleasant, and aesthetically pleasing digital interfaces, while UX design focuses on making the entire user experience positive, from start to finish.",
+          "UX design focuses on how users will engage with products, by organizing all aspects for a meaningful user experience.",
+        ],
+      },
+
+      {
+        question: /which.*statements?.*correct.*(ui|ux) design/i,
+        answers: [
+          "UX design focuses on how users will engage with products, by organizing all aspects for a meaningful user experience.",
         ],
       },
       {
         question:
-          /raj.*ux designer.*improve usability.*instant messaging app.*correct.*ucd process/i,
+          /(?=.*raj)(?=.*ux.*designer)(?=.*improve.*usability)(?=.*instant.*messaging.*app)(?=.*correct.*ucd.*process)/i,
         answers: [
-          "analyze the existing version of the app to identify usability issues, create the updated design, evaluate it, and then implement the changes in the desig",
+          "analyze the existing version of the app to identify usability issues, create the updated design, evaluate it, and then implement the changes in the design",
         ],
       },
       {
@@ -191,12 +199,13 @@
         ],
       },
       {
-        question: /ucd process.*fill.*blank.*iterative/i,
+        question:
+          /(?=.*fill in the blank)(?=.*ucd.*process)(?=.*user.*feedback)(?=.*ux.*designers)/i,
         answers: ["Iterative"],
       },
       {
         question:
-          /zeyad.*ux designer.*exercise app.*report.*analyzes users.*next step.*ucd process/i,
+          /(?=.*zeyad)(?=.*ux.*designer)(?=.*exercise.*app)(?=.*analyzes.*users)(?=.*next.*step)(?=.*ucd.*process)/i,
         answers: [
           "The design step to create a prototype of the app to make sure the user interface and experience meet his users' expectations and goals",
         ],
