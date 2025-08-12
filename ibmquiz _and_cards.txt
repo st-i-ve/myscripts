@@ -3,3 +3,38 @@ Quizes
 
 Which of the following is a likely consequence of AI becoming more pervasive across industries?   
 Enhanced productivity and the creation of new opportunities
+
+
+
+Question:
+What order would you put the following steps in if you were preparing for a debate?
+Learn and understand the topic
+Build a position
+Organize your proof
+Respond to your opponent
+Answer:
+Learn and understand the topic, Build a position, Organize your proof, Respond to your opponent.
+
+
+
+
+
+sorting 
+
+{
+  "I": "left",
+  "elephant": "left",
+  "pajamas": "left",
+  "in": "right",
+  "an": "right",
+  "shot": "right",
+  "my": "right"
+}
+
+{
+  "in + pajamas": "right",
+  "I + elephant": "left",
+  "I + shot": "right",
+  "elephant + pajamas": "left",
+  "I + pajamas": "left"
+}

@@ -696,7 +696,7 @@
         ],
       },
     ],
-    "all about natural language processing": [
+    "natural language processing": [
       {
         question: /grammatical terms.*describes.*entity.*chatbots/i,
         answers: ["Noun"],
