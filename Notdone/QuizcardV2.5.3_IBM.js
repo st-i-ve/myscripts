@@ -580,7 +580,7 @@
       },
       {
         question:
-          /rutherford.*privacy control.*limit.*personal.*sensitive data.*data minimization/i,
+          /rutherford.*privacy control.*limit.*(personal|sensitive).*data.*minimization/i,
         answers: ["Data minimization"],
       },
       {
@@ -599,7 +599,7 @@
       },
       {
         question:
-          /ai.*powered tutor.*students.*personal information.*home address/i,
+          /ai.?powered tutor.*students.*personal information.*(home address|PI)/i,
         answers: ["Home address"],
       },
       {
@@ -613,15 +613,16 @@
       },
       {
         question:
-          /daniel.*nursing school.*ai model.*admissions.*females.*privileged group/i,
+          /daniel.*nursing school.*ai model.*admissions.*majority.*accepted.*female/i,
         answers: ["Females are a privileged group"],
       },
       {
-        question: /adds random noise.*model training.*differential privacy/i,
+        question:
+          /adds.*random noise.*model training.*individual.*identified.*differential privacy/i,
         answers: ["Differential privacy"],
       },
       {
-        question: /x.*ray.*adversary.*noise.*ai ethics.*robustness/i,
+        question: /x.*ray.*adversary.*noise.*robustness/i,
         answers: ["Robustness"],
       },
       {
@@ -630,7 +631,7 @@
       },
       {
         question:
-          /nora.*patient data.*sensitive personal information.*removed/i,
+          /nora.*(data set|patient data).*sensitive personal information.*(removed|qualifies|needs to be removed)/i,
         answers: ["Patient name"],
       },
       {
@@ -639,7 +640,7 @@
       },
       {
         question:
-          /bao.*diagnostic.*ai model.*data set.*larger.*bogus data.*robustness/i,
+          /bao.*diagnostic.*ai model.*data set.*(larger|extra items).*bogus.*robustness/i,
         answers: ["Robustness"],
       },
     ],

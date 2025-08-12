@@ -1,0 +1,403 @@
+<div class="block-process-carousel">
+  <div
+    aria-label="Carousel"
+    aria-roledescription="Carousel"
+    class="carousel"
+    role="region"
+    style="--carousel-active-index: 0"
+  >
+    <div aria-label="Slide controls" class="carousel-controls" role="group">
+      <ul class="carousel-controls-items" role="list">
+        <li class="carousel-controls-item" role="listitem">
+          <button
+            aria-current="true"
+            aria-label="Go to slide Introduction"
+            class="carousel-controls-item-btn"
+            tabindex="0"
+            type="button"
+          >
+            <span class="carousel-controls-item-intro-icon"
+              ><svg
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="far"
+                data-icon="chevron-right"
+                class="svg-inline--fa fa-chevron-right"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M113.3 47.41l183.1 191.1c4.469 4.625 6.688 10.62 6.688 16.59s-2.219 11.97-6.688 16.59l-183.1 191.1c-9.152 9.594-24.34 9.906-33.9 .7187c-9.625-9.125-9.938-24.38-.7187-33.91l168-175.4L78.71 80.6c-9.219-9.5-8.906-24.78 .7187-33.91C88.99 37.5 104.2 37.82 113.3 47.41z"
+                ></path></svg
+            ></span>
+          </button>
+        </li>
+        <li class="carousel-controls-item" role="listitem">
+          <button
+            aria-current="false"
+            aria-label="Go to slide 1"
+            class="carousel-controls-item-btn"
+            tabindex="-1"
+            type="button"
+          >
+            1
+          </button>
+        </li>
+        <li class="carousel-controls-item" role="listitem">
+          <button
+            aria-current="false"
+            aria-label="Go to slide 2"
+            class="carousel-controls-item-btn"
+            tabindex="-1"
+            type="button"
+          >
+            2
+          </button>
+        </li>
+        <li class="carousel-controls-item" role="listitem">
+          <button
+            aria-current="false"
+            aria-label="Go to slide 3"
+            class="carousel-controls-item-btn"
+            tabindex="-1"
+            type="button"
+          >
+            3
+          </button>
+        </li>
+        <li class="carousel-controls-item" role="listitem">
+          <button
+            aria-current="false"
+            aria-label="Go to slide Summary"
+            class="carousel-controls-item-btn"
+            tabindex="-1"
+            type="button"
+          >
+            <span
+              ><svg
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="far"
+                data-icon="check"
+                class="svg-inline--fa fa-check"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M440.1 103C450.3 112.4 450.3 127.6 440.1 136.1L176.1 400.1C167.6 410.3 152.4 410.3 143 400.1L7.029 264.1C-2.343 255.6-2.343 240.4 7.029 231C16.4 221.7 31.6 221.7 40.97 231L160 350.1L407 103C416.4 93.66 431.6 93.66 440.1 103V103z"
+                ></path></svg
+            ></span>
+          </button>
+        </li>
+      </ul>
+      <button
+        aria-disabled="true"
+        aria-label="Go to previous slide"
+        class="carousel-controls-prev"
+        type="button"
+      >
+        <span class="carousel-controls-prev-icon"
+          ><svg
+            aria-hidden="true"
+            focusable="false"
+            data-prefix="fas"
+            data-icon="chevron-left"
+            class="svg-inline--fa fa-chevron-left"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+          >
+            <path
+              fill="currentColor"
+              d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 278.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
+            ></path></svg
+        ></span></button
+      ><button
+        aria-disabled="false"
+        aria-label="Go to next slide"
+        class="carousel-controls-next"
+        type="button"
+      >
+        <span class="carousel-controls-next-icon"
+          ><svg
+            aria-hidden="true"
+            focusable="false"
+            data-prefix="fas"
+            data-icon="chevron-right"
+            class="svg-inline--fa fa-chevron-right"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+          >
+            <path
+              fill="currentColor"
+              d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+            ></path></svg
+        ></span>
+      </button>
+    </div>
+    <div aria-live="polite" class="carousel-slides">
+      <div
+        aria-label="1 of 5"
+        aria-roledescription="Slide"
+        class="carousel-slide"
+        role="group"
+      >
+        <div
+          class="block-process-card block-process-card--intro block-card bg--range-light block-card--white"
+        >
+          <div class="block-process-card__title">
+            <h2>
+              <div class="brand--linkColor">
+                <div class="fr-view rise-tiptap"></div>
+              </div>
+            </h2>
+          </div>
+          <div class="block-process-card__description brand--linkColor">
+            <div class="fr-view rise-tiptap">
+              <p>
+                In this scenario, two adversaries coordinate to accomplish this
+                attack.&nbsp;
+              </p>
+            </div>
+          </div>
+          <button type="button" class="block-process-card__start-btn">
+            <span class="block-process-card__start-btn-text">START</span
+            ><span
+              ><svg
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fas"
+                data-icon="chevron-right"
+                class="svg-inline--fa fa-chevron-right block-process-card__start-btn-icon"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 384 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+      <div
+        aria-label="2 of 5"
+        aria-roledescription="Slide"
+        class="carousel-slide"
+        hidden=""
+        inert=""
+        role="group"
+      >
+        <div
+          class="block-process-card block-process-card--step block-card bg--range-light block-card--white"
+        >
+          <div class="block-process-card__number">Scene 1</div>
+          <div class="block-process-card__title">
+            <h2>
+              <div class="brand--linkColor">
+                <div class="fr-view rise-tiptap"></div>
+              </div>
+            </h2>
+          </div>
+          <div
+            class="block-process-card__media block-process-card__media--legacy"
+          >
+            <div class=""></div>
+          </div>
+          <div class="block-process-card__description brand--linkColor">
+            <div class="fr-view rise-tiptap">
+              <p><strong>Adversary 1</strong></p>
+              <p>
+                The adversary gets access to the data storage and adds malicious
+                images with increased brightness to the training data so the
+                system can learn the pattern.&nbsp;
+              </p>
+              <p>
+                Then, the adversary provides details about the percent increase
+                in brightness to another adversary, possibly someone who works
+                at the hospital.
+              </p>
+              <p><strong>Adversary 2</strong></p>
+              <p>
+                When using the AI model, another adversary, who works at the
+                hospital, can easily modify the input sent to the AI model based
+                on information gathered about the increased brightness range and
+                gets the desired result.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        aria-label="3 of 5"
+        aria-roledescription="Slide"
+        class="carousel-slide"
+        hidden=""
+        inert=""
+        role="group"
+      >
+        <div
+          class="block-process-card block-process-card--step block-card bg--range-light block-card--white"
+        >
+          <div class="block-process-card__number">Scene 2</div>
+          <div class="block-process-card__title">
+            <h2>
+              <div class="brand--linkColor">
+                <div class="fr-view rise-tiptap">
+                  Training phase: Data sent to the model for training
+                </div>
+              </div>
+            </h2>
+          </div>
+          <div
+            class="block-process-card__media block-process-card__media--legacy"
+          >
+            <div class="">
+              <div class="img">
+                <div aria-owns="rmiz-modal-af437a1f73f8" data-rmiz="">
+                  <div
+                    data-rmiz-content="not-found"
+                    style="visibility: visible"
+                  >
+                    <img
+                      alt="Graphic of training data showing the “good or true” data and the “malicious” data combining to result in a trained AI model."
+                      class="img-img img-img--center"
+                      height="380"
+                      width="985"
+                      decoding="async"
+                      loading="lazy"
+                      src="assets/AIEthics_XRayTrainedAIModel.jpg"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="block-process-card__description brand--linkColor">
+            <div class="fr-view rise-tiptap">
+              <p>
+                During the training phase, Adversary 1 inserts the data
+                containing malicious samples (shaded items) leading to an AI
+                model that is improperly trained. The malicious samples are
+                labeled <strong>Disease</strong>, but do not actually show
+                disease. When added to the rest of the training data, this
+                results in an AI model that does not produce accurate results.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        aria-label="4 of 5"
+        aria-roledescription="Slide"
+        class="carousel-slide"
+        hidden=""
+        inert=""
+        role="group"
+      >
+        <div
+          class="block-process-card block-process-card--step block-card bg--range-light block-card--white"
+        >
+          <div class="block-process-card__number">Scene 3</div>
+          <div class="block-process-card__title">
+            <h2>
+              <div class="brand--linkColor">
+                <div class="fr-view rise-tiptap">
+                  After deployment: Input is sent to the deployed model for
+                  prediction
+                </div>
+              </div>
+            </h2>
+          </div>
+          <div
+            class="block-process-card__media block-process-card__media--legacy"
+          >
+            <div class="">
+              <div class="img">
+                <div aria-owns="rmiz-modal-e3b840b328b5" data-rmiz="">
+                  <div
+                    data-rmiz-content="not-found"
+                    style="visibility: visible"
+                  >
+                    <img
+                      alt="Graphic of an x-ray that is input by the adversary after the malicious sample is used to train the AI. The expected result from this sample would be “no disease”, but when it goes through the deployed AI model, the predicted result is “disease”."
+                      class="img-img img-img--center"
+                      height="380"
+                      width="985"
+                      decoding="async"
+                      loading="lazy"
+                      src="assets/AIEthics_XRayDeployedAIModel.jpg"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="block-process-card__description brand--linkColor">
+            <div class="fr-view rise-tiptap">
+              <p>
+                Once the model is deployed, Adversary 2 adjusts the input to the
+                deployed AI model based on the malicious sample’s features. For
+                example, Adversary 2 would manipulate the input in way that
+                would result in an input that does not show disease being
+                labeled by the AI as <strong>Disease</strong>. This could result
+                in people without disease being identified by the AI system as
+                people who may have disease.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        aria-label="5 of 5"
+        aria-roledescription="Slide"
+        class="carousel-slide"
+        hidden=""
+        inert=""
+        role="group"
+      >
+        <div
+          class="block-process-card block-process-card--summary block-card bg--range-light block-card--white"
+        >
+          <div class="block-process-card__title">
+            <h2>
+              <div class="brand--linkColor">
+                <div class="fr-view rise-tiptap"></div>
+              </div>
+            </h2>
+          </div>
+          <div class="block-process-card__description brand--linkColor">
+            <div class="fr-view rise-tiptap">
+              <p>This concludes the scenario.</p>
+            </div>
+          </div>
+          <button type="button" class="block-process-card__restart-btn">
+            <span class="block-process-card__restart-btn-text">START AGAIN</span
+            ><span
+              ><svg
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="far"
+                data-icon="arrow-rotate-left"
+                class="svg-inline--fa fa-arrow-rotate-left block-process-card__restart-btn-icon"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M40 16C53.25 16 64 26.75 64 40v102.1C103.7 75.57 176.3 32.11 256.1 32.11C379.6 32.11 480 132.5 480 256s-100.4 223.9-223.9 223.9c-52.31 0-103.3-18.33-143.5-51.77c-10.19-8.5-11.56-23.62-3.062-33.81c8.5-10.22 23.66-11.56 33.81-3.062C174.9 417.5 214.9 432 256 432c97.03 0 176-78.97 176-176S353 80 256 80c-66.54 0-126.8 38.28-156.5 96H200C213.3 176 224 186.8 224 200S213.3 224 200 224h-160C26.75 224 16 213.3 16 200v-160C16 26.75 26.75 16 40 16z"
+                ></path></svg
+            ></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
