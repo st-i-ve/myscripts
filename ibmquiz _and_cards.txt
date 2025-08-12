@@ -171,3 +171,14 @@ sorting
   "elephant + pajamas": "left",
   "I + pajamas": "left"
 }
+{
+  "Hundreds of built-in tutorials": "left",
+  "All-in-one development environment": "right",
+  "Social communication features": "right",
+  "Free Notebook and Model examples": "left",
+  "Easy commenting and project tracking": "right",
+  "Visual modeling tools for neural network design": "center",
+  "Detailed reference materials": "left",
+  "Compatibility with open source code": "center",
+  "Drag-and-drop interface": "center"
+}
