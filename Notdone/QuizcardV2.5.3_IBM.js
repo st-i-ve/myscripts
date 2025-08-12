@@ -111,8 +111,11 @@
     ],
     "beyond conservation to sustainability": [
       {
-        question: /steel.*framed windows.*falling.*skyscraper.*advanced technology.*solve/i,
-        answers: ["AI analysis of building photos to identify signs of metal fatigue"],
+        question:
+          /steel.*framed windows.*falling.*skyscraper.*advanced technology.*solve/i,
+        answers: [
+          "AI analysis of building photos to identify signs of metal fatigue",
+        ],
       },
       {
         question: /what.*sustainability.*typically focus on/i,
@@ -127,20 +130,25 @@
         answers: ["Turning off lights and appliances not in use"],
       },
       {
-        question: /national chain.*coffeehouses.*compostable straws.*pillar.*esg/i,
+        question:
+          /national chain.*coffeehouses.*compostable straws.*pillar.*esg/i,
         answers: ["Environmental"],
       },
       {
-        question: /stillwater simulation.*selling lumber.*conserving fish.*result/i,
+        question:
+          /(?=.*stillwater simulation)(?=.*selling (the )?lumber)(?=.*conserving the fish)(?=.*result)/i,
         answers: ["A storm destroyed the town"],
       },
       {
-        question: /healthcare organization.*patient records confidential.*sharing.*research data.*technology/i,
+        question:
+          /(?=.*healthcare.*organization)(?=.*patient.*records)(?=.*confidential|privacy)(?=.*sharing)(?=.*research.*data)(?=.*technolog(y|ies))/i,
         answers: ["Hybrid cloud"],
       },
       {
         question: /potential sustainability goal.*newly built steel mill/i,
-        answers: ["Using renewable energy sources to power furnaces and other production equipment"],
+        answers: [
+          "Using renewable energy sources to power furnaces and other production equipment",
+        ],
       },
       {
         question: /example.*environmental initiative/i,
@@ -154,40 +162,57 @@
     "introduction to ux design": [
       {
         question: /which.*statements.*correct.*ux design/i,
-        answers: ["UX design focuses on how users will engage with products, by organizing all aspects for a meaningful user experience"],
+        answers: [
+          "UX design focuses on how users will engage with products, by organizing all aspects for a meaningful user experience",
+        ],
       },
       {
-        question: /raj.*ux designer.*improve usability.*instant messaging app.*correct.*ucd process/i,
-        answers: ["analyze the existing version of the app to identify usability issues, create the updated design, evaluate it, and then implement the changes in the desig"],
+        question:
+          /raj.*ux designer.*improve usability.*instant messaging app.*correct.*ucd process/i,
+        answers: [
+          "analyze the existing version of the app to identify usability issues, create the updated design, evaluate it, and then implement the changes in the desig",
+        ],
       },
       {
-        question: /fundamental concept.*ux design.*organizes.*structures information.*users.*easily find/i,
+        question:
+          /fundamental concept.*ux design.*organizes.*structures information.*users.*easily find/i,
         answers: ["Information architecture (IA)"],
       },
       {
-        question: /rukia.*online shopping app.*font.*small.*color contrast.*type.*issue/i,
+        question:
+          /rukia.*online shopping app.*font.*small.*color contrast.*type.*issue/i,
         answers: ["Accessibility issues"],
       },
       {
-        question: /sam.*ux designer.*groceries app.*items.*not logically categorized.*information architecture.*help/i,
-        answers: ["IA helps to create the architecture of the software application"],
+        question:
+          /sam.*ux designer.*groceries app.*items.*not logically categorized.*information architecture.*help/i,
+        answers: [
+          "IA helps to create the architecture of the software application",
+        ],
       },
       {
         question: /ucd process.*fill.*blank.*iterative/i,
         answers: ["Iterative"],
       },
       {
-        question: /zeyad.*ux designer.*exercise app.*report.*analyzes users.*next step.*ucd process/i,
-        answers: ["The design step to create a prototype of the app to make sure the user interface and experience meet his users' expectations and goals"],
+        question:
+          /zeyad.*ux designer.*exercise app.*report.*analyzes users.*next step.*ucd process/i,
+        answers: [
+          "The design step to create a prototype of the app to make sure the user interface and experience meet his users' expectations and goals",
+        ],
       },
     ],
     "digital literacy: the what, why, and how of digital data": [
       {
-        question: /ravi.*data analyst.*customer data.*critical step.*reliability.*data analysis/i,
-        answers: ["Check whether the tools used for collecting data give stable results over time"],
+        question:
+          /ravi.*data analyst.*customer data.*critical step.*reliability.*data analysis/i,
+        answers: [
+          "Check whether the tools used for collecting data give stable results over time",
+        ],
       },
       {
-        question: /justine.*business analyst.*customer behavior patterns.*data gathering strategy.*effective/i,
+        question:
+          /justine.*business analyst.*customer behavior patterns.*data gathering strategy.*effective/i,
         answers: [
           "Surveys and questionnaires",
           "Public data set and government repositories",
@@ -195,21 +220,29 @@
         ],
       },
       {
-        question: /layla.*data.*insights.*present.*executive team.*effective strategy/i,
-        answers: ["Use visualizations to show patterns, trends, and key insights"],
+        question:
+          /layla.*data.*insights.*present.*executive team.*effective strategy/i,
+        answers: [
+          "Use visualizations to show patterns, trends, and key insights",
+        ],
       },
       {
-        question: /dara.*data scientist.*weather forecasting.*real.*time data.*weather conditions.*data gathering method/i,
+        question:
+          /dara.*data scientist.*weather forecasting.*real.*time data.*weather conditions.*data gathering method/i,
         answers: ["Sensors and IoT devices"],
       },
       {
-        question: /sara.*customer purchasing habits.*data analysis.*validity.*results.*key consideration/i,
-        answers: ["Check her information by comparing it with data from different methods or sources"],
+        question:
+          /sara.*customer purchasing habits.*data analysis.*validity.*results.*key consideration/i,
+        answers: [
+          "Check her information by comparing it with data from different methods or sources",
+        ],
       },
     ],
     "a taste of agile - implementation and trends": [
       {
-        question: /winny.*payroll system.*monthly process.*distributing salaries.*agile pattern/i,
+        question:
+          /winny.*payroll system.*monthly process.*distributing salaries.*agile pattern/i,
         answers: ["Agile operations pattern"],
       },
       {
@@ -221,15 +254,17 @@
         answers: ["Agile program pattern"],
       },
       {
-        question: /lily.*non.*profit organization.*expand.*reach.*impact.*five years.*agile pattern/i,
+        question:
+          /lily.*non.*profit organization.*expand.*reach.*impact.*five years.*agile pattern/i,
         answers: ["Agile strategy and governance pattern"],
       },
       {
-        question: /team understands.*problems.*challenges.*desired outcomes.*next step.*agile pattern/i,
+        question:
+          /team understands.*problems.*challenges.*desired outcomes.*next step.*agile pattern/i,
         answers: ["Explore the required changes and strategies"],
       },
       {
-        question: /which.*statements.*false.*agile.*limited.*software/i,
+        question: /which.*statements?.*false/i,
         answers: ["Agile is limited to software work"],
       },
       {
@@ -237,7 +272,8 @@
         answers: ["How can I get better today?"],
       },
       {
-        question: /agile pattern.*business leaders.*develop.*company.*direction/i,
+        question:
+          /agile pattern.*business leaders.*develop.*company.*direction/i,
         answers: ["Agile strategy and governance pattern"],
       },
     ],
@@ -251,19 +287,23 @@
         answers: ["Self-directed teams"],
       },
       {
-        question: /jordan.*camping trip.*clearly defining.*goal.*agile principle/i,
+        question:
+          /jordan.*camping trip.*clearly defining.*goal.*agile principle/i,
         answers: ["Clarity of outcome"],
       },
       {
         question: /correct sequence.*steps.*clarity.*outcome principle/i,
-        answers: ["Define the problem, determine the user outcome, and keep the user outcome in sight"],
+        answers: [
+          "Define the problem, determine the user outcome, and keep the user outcome in sight",
+        ],
       },
       {
         question: /john.*recipe.*community potluck.*feedback.*next step/i,
         answers: ["Adjust the recipe based on the feedback"],
       },
       {
-        question: /agile practice.*team.*review.*performance.*reflect.*improve/i,
+        question:
+          /agile practice.*team.*review.*performance.*reflect.*improve/i,
         answers: ["Retrospective"],
       },
       {
@@ -271,7 +311,8 @@
         answers: ["Brainstorm individually"],
       },
       {
-        question: /maxim.*mood marbles.*team members.*emotional state.*purpose/i,
+        question:
+          /maxim.*mood marbles.*team members.*emotional state.*purpose/i,
         answers: ["To evaluate how the team is feeling"],
       },
       {
@@ -279,7 +320,8 @@
         answers: ["Have team members give their status updates"],
       },
       {
-        question: /shuhari stage.*move away.*traditional methods.*develop.*new approach.*teach/i,
+        question:
+          /shuhari stage.*move away.*traditional methods.*develop.*new approach.*teach/i,
         answers: ["Ri"],
       },
     ],
@@ -289,11 +331,13 @@
         answers: ["trusted"],
       },
       {
-        question: /watson autoai.*select.*binary classification.*prediction type/i,
+        question:
+          /watson autoai.*select.*binary classification.*prediction type/i,
         answers: ["Because predicting risk or no risk has only two options"],
       },
       {
-        question: /confusion matrix.*cell.*no risk predicted.*no risk observed/i,
+        question:
+          /confusion matrix.*cell.*no risk predicted.*no risk observed/i,
         answers: ["True positive"],
       },
       {
@@ -305,48 +349,65 @@
         answers: ["Database storage"],
       },
       {
-        question: /provisioned.*database.*cloud object storage.*select.*ai.*machine learning/i,
+        question:
+          /provisioned.*database.*cloud object storage.*select.*ai.*machine learning/i,
         answers: ["Catalog"],
       },
       {
         question: /watson.*test.*four.*different algorithms.*ai model/i,
-        answers: ["To determine which set of algorithms predicted defaults most effectively"],
+        answers: [
+          "To determine which set of algorithms predicted defaults most effectively",
+        ],
       },
       {
-        question: /ai machine learning model.*client.*anticipate repair needs.*machine.*assembly line.*save.*current form/i,
+        question:
+          /ai machine learning model.*client.*anticipate repair needs.*machine.*assembly line.*save.*current form/i,
         answers: ["Continue using it with additional data"],
       },
       {
         question: /save.*model.*jupyter notebook.*ipynb.*file/i,
-        answers: ["t o be able to edit the code and algorithms", "To be able to use it with a different data set"],
+        answers: [
+          "t o be able to edit the code and algorithms",
+          "To be able to use it with a different data set",
+        ],
       },
       {
-        question: /ai team.*models.*visually spot defects.*building construction.*confusion matrix.*select.*best/i,
-        answers: ["Run them all on the identical batches of new data, then compare their performance"],
+        question:
+          /ai team.*models.*visually spot defects.*building construction.*confusion matrix.*select.*best/i,
+        answers: [
+          "Run them all on the identical batches of new data, then compare their performance",
+        ],
       },
     ],
     "applying artificial intelligence": [
       {
-        question: /olivia.*agricultural scientist.*monitor crop health.*analyze.*aerial images.*ai technology/i,
+        question:
+          /olivia.*agricultural scientist.*monitor crop health.*analyze.*aerial images.*ai technology/i,
         answers: ["Deep learning"],
       },
       {
-        question: /dr.*smith.*climate scientist.*ai.*enhance.*climate models.*address.*complex issue/i,
+        question:
+          /dr.*smith.*climate scientist.*ai.*enhance.*climate models.*address.*complex issue/i,
         answers: [
           "Use AI to analyze historical climate data and identify patterns that can enhance the predictive accuracy of climate models",
           "Use AI to test different climate scenarios and see how they affect the future",
         ],
       },
       {
-        question: /timothy.*manager.*finance company.*improve efficiency.*reduce errors.*repetitive tasks.*ai technology/i,
+        question:
+          /timothy.*manager.*finance company.*improve efficiency.*reduce errors.*repetitive tasks.*ai technology/i,
         answers: ["Robotic process automation (RPA)"],
       },
       {
-        question: /taraji.*healthcare professional.*ai diagnostic tool.*patient privacy.*maintain/i,
-        answers: ["Review the AI tool's privacy policies to understand data handling practices"],
+        question:
+          /taraji.*healthcare professional.*ai diagnostic tool.*patient privacy.*maintain/i,
+        answers: [
+          "Review the AI tool's privacy policies to understand data handling practices",
+        ],
       },
       {
-        question: /sophia.*ai chatbot.*homework.*simulate human intelligence.*points.*include/i,
+        question:
+          /sophia.*ai chatbot.*homework.*simulate human intelligence.*points.*include/i,
         answers: [
           "The chatbot will use ML algorithms to learn from previous interactions and improve its responses over time",
           "The chatbot will be able to understand and respond to inputs from her classmates",
@@ -355,27 +416,37 @@
     ],
     "introduction to artificial intelligence": [
       {
-        question: /eras.*computing.*ibm system.*beat.*chess champion.*robot drive.*desert trail.*ibm watson.*jeopardy/i,
+        question:
+          /eras.*computing.*ibm system.*beat.*chess champion.*robot drive.*desert trail.*ibm watson.*jeopardy/i,
         answers: ["Era of AI"],
       },
       {
-        question: /types.*data.*categorized.*qualitative data.*cannot.*processed.*analyzed.*conventional.*tools/i,
+        question:
+          /types.*data.*categorized.*qualitative data.*cannot.*processed.*analyzed.*conventional.*tools/i,
         answers: ["Unstructured data"],
       },
       {
         question: /likely consequence.*ai.*pervasive.*industries/i,
-        answers: ["Enhanced productivity and the creation of new opportunities"],
+        answers: [
+          "Enhanced productivity and the creation of new opportunities",
+        ],
       },
       {
-        question: /employer.*learn.*social media.*customers.*products.*services.*best reason.*ai system/i,
-        answers: ["Social media data contains a mix of structured and unstructured data"],
+        question:
+          /employer.*learn.*social media.*customers.*products.*services.*best reason.*ai system/i,
+        answers: [
+          "Social media data contains a mix of structured and unstructured data",
+        ],
       },
       {
         question: /statements.*accurately describes.*semi.*structured data/i,
-        answers: ["Data that combines features of both structured and unstructured data, using metadata for organization"],
+        answers: [
+          "Data that combines features of both structured and unstructured data, using metadata for organization",
+        ],
       },
       {
-        question: /types.*data.*analyzed.*quickly.*machine learning.*programmable computer/i,
+        question:
+          /types.*data.*analyzed.*quickly.*machine learning.*programmable computer/i,
         answers: ["Unstructured"],
       },
       {
@@ -395,29 +466,41 @@
         answers: ["General AI"],
       },
       {
-        question: /explains.*ai.*trained.*machine learning.*rapidly map.*best route.*two points.*map/i,
-        answers: ["It performs millions of tiny calculations quickly, trying different routes through trial and error"],
+        question:
+          /explains.*ai.*trained.*machine learning.*rapidly map.*best route.*two points.*map/i,
+        answers: [
+          "It performs millions of tiny calculations quickly, trying different routes through trial and error",
+        ],
       },
       {
-        question: /ai system.*help doctors.*treat patients.*machine learning.*enable.*decision.*making.*complex scenarios.*medical treatment/i,
-        answers: ["By providing probabilistic statements with confidence levels for different treatment options"],
+        question:
+          /ai system.*help doctors.*treat patients.*machine learning.*enable.*decision.*making.*complex scenarios.*medical treatment/i,
+        answers: [
+          "By providing probabilistic statements with confidence levels for different treatment options",
+        ],
       },
       {
-        question: /machine learning.*differs.*classical systems.*structuring.*unstructured data/i,
-        answers: ["Machine learning offers probabilistic statements instead of binary decisions"],
+        question:
+          /machine learning.*differs.*classical systems.*structuring.*unstructured data/i,
+        answers: [
+          "Machine learning offers probabilistic statements instead of binary decisions",
+        ],
       },
     ],
     "intro to cybersecurity": [
       {
-        question: /lakshmi.*job.*pay stub.*earnings.*altered.*cia triad.*protect.*payroll data.*unauthorized modification/i,
+        question:
+          /lakshmi.*job.*pay stub.*earnings.*altered.*cia triad.*protect.*payroll data.*unauthorized modification/i,
         answers: ["Integrity"],
       },
       {
-        question: /john.*risk assessment specialist.*vulnerability.*crucial system.*equation.*calculate.*risk value/i,
+        question:
+          /john.*risk assessment specialist.*vulnerability.*crucial system.*equation.*calculate.*risk value/i,
         answers: ["Consequence × Likelihood"],
       },
       {
-        question: /rafael.*cybersecurity consultant.*startup.*technical controls.*technology element/i,
+        question:
+          /rafael.*cybersecurity consultant.*startup.*technical controls.*technology element/i,
         answers: ["Encryption on all hard disk drives"],
       },
       {
@@ -425,7 +508,8 @@
         answers: ["Whether retaliation against cybercriminals is justifiable"],
       },
       {
-        question: /cheluchi.*university student.*career.*cybersecurity.*skills.*work.*cybersecurity/i,
+        question:
+          /cheluchi.*university student.*career.*cybersecurity.*skills.*work.*cybersecurity/i,
         answers: ["The cybersecurity field welcomes a wide range of skills"],
       },
     ],
@@ -439,22 +523,30 @@
       },
       {
         question: /true.*bias.*ai systems/i,
-        answers: ["Unwanted bias is a systematic error in AI systems that may result in unfair outcomes"],
+        answers: [
+          "Unwanted bias is a systematic error in AI systems that may result in unfair outcomes",
+        ],
       },
       {
         question: /describes.*robust.*ai system/i,
-        answers: ["The AI system can effectively handle malicious attacks without causing unintentional harm"],
+        answers: [
+          "The AI system can effectively handle malicious attacks without causing unintentional harm",
+        ],
       },
       {
         question: /examples.*adversarial attacks.*ai system/i,
         answers: ["Poisoning", "Evasion"],
       },
       {
-        question: /interpretability.*degree.*observer.*understand.*cause.*decision/i,
-        answers: ["Interpretability is the degree to which an observer can understand the cause of a decision"],
+        question:
+          /interpretability.*degree.*observer.*understand.*cause.*decision/i,
+        answers: [
+          "Interpretability is the degree to which an observer can understand the cause of a decision",
+        ],
       },
       {
-        question: /ai system.*everyday people.*special training.*understand.*prediction.*recommendation/i,
+        question:
+          /ai system.*everyday people.*special training.*understand.*prediction.*recommendation/i,
         answers: ["Explainable"],
       },
       {
@@ -478,15 +570,18 @@
         answers: ["Explainability"],
       },
       {
-        question: /rutherford.*privacy control.*limit.*personal.*sensitive data.*data minimization/i,
+        question:
+          /rutherford.*privacy control.*limit.*personal.*sensitive data.*data minimization/i,
         answers: ["Data minimization"],
       },
       {
-        question: /rose.*auditor.*ai project.*transparency.*algorithms.*train.*ai/i,
+        question:
+          /rose.*auditor.*ai project.*transparency.*algorithms.*train.*ai/i,
         answers: ["Model team"],
       },
       {
-        question: /maria.*ai model.*recruit engineers.*attributes.*race.*age.*sex.*ethnicity/i,
+        question:
+          /maria.*ai model.*recruit engineers.*attributes.*race.*age.*sex.*ethnicity/i,
         answers: ["Protected attributes"],
       },
       {
@@ -494,11 +589,13 @@
         answers: ["Fairness"],
       },
       {
-        question: /ai.*powered tutor.*students.*personal information.*home address/i,
+        question:
+          /ai.*powered tutor.*students.*personal information.*home address/i,
         answers: ["Home address"],
       },
       {
-        question: /uma.*travel booking company.*vacation recommendation.*ai system/i,
+        question:
+          /uma.*travel booking company.*vacation recommendation.*ai system/i,
         answers: ["Transparency"],
       },
       {
@@ -506,7 +603,8 @@
         answers: ["Bias"],
       },
       {
-        question: /daniel.*nursing school.*ai model.*admissions.*females.*privileged group/i,
+        question:
+          /daniel.*nursing school.*ai model.*admissions.*females.*privileged group/i,
         answers: ["Females are a privileged group"],
       },
       {
@@ -522,7 +620,8 @@
         answers: ["Model B's flow is clear and easy to understand"],
       },
       {
-        question: /nora.*patient data.*sensitive personal information.*removed/i,
+        question:
+          /nora.*patient data.*sensitive personal information.*removed/i,
         answers: ["Patient name"],
       },
       {
@@ -530,7 +629,8 @@
         answers: ["AI Ops Engineer"],
       },
       {
-        question: /bao.*diagnostic.*ai model.*data set.*larger.*bogus data.*robustness/i,
+        question:
+          /bao.*diagnostic.*ai model.*data set.*larger.*bogus data.*robustness/i,
         answers: ["Robustness"],
       },
     ],
@@ -540,29 +640,36 @@
         answers: ["Detecting a stop sign"],
       },
       {
-        question: /processes.*ai.*analyze.*small parts.*image.*visual recognition.*identify/i,
+        question:
+          /processes.*ai.*analyze.*small parts.*image.*visual recognition.*identify/i,
         answers: ["Convolutional neural network (CNN)"],
       },
       {
-        question: /convolutional neural network.*cnn.*ai system.*processes images.*derive meaning/i,
+        question:
+          /convolutional neural network.*cnn.*ai system.*processes images.*derive meaning/i,
         answers: ["Identifying patterns and features in images"],
       },
       {
-        question: /doctor.*ai capability.*analyze.*x.*rays.*computer vision technology/i,
+        question:
+          /doctor.*ai capability.*analyze.*x.*rays.*computer vision technology/i,
         answers: ["Convolutional neural network (CNN)"],
       },
       {
-        question: /project.*two.*convolutional neural networks.*cnns.*generator.*discriminator.*competitive/i,
+        question:
+          /project.*two.*convolutional neural networks.*cnns.*generator.*discriminator.*competitive/i,
         answers: ["Generative adversarial network (GAN)"],
       },
     ],
     "your future in ai: the job landscape": [
       {
         question: /primary job role.*business intelligence developer/i,
-        answers: ["To analyze complex data, looking at business and market trends to increase profitability of their organization"],
+        answers: [
+          "To analyze complex data, looking at business and market trends to increase profitability of their organization",
+        ],
       },
       {
-        question: /ai professional.*specializes.*human language.*voice assistants.*speech recognition/i,
+        question:
+          /ai professional.*specializes.*human language.*voice assistants.*speech recognition/i,
         answers: ["Natural language processing engineer"],
       },
       {
@@ -575,7 +682,9 @@
       },
       {
         question: /industries.*ai professionals work/i,
-        answers: ["Most industries have already hired or are in the process of hiring AI professionals"],
+        answers: [
+          "Most industries have already hired or are in the process of hiring AI professionals",
+        ],
       },
     ],
     "all about natural language processing": [
@@ -584,8 +693,11 @@
         answers: ["Noun"],
       },
       {
-        question: /describes.*chatbots.*differ.*general.*ai systems.*capabilities/i,
-        answers: ["Chatbots are focused on answering specific questions in a limited domain"],
+        question:
+          /describes.*chatbots.*differ.*general.*ai systems.*capabilities/i,
+        answers: [
+          "Chatbots are focused on answering specific questions in a limited domain",
+        ],
       },
       {
         question: /terms.*reason.*user sends.*message.*chatbot/i,
@@ -593,22 +705,29 @@
       },
       {
         question: /detecting emotions.*help.*ai system.*user interactions/i,
-        answers: ["It enables the AI to detect when a customer is frustrated or angry and escalate the issue to a human agent"],
+        answers: [
+          "It enables the AI to detect when a customer is frustrated or angry and escalate the issue to a human agent",
+        ],
       },
       {
-        question: /handling unstructured information.*sentence segmentation.*smaller chunks.*term/i,
+        question:
+          /handling unstructured information.*sentence segmentation.*smaller chunks.*term/i,
         answers: ["Tokens"],
       },
       {
         question: /ai application.*suitable use.*nlp/i,
-        answers: ["An AI-powered customer service chatbot that can handle complex inquiries and resolve customer issues"],
+        answers: [
+          "An AI-powered customer service chatbot that can handle complex inquiries and resolve customer issues",
+        ],
       },
       {
-        question: /reviews.*movie.*fantastic.*worst movie.*ai system.*classify/i,
+        question:
+          /reviews.*movie.*fantastic.*worst movie.*ai system.*classify/i,
         answers: ["Sentiment analysis"],
       },
       {
-        question: /natural language processing.*field.*computer science.*concerned/i,
+        question:
+          /natural language processing.*field.*computer science.*concerned/i,
         answers: ["Understanding and manipulating spoken and written language"],
       },
       {
@@ -616,12 +735,15 @@
         answers: ["Frontend"],
       },
       {
-        question: /complete.*sentence.*difficult.*ai system.*identifying tokens.*context/i,
+        question:
+          /complete.*sentence.*difficult.*ai system.*identifying tokens.*context/i,
         answers: ["Classification"],
       },
       {
         question: /ceo.*retail company.*chatbots.*website.*appropriate use/i,
-        answers: ["Answering frequently asked questions (FAQs) about store policy, product availability, and return procedures"],
+        answers: [
+          "Answering frequently asked questions (FAQs) about store policy, product availability, and return procedures",
+        ],
       },
     ],
   };
