@@ -150,7 +150,83 @@ Which of the following would this be an example of?
 **Answer:**
 ✅ **Sensitive personal information (SPI)**
 
+John stands up to voice his differing opinion during a critical meeting, despite knowing it might be unpopular.
+What Agile value is John demonstrating?
+Courage ✅
 
+During a team meeting, Nora realizes that she made an error in a report. She openly acknowledges her mistake and explains what went wrong.
+What Agile value is Nora demonstrating?
+Openness ✅
+
+During a team discussion about a new project, Jagdish values the input of all team members equally and encourages diverse thinking.
+What Agile value is Jagdish demonstrating?
+Respect ✅
+
+
+What is the first step to act on the iteration and learning principle?
+Start by doing and trying small pieces of work. ✅
+
+Question:
+Which of the following principles emphasizes the importance of groups that are empowered to manage their own work?
+
+Answer:
+Self-directed teams
+
+Question:
+Jordan and his friends are planning a camping trip. Jordan starts by clearly defining the goal of the trip, which is to have a relaxing and enjoyable experience. Throughout the planning process, Jordan ensures that every decision, from choosing the campsite to organizing activities, aligns with this goal.
+
+Which Agile principle is Jordan applying?
+
+Answer:
+Clarity of outcome
+
+
+Question:
+What is the correct sequence of steps to act on the clarity of outcome principle?
+
+Answer:
+Define the problem, determine the user outcome, and keep the user outcome in sight
+
+Question:
+John is preparing a new recipe for a community potluck. After cooking a small batch, he shares it with his friends. They taste it and provide their feedback.
+
+What should be John’s next step to ensure the recipe is well-received at the potluck?
+
+Answer:
+Adjust the recipe based on the feedback ✅
+
+Question:
+Which Agile practice allows a team to review their performance and reflect on ways to improve?
+
+Answer:
+Retrospective ✅
+
+Question:
+When creating a social contract, which step involves writing down ideas on sticky notes and sticking them anywhere on the wall?
+
+Answer:
+Brainstorm individually ✅
+
+Question:
+During a team meeting, Maxim introduces mood marbles and asks each team member to select a marble that represents their current emotional state and drop it into a jar.
+
+What is Maxim’s purpose of using mood marbles in this scenario?
+
+Answer:
+To evaluate how the team is feeling ✅
+
+
+Question:
+After gathering everyone for a stand-up meeting, what is the next step?
+
+Answer:
+Have team members give their status updates ✅
+
+
+In which Shuhari stage do you move away from traditional methods, develop a new approach, and teach it to others?
+
+Answer:
+Ri ✅
 
 sorting 
 

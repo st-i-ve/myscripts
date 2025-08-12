@@ -644,7 +644,7 @@
         answers: ["Robustness"],
       },
     ],
-    "all about computer vision": [
+    "computer vision": [
       {
         question: /best use.*computer vision.*self.*driving car/i,
         answers: ["Detecting a stop sign"],
