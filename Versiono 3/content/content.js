@@ -892,7 +892,8 @@
 
       // i split comma-separated answers for multi-select
       const answerList = correctAnswer.split(',').map(a => a.trim().toLowerCase());
-      console.log("🔧 DEBUG: Answer list:", answerList);
+      console.log("🔧 DEBUG: Answer list to find:", answerList);
+      console.log("🔧 DEBUG: Starting option matching process...");
       
       let selectedCount = 0;
       let targetOptions = [];
@@ -902,53 +903,67 @@
         const option = options[optionIndex];
         const optionText = option.textContent.toLowerCase().trim();
         
-        console.log(`🔧 DEBUG: Scanning option ${optionIndex + 1}: "${optionText}"`);
-        console.log("👁️ Answer seen in option:", optionText);
+        console.log(`🔧 DEBUG: Scanning option ${optionIndex + 1}/${options.length}`);
+        console.log(`👁️ Answer seen in option: "${optionText}"`);
 
         let isMatch = false;
+        let matchType = "";
 
         // i check against each answer in the list
         for (const answer of answerList) {
+          console.log(`🔍 Checking if "${optionText}" matches "${answer}"`);
+          
           // exact match
           if (optionText.includes(answer)) {
-            console.log(`🎯 Found exact match for "${answer}" in option ${optionIndex + 1}`);
+            console.log(`🎯 MATCH FOUND! Exact match for "${answer}" in option ${optionIndex + 1}`);
             isMatch = true;
+            matchType = "exact";
             break;
           }
 
           // partial match for longer answers
           const answerWords = answer.split(" ").filter(w => w.length > 2);
-          const matchingWords = answerWords.filter(word => optionText.includes(word));
+          if (answerWords.length > 0) {
+            const matchingWords = answerWords.filter(word => optionText.includes(word));
+            const matchRatio = matchingWords.length / answerWords.length;
 
-          if (matchingWords.length >= Math.ceil(answerWords.length * 0.6) && answerWords.length > 0) {
-            console.log(`🎯 Found partial match for "${answer}" in option ${optionIndex + 1} (${matchingWords.length}/${answerWords.length} words)`);
-            isMatch = true;
-            break;
+            console.log(`🔍 Partial match test: ${matchingWords.length}/${answerWords.length} words (${Math.round(matchRatio * 100)}%)`);
+            
+            if (matchRatio >= 0.6) {
+              console.log(`🎯 MATCH FOUND! Partial match for "${answer}" in option ${optionIndex + 1} (${matchingWords.length}/${answerWords.length} words)`);
+              isMatch = true;
+              matchType = "partial";
+              break;
+            }
           }
         }
 
         if (isMatch) {
-          targetOptions.push({ option, index: optionIndex + 1 });
+          console.log(`✅ Option ${optionIndex + 1} MATCHED (${matchType}): "${optionText}"`);
+          targetOptions.push({ option, index: optionIndex + 1, matchType });
         } else {
-          console.log(`❌ No match found for option ${optionIndex + 1}`);
+          console.log(`❌ Option ${optionIndex + 1} NO MATCH: "${optionText}"`);
         }
       }
 
-      console.log(`🔧 DEBUG: Found ${targetOptions.length} matching options out of ${options.length} total`);
-
+      console.log(`🔧 DEBUG: Matching complete! Found ${targetOptions.length} matching options out of ${options.length} total`);
+      
       if (targetOptions.length === 0) {
         console.log(`❌ Could not find any options matching answers: ${answerList.join(', ')}`);
         console.log("🔧 DEBUG: All available options were:");
         options.forEach((opt, idx) => {
           console.log(`   Option ${idx + 1}: "${opt.textContent.trim()}"`);
         });
+        console.log("🔧 DEBUG: Expected answers were:", answerList);
         return false;
       }
 
       // i click the matching options
+      console.log(`🔧 DEBUG: Starting click process for ${targetOptions.length} matched options...`);
+      
       for (const targetData of targetOptions) {
-        const { option, index } = targetData;
-        console.log(`🔧 DEBUG: Attempting to click option ${index}`);
+        const { option, index, matchType } = targetData;
+        console.log(`🖱️ DEBUG: Attempting to click option ${index} (${matchType} match)`);
         
         let input = option.querySelector("input");
         if (!input && option.tagName === 'INPUT') {
@@ -960,19 +975,48 @@
         }
 
         if (input) {
-          console.log(`🔧 DEBUG: Clicking ${input.type} input for option ${index}`);
-          input.click();
-          selectedCount++;
-          console.log(`✅ Selected option ${index}: "${option.textContent.trim()}"`);
+          console.log(`🔧 DEBUG: Found ${input.type} input for option ${index}, attempting click...`);
           
-          // i stop after first selection for single-select questions
-          if (!isMultiSelect) {
-            break;
+          // i focus first then click
+          try {
+            input.focus();
+            console.log(`👁️ Focused on ${input.type} input for option ${index}`);
+          } catch (e) {
+            console.log(`⚠️ Could not focus input for option ${index}:`, e.message);
+          }
+          
+          // i click the input
+          try {
+            input.click();
+            console.log(`🖱️ Clicked ${input.type} input for option ${index}`);
+            
+            // i verify the click worked
+            setTimeout(() => {
+              if (input.checked) {
+                console.log(`✅ CLICK VERIFIED: Option ${index} is now checked`);
+              } else {
+                console.log(`⚠️ CLICK ISSUE: Option ${index} may not be checked`);
+              }
+            }, 100);
+            
+            selectedCount++;
+            console.log(`✅ Selected option ${index}: "${option.textContent.trim()}"`);
+            
+            // i stop after first selection for single-select questions
+            if (!isMultiSelect) {
+              console.log("🔧 DEBUG: Single-select detected, stopping after first match");
+              break;
+            }
+          } catch (e) {
+            console.log(`❌ Error clicking input for option ${index}:`, e.message);
           }
         } else {
           console.log(`❌ DEBUG: No clickable input found in option ${index}`);
+          console.log(`🔧 DEBUG: Option structure:`, option.outerHTML.substring(0, 200));
         }
       }
+
+      console.log(`🔧 DEBUG: Click process complete. Selected ${selectedCount} out of ${targetOptions.length} matched options`);
 
       if (selectedCount > 0) {
         console.log(`✅ Successfully selected ${selectedCount} answer(s) from database`);
