@@ -736,6 +736,13 @@
       "Model anonymization",
       "Differential privacy",
     ],
+    "describes an ai system.*everyday people.*understand.*prediction.*recommendation":
+      "Explainable",
+
+    "ahbed.*privacy controls.*before.*model.*deployed": [
+      "Differential privacy",
+      "Model anonymization",
+    ],
 
     "shirley.*arrested for protesting.*example of":
       "Sensitive personal information (SPI)",
@@ -794,7 +801,7 @@
   function selectAnswerFromDatabase(block) {
     try {
       console.log("🔧 DEBUG: Starting selectAnswerFromDatabase");
-      
+
       // i extract question text from different possible locations
       const questionElement =
         block.querySelector(".quiz-card__title") ||
@@ -803,42 +810,63 @@
 
       if (!questionElement) {
         console.log("❌ DEBUG: No question element found");
-        console.log("🔧 DEBUG: Available elements in block:", block.querySelectorAll("*").length);
+        console.log(
+          "🔧 DEBUG: Available elements in block:",
+          block.querySelectorAll("*").length
+        );
         return false;
       }
 
       const rawQuestionText = questionElement.textContent;
       const questionText = rawQuestionText.toLowerCase().trim();
       const normalizedQuestion = questionText.replace(/\s+/g, " ").trim();
-      
+
       console.log("🔧 DEBUG: Raw question text:", rawQuestionText);
       console.log("🔧 DEBUG: Normalized question:", normalizedQuestion);
-      console.log("🔍 Analyzing question:", questionText.substring(0, 100) + "...");
+      console.log(
+        "🔍 Analyzing question:",
+        questionText.substring(0, 100) + "..."
+      );
 
       // i search through database patterns
       let correctAnswer = null;
       let matchedPattern = null;
       let testedPatterns = 0;
 
-      console.log("🔧 DEBUG: Starting pattern matching against", Object.keys(quizDatabase).length, "patterns");
-      
+      console.log(
+        "🔧 DEBUG: Starting pattern matching against",
+        Object.keys(quizDatabase).length,
+        "patterns"
+      );
+
       for (const [pattern, answer] of Object.entries(quizDatabase)) {
         testedPatterns++;
         const regex = new RegExp(pattern, "i");
-        console.log(`🔧 DEBUG: Testing pattern ${testedPatterns}: "${pattern}"`);
-        
+        console.log(
+          `🔧 DEBUG: Testing pattern ${testedPatterns}: "${pattern}"`
+        );
+
         if (regex.test(questionText)) {
           correctAnswer = answer;
           matchedPattern = pattern;
-          console.log(`✅ Found match! Pattern: "${pattern}" -> Answer: "${answer}"`);
+          console.log(
+            `✅ Found match! Pattern: "${pattern}" -> Answer: "${answer}"`
+          );
           break;
         }
       }
 
       if (!correctAnswer) {
         console.log("❌ No matching pattern found in database");
-        console.log("📝 Normalized question (no answer found):", normalizedQuestion);
-        console.log("🔧 DEBUG: Tested", testedPatterns, "patterns without match");
+        console.log(
+          "📝 Normalized question (no answer found):",
+          normalizedQuestion
+        );
+        console.log(
+          "🔧 DEBUG: Tested",
+          testedPatterns,
+          "patterns without match"
+        );
         return false;
       }
 
@@ -848,16 +876,24 @@
       const options = block.querySelectorAll(
         '.quiz-multiple-choice-option, [role="radio"], [role="checkbox"], input[type="radio"], input[type="checkbox"], label'
       );
-      
+
       console.log("🔧 DEBUG: Found", options.length, "answer options to scan");
-      
+
       if (options.length === 0) {
-        console.log("❌ DEBUG: No answer options found with standard selectors");
+        console.log(
+          "❌ DEBUG: No answer options found with standard selectors"
+        );
         console.log("🔧 DEBUG: Trying alternative selectors...");
-        
-        const altOptions = block.querySelectorAll('button, .option, .choice, .quiz-fill__input');
-        console.log("🔧 DEBUG: Alternative selectors found", altOptions.length, "elements");
-        
+
+        const altOptions = block.querySelectorAll(
+          "button, .option, .choice, .quiz-fill__input"
+        );
+        console.log(
+          "🔧 DEBUG: Alternative selectors found",
+          altOptions.length,
+          "elements"
+        );
+
         if (altOptions.length === 0) {
           console.log("❌ DEBUG: No options found with any selector");
           return false;
@@ -867,34 +903,71 @@
       // i detect input types to understand question format
       const radioInputs = block.querySelectorAll('input[type="radio"]');
       const checkboxInputs = block.querySelectorAll('input[type="checkbox"]');
-      const fillInputs = block.querySelectorAll('.quiz-fill__input, input[type="text"]');
-      
-      console.log(`🔧 DEBUG: Input types detected - Radio: ${radioInputs.length}, Checkbox: ${checkboxInputs.length}, Fill: ${fillInputs.length}`);
-      
+      const fillInputs = block.querySelectorAll(
+        '.quiz-fill__input, input[type="text"]'
+      );
+
+      console.log(
+        `🔧 DEBUG: Input types detected - Radio: ${radioInputs.length}, Checkbox: ${checkboxInputs.length}, Fill: ${fillInputs.length}`
+      );
+
       const isMultiSelect = checkboxInputs.length > radioInputs.length;
       const isFillIn = fillInputs.length > 0;
-      
-      console.log(`🔧 DEBUG: Question type - MultiSelect: ${isMultiSelect}, FillIn: ${isFillIn}`);
+
+      console.log(
+        `🔧 DEBUG: Question type - MultiSelect: ${isMultiSelect}, FillIn: ${isFillIn}`
+      );
 
       // i handle fill-in-the-blank questions
       if (isFillIn) {
         const fillInput = fillInputs[0];
         console.log("📝 DEBUG: Handling fill-in-the-blank question");
         console.log("👁️ Answer seen:", correctAnswer);
-        
-        fillInput.value = correctAnswer;
-        fillInput.dispatchEvent(new Event('input', { bubbles: true }));
-        fillInput.dispatchEvent(new Event('change', { bubbles: true }));
-        
-        console.log(`✅ Filled in answer: "${correctAnswer}"`);
+
+        // i normalize the answer to a string (use first when array)
+        const fillValue = Array.isArray(correctAnswer)
+          ? String(correctAnswer[0] ?? "").trim()
+          : String(correctAnswer ?? "").trim();
+
+        fillInput.value = fillValue;
+        fillInput.dispatchEvent(new Event("input", { bubbles: true }));
+        fillInput.dispatchEvent(new Event("change", { bubbles: true }));
+
+        console.log(`✅ Filled in answer: "${fillValue}"`);
         return true;
       }
 
-      // i split comma-separated answers for multi-select
-      const answerList = correctAnswer.split(',').map(a => a.trim().toLowerCase());
+      // i normalize answers to an array then lowercase for matching
+      let expectedAnswers;
+      if (Array.isArray(correctAnswer)) {
+        expectedAnswers = correctAnswer
+          .map((a) => String(a ?? "").trim())
+          .filter(Boolean);
+        console.log(
+          "🔧 DEBUG: Normalized answers (from array):",
+          expectedAnswers
+        );
+      } else if (typeof correctAnswer === "string") {
+        expectedAnswers = correctAnswer
+          .split(",")
+          .map((a) => a.trim())
+          .filter(Boolean);
+        console.log(
+          "🔧 DEBUG: Normalized answers (from string):",
+          expectedAnswers
+        );
+      } else {
+        console.log(
+          "❌ DEBUG: Unexpected correctAnswer type:",
+          typeof correctAnswer,
+          correctAnswer
+        );
+        return false;
+      }
+      const answerList = expectedAnswers.map((a) => a.toLowerCase());
       console.log("🔧 DEBUG: Answer list to find:", answerList);
       console.log("🔧 DEBUG: Starting option matching process...");
-      
+
       let selectedCount = 0;
       let targetOptions = [];
 
@@ -902,8 +975,10 @@
       for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
         const option = options[optionIndex];
         const optionText = option.textContent.toLowerCase().trim();
-        
-        console.log(`🔧 DEBUG: Scanning option ${optionIndex + 1}/${options.length}`);
+
+        console.log(
+          `🔧 DEBUG: Scanning option ${optionIndex + 1}/${options.length}`
+        );
         console.log(`👁️ Answer seen in option: "${optionText}"`);
 
         let isMatch = false;
@@ -912,25 +987,39 @@
         // i check against each answer in the list
         for (const answer of answerList) {
           console.log(`🔍 Checking if "${optionText}" matches "${answer}"`);
-          
+
           // exact match
           if (optionText.includes(answer)) {
-            console.log(`🎯 MATCH FOUND! Exact match for "${answer}" in option ${optionIndex + 1}`);
+            console.log(
+              `🎯 MATCH FOUND! Exact match for "${answer}" in option ${
+                optionIndex + 1
+              }`
+            );
             isMatch = true;
             matchType = "exact";
             break;
           }
 
           // partial match for longer answers
-          const answerWords = answer.split(" ").filter(w => w.length > 2);
+          const answerWords = answer.split(" ").filter((w) => w.length > 2);
           if (answerWords.length > 0) {
-            const matchingWords = answerWords.filter(word => optionText.includes(word));
+            const matchingWords = answerWords.filter((word) =>
+              optionText.includes(word)
+            );
             const matchRatio = matchingWords.length / answerWords.length;
 
-            console.log(`🔍 Partial match test: ${matchingWords.length}/${answerWords.length} words (${Math.round(matchRatio * 100)}%)`);
-            
+            console.log(
+              `🔍 Partial match test: ${matchingWords.length}/${
+                answerWords.length
+              } words (${Math.round(matchRatio * 100)}%)`
+            );
+
             if (matchRatio >= 0.6) {
-              console.log(`🎯 MATCH FOUND! Partial match for "${answer}" in option ${optionIndex + 1} (${matchingWords.length}/${answerWords.length} words)`);
+              console.log(
+                `🎯 MATCH FOUND! Partial match for "${answer}" in option ${
+                  optionIndex + 1
+                } (${matchingWords.length}/${answerWords.length} words)`
+              );
               isMatch = true;
               matchType = "partial";
               break;
@@ -939,17 +1028,27 @@
         }
 
         if (isMatch) {
-          console.log(`✅ Option ${optionIndex + 1} MATCHED (${matchType}): "${optionText}"`);
+          console.log(
+            `✅ Option ${
+              optionIndex + 1
+            } MATCHED (${matchType}): "${optionText}"`
+          );
           targetOptions.push({ option, index: optionIndex + 1, matchType });
         } else {
           console.log(`❌ Option ${optionIndex + 1} NO MATCH: "${optionText}"`);
         }
       }
 
-      console.log(`🔧 DEBUG: Matching complete! Found ${targetOptions.length} matching options out of ${options.length} total`);
-      
+      console.log(
+        `🔧 DEBUG: Matching complete! Found ${targetOptions.length} matching options out of ${options.length} total`
+      );
+
       if (targetOptions.length === 0) {
-        console.log(`❌ Could not find any options matching answers: ${answerList.join(', ')}`);
+        console.log(
+          `❌ Could not find any options matching answers: ${answerList.join(
+            ", "
+          )}`
+        );
         console.log("🔧 DEBUG: All available options were:");
         options.forEach((opt, idx) => {
           console.log(`   Option ${idx + 1}: "${opt.textContent.trim()}"`);
@@ -959,73 +1058,103 @@
       }
 
       // i click the matching options
-      console.log(`🔧 DEBUG: Starting click process for ${targetOptions.length} matched options...`);
-      
+      console.log(
+        `🔧 DEBUG: Starting click process for ${targetOptions.length} matched options...`
+      );
+
       for (const targetData of targetOptions) {
         const { option, index, matchType } = targetData;
-        console.log(`🖱️ DEBUG: Attempting to click option ${index} (${matchType} match)`);
-        
+        console.log(
+          `🖱️ DEBUG: Attempting to click option ${index} (${matchType} match)`
+        );
+
         let input = option.querySelector("input");
-        if (!input && option.tagName === 'INPUT') {
+        if (!input && option.tagName === "INPUT") {
           input = option;
         }
-        if (!input && option.tagName === 'LABEL') {
+        if (!input && option.tagName === "LABEL") {
           const doc = option.ownerDocument || document;
-          input = option.querySelector("input") || doc.querySelector(`input[id="${option.getAttribute('for')}"]`);
+          input =
+            option.querySelector("input") ||
+            doc.querySelector(`input[id="${option.getAttribute("for")}"]`);
         }
 
         if (input) {
-          console.log(`🔧 DEBUG: Found ${input.type} input for option ${index}, attempting click...`);
-          
+          console.log(
+            `🔧 DEBUG: Found ${input.type} input for option ${index}, attempting click...`
+          );
+
           // i focus first then click
           try {
             input.focus();
-            console.log(`👁️ Focused on ${input.type} input for option ${index}`);
+            console.log(
+              `👁️ Focused on ${input.type} input for option ${index}`
+            );
           } catch (e) {
-            console.log(`⚠️ Could not focus input for option ${index}:`, e.message);
+            console.log(
+              `⚠️ Could not focus input for option ${index}:`,
+              e.message
+            );
           }
-          
+
           // i click the input
           try {
             input.click();
             console.log(`🖱️ Clicked ${input.type} input for option ${index}`);
-            
+
             // i verify the click worked
             setTimeout(() => {
               if (input.checked) {
-                console.log(`✅ CLICK VERIFIED: Option ${index} is now checked`);
+                console.log(
+                  `✅ CLICK VERIFIED: Option ${index} is now checked`
+                );
               } else {
-                console.log(`⚠️ CLICK ISSUE: Option ${index} may not be checked`);
+                console.log(
+                  `⚠️ CLICK ISSUE: Option ${index} may not be checked`
+                );
               }
             }, 100);
-            
+
             selectedCount++;
-            console.log(`✅ Selected option ${index}: "${option.textContent.trim()}"`);
-            
+            console.log(
+              `✅ Selected option ${index}: "${option.textContent.trim()}"`
+            );
+
             // i stop after first selection for single-select questions
             if (!isMultiSelect) {
-              console.log("🔧 DEBUG: Single-select detected, stopping after first match");
+              console.log(
+                "🔧 DEBUG: Single-select detected, stopping after first match"
+              );
               break;
             }
           } catch (e) {
-            console.log(`❌ Error clicking input for option ${index}:`, e.message);
+            console.log(
+              `❌ Error clicking input for option ${index}:`,
+              e.message
+            );
           }
         } else {
           console.log(`❌ DEBUG: No clickable input found in option ${index}`);
-          console.log(`🔧 DEBUG: Option structure:`, option.outerHTML.substring(0, 200));
+          console.log(
+            `🔧 DEBUG: Option structure:`,
+            option.outerHTML.substring(0, 200)
+          );
         }
       }
 
-      console.log(`🔧 DEBUG: Click process complete. Selected ${selectedCount} out of ${targetOptions.length} matched options`);
+      console.log(
+        `🔧 DEBUG: Click process complete. Selected ${selectedCount} out of ${targetOptions.length} matched options`
+      );
 
       if (selectedCount > 0) {
-        console.log(`✅ Successfully selected ${selectedCount} answer(s) from database`);
+        console.log(
+          `✅ Successfully selected ${selectedCount} answer(s) from database`
+        );
         return true;
       } else {
         console.log("❌ DEBUG: No answers were successfully selected");
         return false;
       }
-
     } catch (error) {
       console.error("❌ Error in selectAnswerFromDatabase:", error);
       console.log("🔧 DEBUG: Error stack:", error.stack);
@@ -1076,7 +1205,9 @@
 
           return; // i skip since database worked
         }
-        console.log("❌ Database approach failed, no fallback - manual completion required");
+        console.log(
+          "❌ Database approach failed, no fallback - manual completion required"
+        );
       }
 
       // i submit button with delay (database failed, manual completion required)
