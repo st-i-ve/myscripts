@@ -97,6 +97,31 @@
     "Drive energy-efficient vehicles.": "right",
     "Share rides, car-pool, and use public transportation.": "right",
     "Buy energy-efficient electrical appliances.": "left",
+
+    //new
+    "Hundreds of built-in tutorials": "left",
+    "All-in-one development environment": "right",
+    "Social communication features": "right",
+    "Free Notebook and Model examples": "left",
+    "Easy commenting and project tracking": "right",
+    "Visual modeling tools for neural network design": "center",
+    "Detailed reference materials": "left",
+    "Compatibility with open source code": "center",
+    "Drag-and-drop interface": "center",
+
+    "in + pajamas": "right",
+    "I + elephant": "left",
+    "I + shot": "right",
+    "elephant + pajamas": "left",
+    "I + pajamas": "left",
+
+    "I": "left",
+    "elephant": "left",
+    "pajamas": "left",
+    "in": "right",
+    "an": "right",
+    "shot": "right",
+    "my": "right"
   };
 
   // create toggle button
@@ -743,11 +768,62 @@
       "Differential privacy",
       "Model anonymization",
     ],
+    "john.*critical meeting.*unpopular.*agile value": ["Courage"],
 
     "shirley.*arrested for protesting.*example of":
       "Sensitive personal information (SPI)",
 
     "john.*different opinion.*agile value": "Courage",
+    "nora.*team meeting.*error.*acknowledges.*agile value": ["Trust"],
+    "jagdish.*team discussion.*values.*input.*diverse thinking.*agile value": [
+      "Respect",
+    ],
+    "first step.*iteration and learning principle": [
+      "Start by doing and trying small pieces of work.",
+    ],
+    "principle.*empowered.*manage their own work": ["Self-directed teams"],
+    "jordan.*camping trip.*define.*goal.*aligns.*agile principle": [
+      "Clarity of outcome",
+    ],
+    "correct sequence.*clarity of outcome principle": [
+      "Define the problem, determine the user outcome, and keep the user outcome in sight",
+    ],
+    "john.*recipe.*potluck.*feedback.*next step": [
+      "Adjust the recipe based on the feedback.",
+    ],
+    "agile practice.*review performance.*reflect.*improve": ["Retrospective"],
+    "social contract.*writing down ideas.*sticky notes.*wall": [
+      "Brainstorm individually",
+    ],
+    "maxim.*mood marbles.*emotional state": [
+      "To evaluate how the team is feeling",
+    ],
+    "after.*stand-up meeting.*next step": [
+      "Have team members give their status updates",
+    ],
+
+    "shuhari.*stage.*move away from traditional methods.*teach": ["Ri"],
+
+    "clinic.*outdated operating system.*vendor.*no support.*relevant question":
+      [
+        "What negative impact can this outdated OS have on system and data security?",
+      ],
+
+    "clinic.*email system.*single-factor authentication.*industry standard.*relevant question":
+      [
+        "How can single-factor authentication compromise the clinic’s email security?",
+      ],
+
+    "organization.*antimalware software.*not updated regularly.*system administrator.*relevant question":
+      [
+        "What is the probability of a virus or other malware attacking this system?",
+      ],
+
+    "organization.*no regular backup routine.*important data files.*relevant question":
+      ["What damages can result from losing patients’ data?"],
+
+    "clinic.*old hardware.*computers.*basic tasks.*don’t hold sensitive data.*relevant question":
+      ["Are the old computers accessible through the clinic’s network?"],
 
     "nora.*error in report.*agile value": "Openness",
 
