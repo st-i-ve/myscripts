@@ -793,6 +793,8 @@
   // i created a function to select answers from the database using keyword matching
   function selectAnswerFromDatabase(block) {
     try {
+      console.log("🔧 DEBUG: Starting selectAnswerFromDatabase");
+      
       // i extract question text from different possible locations
       const questionElement =
         block.querySelector(".quiz-card__title") ||
@@ -800,46 +802,71 @@
         block.querySelector('[class*="title"]');
 
       if (!questionElement) {
-        console.log("❌ No question element found");
+        console.log("❌ DEBUG: No question element found");
+        console.log("🔧 DEBUG: Available elements in block:", block.querySelectorAll("*").length);
         return false;
       }
 
-      const questionText = questionElement.textContent.toLowerCase().trim();
-      console.log(
-        "🔍 Analyzing question:",
-        questionText.substring(0, 100) + "..."
-      );
+      const rawQuestionText = questionElement.textContent;
+      const questionText = rawQuestionText.toLowerCase().trim();
+      const normalizedQuestion = questionText.replace(/\s+/g, " ").trim();
+      
+      console.log("🔧 DEBUG: Raw question text:", rawQuestionText);
+      console.log("🔧 DEBUG: Normalized question:", normalizedQuestion);
+      console.log("🔍 Analyzing question:", questionText.substring(0, 100) + "...");
 
       // i search through database patterns
       let correctAnswer = null;
       let matchedPattern = null;
+      let testedPatterns = 0;
 
+      console.log("🔧 DEBUG: Starting pattern matching against", Object.keys(quizDatabase).length, "patterns");
+      
       for (const [pattern, answer] of Object.entries(quizDatabase)) {
+        testedPatterns++;
         const regex = new RegExp(pattern, "i");
+        console.log(`🔧 DEBUG: Testing pattern ${testedPatterns}: "${pattern}"`);
+        
         if (regex.test(questionText)) {
           correctAnswer = answer;
           matchedPattern = pattern;
-          console.log(
-            `✅ Found match! Pattern: "${pattern}" -> Answer: "${answer}"`
-          );
+          console.log(`✅ Found match! Pattern: "${pattern}" -> Answer: "${answer}"`);
           break;
         }
       }
 
       if (!correctAnswer) {
         console.log("❌ No matching pattern found in database");
+        console.log("📝 Normalized question (no answer found):", normalizedQuestion);
+        console.log("🔧 DEBUG: Tested", testedPatterns, "patterns without match");
         return false;
       }
+
+      console.log("🔧 DEBUG: Pattern matched, now scanning for answer options");
 
       // i look for the correct answer option
       const options = block.querySelectorAll(
         '.quiz-multiple-choice-option, [role="radio"], [role="checkbox"]'
       );
+      
+      console.log("🔧 DEBUG: Found", options.length, "answer options to scan");
+      
+      if (options.length === 0) {
+        console.log("❌ DEBUG: No answer options found with standard selectors");
+        console.log("🔧 DEBUG: Trying alternative selectors...");
+        
+        const altOptions = block.querySelectorAll('input[type="radio"], input[type="checkbox"], button, .option, .choice');
+        console.log("🔧 DEBUG: Alternative selectors found", altOptions.length, "elements");
+      }
+
       let targetOption = null;
+      let optionIndex = 0;
 
       // i try different methods to find the correct option
       for (const option of options) {
+        optionIndex++;
         const optionText = option.textContent.toLowerCase().trim();
+        console.log(`🔧 DEBUG: Scanning option ${optionIndex}: "${optionText}"`);
 
         // exact match
         if (optionText.includes(correctAnswer.toLowerCase())) {
@@ -854,6 +881,8 @@
           (word) => word.length > 2 && optionText.includes(word)
         );
 
+        console.log(`🔧 DEBUG: Option ${optionIndex} partial match: ${matchingWords.length}/${answerWords.length} words match`);
+
         if (matchingWords.length >= Math.ceil(answerWords.length * 0.6)) {
           targetOption = option;
           console.log(
@@ -864,20 +893,31 @@
       }
 
       if (targetOption) {
+        console.log("🔧 DEBUG: Target option found, attempting to click");
+        
         // i click the correct option
         const input = targetOption.querySelector("input") || targetOption;
         if (input) {
+          console.log("🔧 DEBUG: Clicking input element:", input.tagName, input.type || "no-type");
           input.click();
           console.log(`✅ Selected answer from database: "${correctAnswer}"`);
           return true;
+        } else {
+          console.log("❌ DEBUG: No clickable input found in target option");
         }
       } else {
         console.log(`❌ Could not find option matching: "${correctAnswer}"`);
+        console.log("🔧 DEBUG: All available options were:");
+        options.forEach((opt, idx) => {
+          console.log(`   Option ${idx + 1}: "${opt.textContent.trim()}"`);
+        });
       }
     } catch (error) {
       console.error("❌ Error in selectAnswerFromDatabase:", error);
+      console.log("🔧 DEBUG: Error stack:", error.stack);
     }
 
+    console.log("🔧 DEBUG: selectAnswerFromDatabase returning false");
     return false;
   }
 
