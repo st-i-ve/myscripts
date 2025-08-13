@@ -691,10 +691,103 @@
   // execution function for knowledge blocks (quiz logic)
   // i created a keyword-based quiz database for automatic answer selection
   const quizDatabase = {
-    // IBM Computing Eras
     "chess champion.*watson.*jeopardy": "Era of AI",
     "categorized.*qualitative data.*cannot be processed": "Unstructured data",
-    
+
+    // New entries below
+    "four debate steps.*order.*learn and understand.*build a position.*organize your proof.*respond to your opponent":
+      [
+        "Learn and understand the topic",
+        "Build a position",
+        "Organize your proof",
+        "Respond to your opponent",
+      ],
+
+    "likely consequence of ai becoming more pervasive":
+      "Enhanced productivity and the creation of new opportunities",
+
+    "promotion candidates.*indicator.*unwanted bias": [
+      "A group receives a systematic advantage",
+      "A group receives a systematic disadvantage",
+    ],
+
+    "true about bias in ai systems":
+      "Unwanted bias is a systematic error in AI systems that may result in unfair outcomes.",
+
+    "describes a robust ai system":
+      "The AI system can effectively handle malicious attacks without causing unintentional harm.",
+
+    "examples of adversarial attacks.*select the two": ["Poisoning", "Evasion"],
+
+    "degree to which an observer can understand the cause of a decision":
+      "interpretability",
+
+    "ai system.*everyday people.*understand prediction or recommendation":
+      "Explainable",
+
+    "sheldon.*ai recommendation system.*share.*transparency": [
+      "What data is collected",
+      "Who has access to the data",
+    ],
+
+    "in order to be trustworthy, an ai system must be": "transparent",
+
+    "employ privacy controls before deployment.*select the two": [
+      "Model anonymization",
+      "Differential privacy",
+    ],
+
+    "shirley.*arrested for protesting.*example of":
+      "Sensitive personal information (SPI)",
+
+    "john.*different opinion.*agile value": "Courage",
+
+    "nora.*error in report.*agile value": "Openness",
+
+    "jagdish.*values input.*agile value": "Respect",
+
+    "first step to act on iteration and learning principle":
+      "Start by doing and trying small pieces of work.",
+
+    "principle emphasizes importance of groups empowered to manage own work":
+      "Self-directed teams",
+
+    "jordan.*planning camping trip.*agile principle": "Clarity of outcome",
+
+    "correct sequence.*clarity of outcome principle":
+      "Define the problem, determine the user outcome, and keep the user outcome in sight",
+
+    "john.*shares recipe feedback.*next step":
+      "Adjust the recipe based on the feedback",
+
+    "agile practice.*review performance.*reflect on ways to improve":
+      "Retrospective",
+
+    "creating social contract.*writing ideas on sticky notes":
+      "Brainstorm individually",
+
+    "maxim.*mood marbles.*team emotional state":
+      "To evaluate how the team is feeling",
+
+    "stand-up meeting.*next step":
+      "Have team members give their status updates",
+
+    "shuhari stage.*move away from traditional methods": "Ri",
+
+    "clinic.*outdated operating system.*relevant risk question":
+      "What negative impact can this outdated OS have on system and data security?",
+
+    "clinic.*email system.*single-factor authentication.*relevant risk question":
+      "How can single-factor authentication compromise the clinic’s email security?",
+
+    "organization.*antimalware software.*relevant risk question":
+      "What is the probability of a virus or other malware attacking this system?",
+
+    "organization.*no regular backup routine.*relevant risk question":
+      "What damages can result from losing patients’ data?",
+
+    "clinic.*old hardware.*relevant risk question":
+      "Are the old computers accessible through the clinic’s network?",
   };
 
   // i created a function to select answers from the database using keyword matching
