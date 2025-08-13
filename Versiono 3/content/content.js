@@ -798,9 +798,13 @@
     "after.*stand-up meeting.*next step": [
       "Have team members give their status updates",
     ],
-
     "shuhari.*stage.*move away from traditional methods.*teach": ["Ri"],
-
+    "which\\s+is\\s+the\\s+best\\s+way\\s+to\\s+state\\s+a?\\s*problem\\??":
+      "By describing a gap between current state and desired state",
+    "why\\s+is\\s+it\\s+important\\s+to\\s+clearly\\s+define\\s+a\\s+problem\\??":
+      "All of the above",
+    "clearly\\s*define.*problem.*avoid.*symptoms.*multiple.*causes.*wrong.*resources":
+      "All of the above",
     "clinic.*outdated operating system.*vendor.*no support.*relevant question":
       [
         "What negative impact can this outdated OS have on system and data security?",
@@ -842,6 +846,8 @@
     "jordan.*camping trip.*aligns with this goal": "Clarity of outcome",
     "jordan.*camping\\s+trip.*clearly\\s+defining\\s+the\\s+goal.*relaxing.*enjoyable.*aligns.*goal":
       "Clarity of outcome",
+    "team.*review.*performance.*reflect.*improve": "Retrospective",
+
     "correct\\s+sequence.*clarity\\s+of\\s+outcome\\s+principle":
       "Define the problem, determine the user outcome, and keep the user outcome in sight",
 
@@ -953,10 +959,15 @@
 
       console.log("🔧 DEBUG: Pattern matched, now scanning for answer options");
 
-      // i broaden selectors to include more input types
-      const options = block.querySelectorAll(
-        '.quiz-multiple-choice-option, [role="radio"], [role="checkbox"], input[type="radio"], input[type="checkbox"], label'
-      );
+      // i prioritize wrap-based elements to keep control and text paired
+      let options = block.querySelectorAll('.quiz-multiple-choice-option-wrap');
+      
+      if (options.length === 0) {
+        // i fall back to individual controls for other quiz formats
+        options = block.querySelectorAll(
+          '.quiz-multiple-choice-option, [role="radio"], [role="checkbox"], input[type="radio"], input[type="checkbox"], label'
+        );
+      }
 
       console.log("🔧 DEBUG: Found", options.length, "answer options to scan");
 
@@ -979,6 +990,7 @@
           console.log("❌ DEBUG: No options found with any selector");
           return false;
         }
+        options = altOptions;
       }
 
       // i detect input types to understand question format
@@ -1057,17 +1069,40 @@
       if (typeof correctAnswer === "string") {
         const fullSequence = correctAnswer
           .toLowerCase()
-          .trim()
-          .replace(/\s+/g, " ");
+          .replace(/\u00a0/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
         console.log(
           `🔧 DEBUG: Trying exact sequence match for: "${fullSequence}"`
         );
         for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
           const option = options[optionIndex];
-          const optionText = option.textContent
-            .toLowerCase()
-            .trim()
-            .replace(/\s+/g, " ");
+
+          // i extract visible option text robustly for exact-sequence check
+          let optionText = "";
+          try {
+            const isWrap = option.classList && option.classList.contains('quiz-multiple-choice-option-wrap');
+            let labelEl = null;
+            if (isWrap) {
+              labelEl = option.querySelector('.quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label');
+            } else {
+              const labelledBy = option.getAttribute && option.getAttribute('aria-labelledby');
+              if (labelledBy) {
+                const doc = option.ownerDocument || document;
+                labelEl = doc.getElementById(labelledBy);
+              }
+              if (!labelEl) {
+                const wrap = option.closest && option.closest('.quiz-multiple-choice-option-wrap');
+                if (wrap) {
+                  labelEl = wrap.querySelector('.quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label');
+                }
+              }
+            }
+            const rawText = (labelEl ? labelEl.textContent : option.textContent) || "";
+            optionText = rawText.toLowerCase().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+          } catch (e) {
+            optionText = (option.textContent || "").toLowerCase().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+          }
 
           if (fullSequence && optionText.includes(fullSequence)) {
             console.log(
@@ -1091,7 +1126,32 @@
         // i find all matching options
         for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
           const option = options[optionIndex];
-          const optionText = option.textContent.toLowerCase().trim();
+
+          // i extract visible option text robustly
+          let optionText = "";
+          try {
+            const isWrap = option.classList && option.classList.contains('quiz-multiple-choice-option-wrap');
+            let labelEl = null;
+            if (isWrap) {
+              labelEl = option.querySelector('.quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label');
+            } else {
+              const labelledBy = option.getAttribute && option.getAttribute('aria-labelledby');
+              if (labelledBy) {
+                const doc = option.ownerDocument || document;
+                labelEl = doc.getElementById(labelledBy);
+              }
+              if (!labelEl) {
+                const wrap = option.closest && option.closest('.quiz-multiple-choice-option-wrap');
+                if (wrap) {
+                  labelEl = wrap.querySelector('.quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label');
+                }
+              }
+            }
+            const rawText = (labelEl ? labelEl.textContent : option.textContent) || "";
+            optionText = rawText.toLowerCase().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+          } catch (e) {
+            optionText = (option.textContent || "").toLowerCase().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+          }
 
           console.log(
             `🔧 DEBUG: Scanning option ${optionIndex + 1}/${options.length}`
@@ -1182,11 +1242,13 @@
         console.log(
           `🔧 DEBUG: Single-select with ${targetOptions.length} matches - selecting highest accuracy match`
         );
-        
+
         // i sort by match quality: exact-sequence > exact > partial
-        const matchPriority = { "exact-sequence": 3, "exact": 2, "partial": 1 };
-        targetOptions.sort((a, b) => matchPriority[b.matchType] - matchPriority[a.matchType]);
-        
+        const matchPriority = { "exact-sequence": 3, exact: 2, partial: 1 };
+        targetOptions.sort(
+          (a, b) => matchPriority[b.matchType] - matchPriority[a.matchType]
+        );
+
         console.log(
           `🎯 Best match selected: Option ${targetOptions[0].index} (${targetOptions[0].matchType})`
         );
