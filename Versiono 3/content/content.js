@@ -115,13 +115,13 @@
     "elephant + pajamas": "left",
     "I + pajamas": "left",
 
-    "I": "left",
-    "elephant": "left",
-    "pajamas": "left",
-    "in": "right",
-    "an": "right",
-    "shot": "right",
-    "my": "right"
+    I: "left",
+    elephant: "left",
+    pajamas: "left",
+    in: "right",
+    an: "right",
+    shot: "right",
+    my: "right",
   };
 
   // create toggle button
@@ -825,7 +825,8 @@
     "clinic.*old hardware.*computers.*basic tasks.*don’t hold sensitive data.*relevant question":
       ["Are the old computers accessible through the clinic’s network?"],
 
-    "nora.*error in report.*agile value": "Openness",
+    "nora.*(team meeting|meeting).*error.*(acknowledg|admit|own).*mistake.*(explain|tell).*what went wrong.*agile value":
+      ["Trust"],
 
     "jagdish.*values input.*agile value": "Respect",
 
