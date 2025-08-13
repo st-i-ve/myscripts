@@ -785,9 +785,6 @@
     "jordan.*camping trip.*define.*goal.*aligns.*agile principle": [
       "Clarity of outcome",
     ],
-    "correct sequence.*clarity of outcome principle": [
-      "Define the problem, determine the user outcome, and keep the user outcome in sight",
-    ],
     "john.*recipe.*potluck.*feedback.*next step": [
       "Adjust the recipe based on the feedback.",
     ],
@@ -840,17 +837,14 @@
     "question\\s*2.*team\\s*meeting.*nora.*error.*report.*open(ly)?\\s+acknowledge(s|d)?.*what\\s+agile\\s+value":
       "Trust",
 
-    "correct sequence.*clarity of outcome principle":
-      "Define the problem, determine the user outcome, and keep the user outcome in sight",
     "team\\s*discussion.*jagdish.*values.*input.*all\\s+team\\s+members.*encourages.*diverse\\s+thinking":
       "Respect",
     "jordan.*camping trip.*aligns with this goal": "Clarity of outcome",
     "jordan.*camping\\s+trip.*clearly\\s+defining\\s+the\\s+goal.*relaxing.*enjoyable.*aligns.*goal":
       "Clarity of outcome",
     "correct\\s+sequence.*clarity\\s+of\\s+outcome\\s+principle":
-      "Determine the user outcome, define the problem, and keep the user outcome in sight",
-    "correct sequence.*clarity of outcome principle":
-      "Determine the user outcome, define the problem, and keep the user outcome in sight",
+      "Define the problem, determine the user outcome, and keep the user outcome in sight",
+
     "john.*shares recipe feedback.*next step":
       "Adjust the recipe based on the feedback",
 
@@ -1061,8 +1055,13 @@
       // i try exact sequence first if the database answer is a string
       let exactSequenceFound = false;
       if (typeof correctAnswer === "string") {
-        const fullSequence = correctAnswer.toLowerCase().trim().replace(/\s+/g, " ");
-        console.log(`🔧 DEBUG: Trying exact sequence match for: "${fullSequence}"`);
+        const fullSequence = correctAnswer
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, " ");
+        console.log(
+          `🔧 DEBUG: Trying exact sequence match for: "${fullSequence}"`
+        );
         for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
           const option = options[optionIndex];
           const optionText = option.textContent
@@ -1072,9 +1071,15 @@
 
           if (fullSequence && optionText.includes(fullSequence)) {
             console.log(
-              `🎯 EXACT SEQUENCE MATCH! Option ${optionIndex + 1} contains the complete pattern`
+              `🎯 EXACT SEQUENCE MATCH! Option ${
+                optionIndex + 1
+              } contains the complete pattern`
             );
-            targetOptions.push({ option, index: optionIndex + 1, matchType: "exact-sequence" });
+            targetOptions.push({
+              option,
+              index: optionIndex + 1,
+              matchType: "exact-sequence",
+            });
             exactSequenceFound = true;
             break; // single-select: stop at first exact sequence match
           }
@@ -1147,7 +1152,9 @@
             );
             targetOptions.push({ option, index: optionIndex + 1, matchType });
           } else {
-            console.log(`❌ Option ${optionIndex + 1} NO MATCH: "${optionText}"`);
+            console.log(
+              `❌ Option ${optionIndex + 1} NO MATCH: "${optionText}"`
+            );
           }
         }
       }
@@ -1168,6 +1175,22 @@
         });
         console.log("🔧 DEBUG: Expected answers were:", answerList);
         return false;
+      }
+
+      // i prioritize best match for single-select questions
+      if (!isMultiSelect && targetOptions.length > 1) {
+        console.log(
+          `🔧 DEBUG: Single-select with ${targetOptions.length} matches - selecting highest accuracy match`
+        );
+        
+        // i sort by match quality: exact-sequence > exact > partial
+        const matchPriority = { "exact-sequence": 3, "exact": 2, "partial": 1 };
+        targetOptions.sort((a, b) => matchPriority[b.matchType] - matchPriority[a.matchType]);
+        
+        console.log(
+          `🎯 Best match selected: Option ${targetOptions[0].index} (${targetOptions[0].matchType})`
+        );
+        targetOptions = [targetOptions[0]]; // i keep only the best match
       }
 
       // i click the matching options
