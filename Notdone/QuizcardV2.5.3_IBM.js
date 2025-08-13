@@ -641,9 +641,10 @@
       },
       {
         question:
-          /nora.*patient data.*sensitive personal information.*spi.*removed.*data set/i,
+          /nora.*(prepare|preparing).*data.*(patient|medical).*sensitive.*(spi|personal information).*remove/i,
         answers: ["Patient name"],
       },
+
       {
         question:
           /xray.*no disease.*noise.*ai model.*disease present.*defending.*attack/i,
