@@ -1332,11 +1332,82 @@
             );
           }
         } else {
-          console.log(`❌ DEBUG: No clickable input found in option ${index}`);
-          console.log(
-            `🔧 DEBUG: Option structure:`,
-            option.outerHTML.substring(0, 200)
-          );
+          // i try role-based clickable controls (radio/checkbox) inside the wrap
+          let roleCtrl = null;
+          try {
+            if (
+              option.matches &&
+              (option.matches('[role="radio"]') || option.matches('[role="checkbox"]'))
+            ) {
+              roleCtrl = option;
+            }
+          } catch (e) {}
+          if (!roleCtrl) {
+            roleCtrl =
+              option.querySelector &&
+              option.querySelector(
+                '.quiz-multiple-choice-option[role="radio"], .quiz-multiple-choice-option[role="checkbox"], [role="radio"], [role="checkbox"]'
+              );
+          }
+
+          if (roleCtrl) {
+            console.log(
+              `🔧 DEBUG: Found role control (${roleCtrl.getAttribute('role')}) for option ${index}, attempting click...`
+            );
+            try {
+              roleCtrl.focus && roleCtrl.focus();
+              console.log(
+                `👁️ Focused on ${roleCtrl.getAttribute('role')} control for option ${index}`
+              );
+            } catch (e) {
+              console.log(
+                `⚠️ Could not focus role control for option ${index}:`,
+                e.message
+              );
+            }
+            try {
+              roleCtrl.click();
+              console.log(
+                `🖱️ Clicked ${roleCtrl.getAttribute('role')} control for option ${index}`
+              );
+              setTimeout(() => {
+                const checked =
+                  roleCtrl.getAttribute && roleCtrl.getAttribute('aria-checked');
+                if (checked === 'true') {
+                  console.log(
+                    `✅ CLICK VERIFIED: Option ${index} aria-checked=true`
+                  );
+                } else {
+                  console.log(
+                    `⚠️ CLICK ISSUE: Option ${index} aria-checked did not turn true (value: ${checked})`
+                  );
+                }
+              }, 100);
+
+              selectedCount++;
+              console.log(
+                `✅ Selected option ${index}: "${option.textContent.trim()}"`
+              );
+
+              if (!isMultiSelect) {
+                console.log(
+                  "🔧 DEBUG: Single-select detected, stopping after first match"
+                );
+                break;
+              }
+            } catch (e) {
+              console.log(
+                `❌ Error clicking role control for option ${index}:`,
+                e.message
+              );
+            }
+          } else {
+            console.log(`❌ DEBUG: No clickable input found in option ${index}`);
+            console.log(
+              `🔧 DEBUG: Option structure:`,
+              option.outerHTML.substring(0, 200)
+            );
+          }
         }
       }
 
