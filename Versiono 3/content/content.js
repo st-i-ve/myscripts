@@ -826,7 +826,7 @@
       ["Are the old computers accessible through the clinic’s network?"],
 
     "nora.*(team meeting|meeting).*error.*(acknowledg|admit|own).*mistake.*(explain|tell).*what went wrong.*agile value":
-      ["Trust"],
+      "Trust",
 
     "jagdish.*values input.*agile value": "Respect",
 
@@ -837,6 +837,8 @@
       "Self-directed teams",
 
     "jordan.*planning camping trip.*agile principle": "Clarity of outcome",
+    "question\\s*2.*team\\s*meeting.*nora.*error.*report.*open(ly)?\\s+acknowledge(s|d)?.*what\\s+agile\\s+value":
+      "Trust",
 
     "correct sequence.*clarity of outcome principle":
       "Define the problem, determine the user outcome, and keep the user outcome in sight",
