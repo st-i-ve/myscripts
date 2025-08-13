@@ -641,7 +641,7 @@
       },
       {
         question:
-          /nora.*(prepare|preparing).*data.*(patient|medical).*sensitive.*(spi|personal information).*remove/i,
+          /preparing.*data.*patient.*nora.*sensitive.*(personal information|spi).*removed?/i,
         answers: ["Patient name"],
       },
 
