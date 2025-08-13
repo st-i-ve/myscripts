@@ -563,6 +563,11 @@
         answers: ["What data is collected", "Who has access to the data"],
       },
       {
+        question:
+          /adds random noise.*reduce the impact.*individual.*model.*training.*identified/i,
+        answers: ["Differential privacy"],
+      },
+      {
         question: /trustworthy.*ai system.*must be/i,
         answers: ["transparent"],
       },
@@ -580,7 +585,7 @@
       },
       {
         question:
-          /rutherford.*privacy control.*limit.*(personal|sensitive).*data.*minimization/i,
+          /rutherford.*privacy control.*limit.*(personal|sensitive).*data.*granular.*needed/i,
         answers: ["Data minimization"],
       },
       {
@@ -613,7 +618,7 @@
       },
       {
         question:
-          /daniel.*nursing school.*ai model.*admissions.*majority.*accepted.*female/i,
+          /daniel.*nursing school.*resume.*turned down.*ai model.*applications.*(60|sixty).*female.*(90|ninety).*accepted.*female/i,
         answers: ["Females are a privileged group"],
       },
       {
@@ -635,12 +640,22 @@
         answers: ["Patient name"],
       },
       {
+        question:
+          /nora.*patient data.*sensitive personal information.*spi.*removed.*data set/i,
+        answers: ["Patient name"],
+      },
+      {
+        question:
+          /xray.*no disease.*noise.*ai model.*disease present.*defending.*attack/i,
+        answers: ["Robustness"],
+      },
+      {
         question: /business roles.*deployment.*ai models/i,
         answers: ["AI Ops Engineer"],
       },
       {
         question:
-          /bao.*diagnostic.*ai model.*data set.*(larger|extra items).*bogus.*robustness/i,
+          /bao.*diagnostic.*ai model.*data set.*(larger|extra).*bogus.*accurate.*diagnoses/i,
         answers: ["Robustness"],
       },
     ],
