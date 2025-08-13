@@ -632,7 +632,7 @@
       processed++;
     });
 
-    console.log(`✅ Applied hint dots to ${processed} sorting activities`);
+    console.log(`✅ Added hint dots to ${processed} sorting activities`);
     return processed > 0;
   }
 
@@ -842,7 +842,15 @@
 
     "correct sequence.*clarity of outcome principle":
       "Define the problem, determine the user outcome, and keep the user outcome in sight",
-
+    "team\\s*discussion.*jagdish.*values.*input.*all\\s+team\\s+members.*encourages.*diverse\\s+thinking":
+      "Respect",
+    "jordan.*camping trip.*aligns with this goal": "Clarity of outcome",
+    "jordan.*camping\\s+trip.*clearly\\s+defining\\s+the\\s+goal.*relaxing.*enjoyable.*aligns.*goal":
+      "Clarity of outcome",
+    "correct\\s+sequence.*clarity\\s+of\\s+outcome\\s+principle":
+      "Determine the user outcome, define the problem, and keep the user outcome in sight",
+    "correct sequence.*clarity of outcome principle":
+      "Determine the user outcome, define the problem, and keep the user outcome in sight",
     "john.*shares recipe feedback.*next step":
       "Adjust the recipe based on the feedback",
 
@@ -1050,71 +1058,97 @@
       let selectedCount = 0;
       let targetOptions = [];
 
-      // i find all matching options
-      for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
-        const option = options[optionIndex];
-        const optionText = option.textContent.toLowerCase().trim();
+      // i try exact sequence first if the database answer is a string
+      let exactSequenceFound = false;
+      if (typeof correctAnswer === "string") {
+        const fullSequence = correctAnswer.toLowerCase().trim().replace(/\s+/g, " ");
+        console.log(`🔧 DEBUG: Trying exact sequence match for: "${fullSequence}"`);
+        for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
+          const option = options[optionIndex];
+          const optionText = option.textContent
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, " ");
 
-        console.log(
-          `🔧 DEBUG: Scanning option ${optionIndex + 1}/${options.length}`
-        );
-        console.log(`👁️ Answer seen in option: "${optionText}"`);
-
-        let isMatch = false;
-        let matchType = "";
-
-        // i check against each answer in the list
-        for (const answer of answerList) {
-          console.log(`🔍 Checking if "${optionText}" matches "${answer}"`);
-
-          // exact match
-          if (optionText.includes(answer)) {
+          if (fullSequence && optionText.includes(fullSequence)) {
             console.log(
-              `🎯 MATCH FOUND! Exact match for "${answer}" in option ${
-                optionIndex + 1
-              }`
+              `🎯 EXACT SEQUENCE MATCH! Option ${optionIndex + 1} contains the complete pattern`
             );
-            isMatch = true;
-            matchType = "exact";
-            break;
-          }
-
-          // partial match for longer answers
-          const answerWords = answer.split(" ").filter((w) => w.length > 2);
-          if (answerWords.length > 0) {
-            const matchingWords = answerWords.filter((word) =>
-              optionText.includes(word)
-            );
-            const matchRatio = matchingWords.length / answerWords.length;
-
-            console.log(
-              `🔍 Partial match test: ${matchingWords.length}/${
-                answerWords.length
-              } words (${Math.round(matchRatio * 100)}%)`
-            );
-
-            if (matchRatio >= 0.6) {
-              console.log(
-                `🎯 MATCH FOUND! Partial match for "${answer}" in option ${
-                  optionIndex + 1
-                } (${matchingWords.length}/${answerWords.length} words)`
-              );
-              isMatch = true;
-              matchType = "partial";
-              break;
-            }
+            targetOptions.push({ option, index: optionIndex + 1, matchType: "exact-sequence" });
+            exactSequenceFound = true;
+            break; // single-select: stop at first exact sequence match
           }
         }
+      }
 
-        if (isMatch) {
+      // i fall back to individual part matching only if no exact sequence found
+      if (!exactSequenceFound) {
+        // i find all matching options
+        for (let optionIndex = 0; optionIndex < options.length; optionIndex++) {
+          const option = options[optionIndex];
+          const optionText = option.textContent.toLowerCase().trim();
+
           console.log(
-            `✅ Option ${
-              optionIndex + 1
-            } MATCHED (${matchType}): "${optionText}"`
+            `🔧 DEBUG: Scanning option ${optionIndex + 1}/${options.length}`
           );
-          targetOptions.push({ option, index: optionIndex + 1, matchType });
-        } else {
-          console.log(`❌ Option ${optionIndex + 1} NO MATCH: "${optionText}"`);
+          console.log(`👁️ Answer seen in option: "${optionText}"`);
+
+          let isMatch = false;
+          let matchType = "";
+
+          // i check against each answer in the list
+          for (const answer of answerList) {
+            console.log(`🔍 Checking if "${optionText}" matches "${answer}"`);
+
+            // exact match
+            if (optionText.includes(answer)) {
+              console.log(
+                `🎯 MATCH FOUND! Exact match for "${answer}" in option ${
+                  optionIndex + 1
+                }`
+              );
+              isMatch = true;
+              matchType = "exact";
+              break;
+            }
+
+            // partial match for longer answers
+            const answerWords = answer.split(" ").filter((w) => w.length > 2);
+            if (answerWords.length > 0) {
+              const matchingWords = answerWords.filter((word) =>
+                optionText.includes(word)
+              );
+              const matchRatio = matchingWords.length / answerWords.length;
+
+              console.log(
+                `🔍 Partial match test: ${matchingWords.length}/${
+                  answerWords.length
+                } words (${Math.round(matchRatio * 100)}%)`
+              );
+
+              if (matchRatio >= 0.6) {
+                console.log(
+                  `🎯 MATCH FOUND! Partial match for "${answer}" in option ${
+                    optionIndex + 1
+                  } (${matchingWords.length}/${answerWords.length} words)`
+                );
+                isMatch = true;
+                matchType = "partial";
+                break;
+              }
+            }
+          }
+
+          if (isMatch) {
+            console.log(
+              `✅ Option ${
+                optionIndex + 1
+              } MATCHED (${matchType}): "${optionText}"`
+            );
+            targetOptions.push({ option, index: optionIndex + 1, matchType });
+          } else {
+            console.log(`❌ Option ${optionIndex + 1} NO MATCH: "${optionText}"`);
+          }
         }
       }
 
