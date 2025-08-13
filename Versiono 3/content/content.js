@@ -920,60 +920,19 @@
             }
           }, 300);
 
-          return; // i skip random selection since database worked
+          return; // i skip since database worked
         }
-        console.log(
-          "❌ Database approach failed, falling back to random selection..."
-        );
+        console.log("❌ Database approach failed, no fallback - manual completion required");
       }
 
-      // i fall back to existing random selection logic
-      // radio button logic
-      const alreadySelected = quizCard.querySelector(
-        '[role="radio"][aria-checked="true"]'
-      );
-      if (!alreadySelected) {
-        const options = quizCard.querySelectorAll(
-          '[role="radio"][aria-checked="false"]'
-        );
-        if (options.length > 0) {
-          const randomIndex = Math.floor(Math.random() * options.length);
-          const chosen = options[randomIndex];
-          chosen.dispatchEvent(
-            new MouseEvent("click", { bubbles: true, cancelable: true })
-          );
-          console.log(
-            `🔘 Selected random radio option (execution ${executionNumber})`
-          );
-        }
-      }
-
-      // checkbox logic
-      const checkboxOptions = quizCard.querySelectorAll(
-        '[role="checkbox"][aria-checked="false"]'
-      );
-      if (checkboxOptions.length > 0) {
-        const shuffled = [...checkboxOptions].sort(() => 0.5 - Math.random());
-        const pickCount = Math.min(2, shuffled.length);
-        const picked = shuffled.slice(0, pickCount);
-        picked.forEach((checkbox) => {
-          checkbox.dispatchEvent(
-            new MouseEvent("click", { bubbles: true, cancelable: true })
-          );
-        });
-        console.log(
-          `☑️ Selected ${picked.length} random checkbox options (execution ${executionNumber})`
-        );
-      }
-
-      // submit button with delay
+      // i submit button with delay (database failed, manual completion required)
       setTimeout(() => {
         const submitBtn = wrapper.querySelector(
           "button.quiz-card__button:not(.quiz-card__button--disabled)"
         );
         if (submitBtn) {
           console.log(
-            `📤 Clicking submit button (execution ${executionNumber})`
+            `📤 Clicking submit button (execution ${executionNumber}) - manual completion required`
           );
           submitBtn.click();
         }
