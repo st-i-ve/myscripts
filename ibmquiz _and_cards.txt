@@ -238,6 +238,94 @@ In which Shuhari stage do you move away from traditional methods, develop a new 
 Answer:
 Ri ✅
 
+
+
+Question:
+The clinic’s computers run on an outdated operating system (OS). The vendor of the OS no longer supports it and doesn’t provide security updates for it.
+
+Which question is relevant for determining the value of this risk?
+
+Would updating the OS disrupt any currently running applications or services?
+
+What is the total cost associated with updating the operating system?
+
+What technical support is available for migrating to a more secure OS?
+
+What negative impact can this outdated OS have on system and data security?
+
+Answer:
+What negative impact can this outdated OS have on system and data security?
+
+
+The clinic’s email system uses single-factor authentication. Users need only one form of authentication, a password, for access. The current industry standard for authentication is multifactor authentication, which is when a login requires at least two types of credentials. For example, logging into your bank account from a new device might require a password and the answer to a security question.
+
+Which question is relevant for determining the value of this risk?
+
+How can single-factor authentication compromise the clinic’s email security?
+
+How burdensome is providing multiple types of credentials for users?
+
+How much do users trust the provider of the multifactor authentication service?
+
+How compatible is multifactor authentication with all company devices?
+
+Answer:
+How can single-factor authentication compromise the clinic’s email security?
+
+
+
+
+Question:
+The organization’s antimalware software isn’t updated regularly. The software isn’t configured to update automatically, and the system administrator, Heidi, updates the software manually on an irregular basis.
+
+Which question is relevant for determining the value of this risk?
+
+How inconvenient is the process of updating the antimalware software?
+
+What is the probability of a virus or other malware attacking this system?
+
+How reluctant is Heidi to pay for regularly updating the antimalware software?
+
+Would other antimalware software provide better technical support?
+
+Answer:
+What is the probability of a virus or other malware attacking this system?
+
+Question:
+The organization has no regular backup routine for important data files.
+
+Which question is relevant for determining the value of this risk?
+
+How time-consuming is the backup process?
+
+How often should the clinic back up patients’ data?
+
+What damages can result from losing patients’ data?
+
+Is the backup process efficient enough for the clinic?
+
+Answer:
+What damages can result from losing patients’ data?
+
+
+Question:
+The clinic relies on old hardware. Some computers are quite old and don’t support the latest updates or software. Employees use these computers only for basic tasks that don’t require high processing power, and the computers don’t hold sensitive data.
+
+Which question is relevant for determining the value of this risk?
+
+Are the old computers accessible through the clinic’s network?
+
+Does maintaining these older machines cost more than replacing them?
+
+How much do users prefer using the old computers because of familiarity?
+
+Are these computers older on average than those in other clinics?
+
+Answer:
+Are the old computers accessible through the clinic’s network?
+
+
+
 sorting 
 
 {
