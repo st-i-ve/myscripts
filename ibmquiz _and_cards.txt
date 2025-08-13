@@ -1,5 +1,15 @@
 Quizes
 
+Question:
+Here are the four debate steps. What order would you put the following steps in if you were preparing for a debate?
+Don't worry if you get this wrong. Simply try. You'll learn more about each step next!
+Learn and understand the topic
+Build a position
+Organize your proof
+Respond to your opponent
+Answer:
+Learn and understand the topic, Build a position, Organize your proof, Respond to your opponent
+
 
 Which of the following is a likely consequence of AI becoming more pervasive across industries?   
 Enhanced productivity and the creation of new opportunities
