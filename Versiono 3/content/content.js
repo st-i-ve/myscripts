@@ -778,6 +778,23 @@
     "jagdish.*team discussion.*values.*input.*diverse thinking.*agile value": [
       "Respect",
     ],
+    "risk.*outdated.*operating\\s+system.*relevant.*determining.*value.*risk": [
+      "What negative impact can this outdated OS have on system and data security?",
+    ],
+    "risk.*single[-]?factor.*authentication.*relevant.*determining.*value.*risk":
+      [
+        "How can single-factor authentication compromise the clinic’s email security?",
+      ],
+    "risk.*antimalware.*software.*updated.*regularly.*relevant.*determining.*value.*risk":
+      [
+        "What is the probability of a virus or other malware attacking this system?",
+      ],
+    "risk.*important.*files.*backed.*up.*relevant.*determining.*value.*risk": [
+      "What damages can result from losing patients’ data?",
+    ],
+    "risk.*old.*hardware.*relevant.*determining.*value.*risk": [
+      "Are the old computers accessible through the clinic’s network?",
+    ],
     "first step.*iteration and learning principle": [
       "Start by doing and trying small pieces of work.",
     ],
