@@ -72,7 +72,7 @@
 
     // Environmental Initiative (LEFT)
     "Traffic congestion": "right",
-    Pollution: "left",
+    "Pollution": "left",
     "Bird migration": "left",
     "Rain and flood": "left",
     "Hunting license": "right",
@@ -81,7 +81,8 @@
     // Social Relationship (CENTER)
     "Skills training": "center",
     "Child adoption": "center",
-    Education: "center",
+    "Education": "center",
+
     "Substance abuse": "center",
 
     // Governance Standard (RIGHT)
@@ -122,6 +123,9 @@
     an: "right",
     shot: "right",
     my: "right",
+
+
+    
   };
 
   // create toggle button
@@ -785,6 +789,13 @@
       [
         "How can single-factor authentication compromise the clinic’s email security?",
       ],
+
+    "which\\s+of\\s+the\\s+following\\s+do\\s+you\\s+think\\s+might\\s+be\\s+an\\s+example\\s+of\\s+structured\\s+data":
+      ["Hotel and ticket reservation data"],
+    "which\\s+of\\s+the\\s+following\\s+do\\s+you\\s+think\\s+might\\s+be\\s+an\\s+example\\s+of\\s+semi[-]?structured\\s+data":
+      ["Tweets organized by hashtags"],
+    "which\\s+of\\s+the\\s+following\\s+do\\s+you\\s+think\\s+might\\s+be\\s+an\\s+example\\s+of\\s+unstructured\\s+data":
+      ["Your social media posts"],
     "risk.*antimalware.*software.*updated.*regularly.*relevant.*determining.*value.*risk":
       [
         "What is the probability of a virus or other malware attacking this system?",
