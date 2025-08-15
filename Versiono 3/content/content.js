@@ -72,7 +72,7 @@
 
     // Environmental Initiative (LEFT)
     "Traffic congestion": "right",
-    "Pollution": "left",
+    Pollution: "left",
     "Bird migration": "left",
     "Rain and flood": "left",
     "Hunting license": "right",
@@ -81,7 +81,7 @@
     // Social Relationship (CENTER)
     "Skills training": "center",
     "Child adoption": "center",
-    "Education": "center",
+    Education: "center",
 
     "Substance abuse": "center",
 
@@ -123,9 +123,15 @@
     an: "right",
     shot: "right",
     my: "right",
-
-
     
+    Compassion: "left",
+    Dreaming: "left",
+    Generalization: "left",
+    Abstraction: "left",
+    "Machine learning": "right",
+    "Endless memory capacity": "right",
+    "Pattern identification": "right",
+    "Structuring information": "right",
   };
 
   // create toggle button
