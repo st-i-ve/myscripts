@@ -795,6 +795,9 @@
     "maxim.*mood marbles.*emotional state": [
       "To evaluate how the team is feeling",
     ],
+    "debate\\s+steps.*what\\s+order.*prepar.*debate": [
+      "Learn and understand the topic, Build a position, Organize your proof, Respond to your opponent",
+    ],
     "after.*stand-up meeting.*next step": [
       "Have team members give their status updates",
     ],
@@ -960,8 +963,8 @@
       console.log("🔧 DEBUG: Pattern matched, now scanning for answer options");
 
       // i prioritize wrap-based elements to keep control and text paired
-      let options = block.querySelectorAll('.quiz-multiple-choice-option-wrap');
-      
+      let options = block.querySelectorAll(".quiz-multiple-choice-option-wrap");
+
       if (options.length === 0) {
         // i fall back to individual controls for other quiz formats
         options = block.querySelectorAll(
@@ -1069,8 +1072,8 @@
       if (typeof correctAnswer === "string") {
         const fullSequence = correctAnswer
           .toLowerCase()
-          .replace(/\u00a0/g, ' ')
-          .replace(/\s+/g, ' ')
+          .replace(/\u00a0/g, " ")
+          .replace(/\s+/g, " ")
           .trim();
         console.log(
           `🔧 DEBUG: Trying exact sequence match for: "${fullSequence}"`
@@ -1081,27 +1084,45 @@
           // i extract visible option text robustly for exact-sequence check
           let optionText = "";
           try {
-            const isWrap = option.classList && option.classList.contains('quiz-multiple-choice-option-wrap');
+            const isWrap =
+              option.classList &&
+              option.classList.contains("quiz-multiple-choice-option-wrap");
             let labelEl = null;
             if (isWrap) {
-              labelEl = option.querySelector('.quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label');
+              labelEl = option.querySelector(
+                ".quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label"
+              );
             } else {
-              const labelledBy = option.getAttribute && option.getAttribute('aria-labelledby');
+              const labelledBy =
+                option.getAttribute && option.getAttribute("aria-labelledby");
               if (labelledBy) {
                 const doc = option.ownerDocument || document;
                 labelEl = doc.getElementById(labelledBy);
               }
               if (!labelEl) {
-                const wrap = option.closest && option.closest('.quiz-multiple-choice-option-wrap');
+                const wrap =
+                  option.closest &&
+                  option.closest(".quiz-multiple-choice-option-wrap");
                 if (wrap) {
-                  labelEl = wrap.querySelector('.quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label');
+                  labelEl = wrap.querySelector(
+                    ".quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label"
+                  );
                 }
               }
             }
-            const rawText = (labelEl ? labelEl.textContent : option.textContent) || "";
-            optionText = rawText.toLowerCase().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+            const rawText =
+              (labelEl ? labelEl.textContent : option.textContent) || "";
+            optionText = rawText
+              .toLowerCase()
+              .replace(/\u00a0/g, " ")
+              .replace(/\s+/g, " ")
+              .trim();
           } catch (e) {
-            optionText = (option.textContent || "").toLowerCase().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+            optionText = (option.textContent || "")
+              .toLowerCase()
+              .replace(/\u00a0/g, " ")
+              .replace(/\s+/g, " ")
+              .trim();
           }
 
           if (fullSequence && optionText.includes(fullSequence)) {
@@ -1130,27 +1151,45 @@
           // i extract visible option text robustly
           let optionText = "";
           try {
-            const isWrap = option.classList && option.classList.contains('quiz-multiple-choice-option-wrap');
+            const isWrap =
+              option.classList &&
+              option.classList.contains("quiz-multiple-choice-option-wrap");
             let labelEl = null;
             if (isWrap) {
-              labelEl = option.querySelector('.quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label');
+              labelEl = option.querySelector(
+                ".quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label"
+              );
             } else {
-              const labelledBy = option.getAttribute && option.getAttribute('aria-labelledby');
+              const labelledBy =
+                option.getAttribute && option.getAttribute("aria-labelledby");
               if (labelledBy) {
                 const doc = option.ownerDocument || document;
                 labelEl = doc.getElementById(labelledBy);
               }
               if (!labelEl) {
-                const wrap = option.closest && option.closest('.quiz-multiple-choice-option-wrap');
+                const wrap =
+                  option.closest &&
+                  option.closest(".quiz-multiple-choice-option-wrap");
                 if (wrap) {
-                  labelEl = wrap.querySelector('.quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label');
+                  labelEl = wrap.querySelector(
+                    ".quiz-multiple-choice-option__text, .fr-view, .quiz-multiple-choice-option__label"
+                  );
                 }
               }
             }
-            const rawText = (labelEl ? labelEl.textContent : option.textContent) || "";
-            optionText = rawText.toLowerCase().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+            const rawText =
+              (labelEl ? labelEl.textContent : option.textContent) || "";
+            optionText = rawText
+              .toLowerCase()
+              .replace(/\u00a0/g, " ")
+              .replace(/\s+/g, " ")
+              .trim();
           } catch (e) {
-            optionText = (option.textContent || "").toLowerCase().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+            optionText = (option.textContent || "")
+              .toLowerCase()
+              .replace(/\u00a0/g, " ")
+              .replace(/\s+/g, " ")
+              .trim();
           }
 
           console.log(
@@ -1337,7 +1376,8 @@
           try {
             if (
               option.matches &&
-              (option.matches('[role="radio"]') || option.matches('[role="checkbox"]'))
+              (option.matches('[role="radio"]') ||
+                option.matches('[role="checkbox"]'))
             ) {
               roleCtrl = option;
             }
@@ -1352,12 +1392,16 @@
 
           if (roleCtrl) {
             console.log(
-              `🔧 DEBUG: Found role control (${roleCtrl.getAttribute('role')}) for option ${index}, attempting click...`
+              `🔧 DEBUG: Found role control (${roleCtrl.getAttribute(
+                "role"
+              )}) for option ${index}, attempting click...`
             );
             try {
               roleCtrl.focus && roleCtrl.focus();
               console.log(
-                `👁️ Focused on ${roleCtrl.getAttribute('role')} control for option ${index}`
+                `👁️ Focused on ${roleCtrl.getAttribute(
+                  "role"
+                )} control for option ${index}`
               );
             } catch (e) {
               console.log(
@@ -1368,12 +1412,15 @@
             try {
               roleCtrl.click();
               console.log(
-                `🖱️ Clicked ${roleCtrl.getAttribute('role')} control for option ${index}`
+                `🖱️ Clicked ${roleCtrl.getAttribute(
+                  "role"
+                )} control for option ${index}`
               );
               setTimeout(() => {
                 const checked =
-                  roleCtrl.getAttribute && roleCtrl.getAttribute('aria-checked');
-                if (checked === 'true') {
+                  roleCtrl.getAttribute &&
+                  roleCtrl.getAttribute("aria-checked");
+                if (checked === "true") {
                   console.log(
                     `✅ CLICK VERIFIED: Option ${index} aria-checked=true`
                   );
@@ -1402,7 +1449,9 @@
               );
             }
           } else {
-            console.log(`❌ DEBUG: No clickable input found in option ${index}`);
+            console.log(
+              `❌ DEBUG: No clickable input found in option ${index}`
+            );
             console.log(
               `🔧 DEBUG: Option structure:`,
               option.outerHTML.substring(0, 200)
