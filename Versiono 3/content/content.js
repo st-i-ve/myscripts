@@ -123,7 +123,7 @@
     an: "right",
     shot: "right",
     my: "right",
-    
+
     Compassion: "left",
     Dreaming: "left",
     Generalization: "left",
@@ -919,6 +919,73 @@
 
     "clinic.*old hardware.*relevant risk question":
       "Are the old computers accessible through the clinic’s network?",
+
+    "developers.*(disagree|conflict|cannot agree).*order.*work.*redo|developers.*work.*introduced.*new.*redo.*schedule":
+      ["Collaborative environment"],
+    "developers.*trouble.*coordinat.*data.*formatted.*incompatible.*tools": [
+      "Collaborative environment",
+    ],
+    "developers.*hard.*read.*understand.*complicated.*functions.*logic": [
+      "Easy visualization",
+    ],
+
+    //digital literacy
+
+    "data\\s+gathering.*method.*identify.*people.*preferences.*behaviors.*viewpoints":
+      ["Surveys and questionnaires"],
+    "company.*discontinue.*product.*no longer needs.*user data.*accountability.*responsibility.*ethical data collection":
+      ["Dispose of the data securely when it’s no longer needed"],
+    "which.*following.*measures.*ensure.*data.*validity.*digital.*data.*analysis":
+      [
+        "Use proven tools and methods for data collection.",
+        "Clearly define objectives and align data collection methods with the objectives.",
+      ],
+    "data\\s+analyst.*present.*findings.*user\\s+engagement.*nontechnical.*colleagues.*advantage.*visual\\s+data":
+      [
+        "It makes complex data easier to understand for everyone, regardless of their expertise.",
+      ],
+
+    //applying ux
+
+    "how.*make.*your.*message.*clear": ["All of the above"],
+    "how.*make.*your.*message.*heard": ["Check in with your audience"],
+    "which.*following.*clarifying.*questions.*useful": ["All of the above"],
+    "what.*aspect.*well[-]?developed.*critical.*thinking": ["All of the above"],
+    "what.*critical.*thinking": [
+      "A process for analyzing and evaluating your thinking",
+    ],
+    "what.*aspect.*well[-]?developed.*critical.*thinking": ["All of the above"],
+    "which.*following.*example.*system": ["All of the above"],
+    "when.*talking.*people.*how.*diversity.*defined": [
+      "By anything that makes people different",
+    ],
+    "what.*advantages.*embracing.*diversity": ["All of the above"],
+    "what.*empathy": ["All of the above"],
+    "which.*belief.*not.*get.*in.*way.*creative.*thinking": [
+      "I have a unique perspective",
+    ],
+    "what.*thought.*discourages.*dismisses.*creative.*thinking": [
+      "All of the above",
+    ],
+    "how.*accessibility.*considerations.*help.*ux.*designers.*design.*process":
+      [
+        "It allows them to use appropriate color contrast so users with visual impairments can read and use the UI effectively.",
+        "It helps them ensure that the design can seamlessly integrate with tools that assist the users.",
+      ],
+    "what.*effective.*self[-]?promotion.*look": [
+      "Demonstrating your skills and letting people know your goals",
+    ],
+    "which.*following.*statements.*correct.*case.*study": [
+      "It provides a sample of a UX designer’s skills, experience, and approach to design problems.",
+      "It includes the decisions and processes the UX designer followed to come up with design ideas.",
+    ],
+    //intro to ux
+    "what.*purpose.*iterative.*process.*ux.*designing": [
+      "To repeatedly test and refine the design, for making it better over time",
+    ],
+    "what.*step.*ucd.*process.*raima.*performed.*better.*avoid.*issues.*app": [
+      "The evaluate step to get real users to try out and evaluate her design to determine needed improvements.",
+    ],
   };
 
   // i created a function to select answers from the database using keyword matching
