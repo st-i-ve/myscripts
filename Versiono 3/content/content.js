@@ -253,7 +253,7 @@
       });
 
       // i wait a bit for the scroll to complete
-      setTimeout(resolve, 200); // aggressive speed: reduced to 150ms
+      setTimeout(resolve, 300); // aggressive speed: reduced to 150ms
     });
   }
 
