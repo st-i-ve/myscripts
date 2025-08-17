@@ -1,3 +1,6 @@
+class="blocks-tabs"
+
+
 // ==UserScript==
 // @name         Auto Click Tabs
 // @namespace    http://tampermonkey.net/
