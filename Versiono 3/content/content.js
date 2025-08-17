@@ -690,6 +690,34 @@
     return expanded > 0;
   }
 
+  // execution function for tabs
+  function executeTabs(element, iframeDoc) {
+    console.log("📑 Executing tabs logic");
+
+    const tabContainer = element.querySelector(".blocks-tabs__header-wrap");
+    if (!tabContainer) {
+      console.log("⚠️ No tab container found");
+      return false;
+    }
+
+    const tabButtons = tabContainer.querySelectorAll(".blocks-tabs__header-item");
+    if (!tabButtons || tabButtons.length === 0) {
+      console.log("⚠️ No tab buttons found");
+      return false;
+    }
+
+    // i click each tab with a delay to ensure proper loading
+    tabButtons.forEach((btn, index) => {
+      setTimeout(() => {
+        console.log(`📑 Clicking tab ${index + 1}:`, btn);
+        btn.click();
+      }, index * 500); // 500ms between clicks
+    });
+
+    console.log(`✅ Initiated clicking of ${tabButtons.length} tabs`);
+    return tabButtons.length > 0;
+  }
+
   // execution function for labeled graphics
   function executeLabeledGraphic(element, iframeDoc) {
     console.log("🔘 Executing labeled graphic logic");
@@ -1672,6 +1700,8 @@
         return executeLabeledGraphic(element, iframeDoc);
       case "continue button - click":
         return executeContinueButton(element, iframeDoc, iframeWin);
+      case "tabs - open all tabs":
+        return executeTabs(element, iframeDoc);
       case "knowledge - answer with radio":
       case "knowledge - answer with checkbox":
       case "knowledge - general":

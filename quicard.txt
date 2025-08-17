@@ -1,0 +1,3 @@
+class="quiz"
+class="quiz__wrap"
+<button class="quiz-header__start-quiz brand--color" tabindex="0" type="button"><span class="brand--ui">START QUIZ</span><i class="icon icon-chevron-right"></i></button>
