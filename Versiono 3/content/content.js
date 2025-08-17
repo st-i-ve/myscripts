@@ -350,6 +350,7 @@
 
       // selectors for process arrow buttons based on the HTML structure
       const PROCESS_SELECTORS = [
+        ".block-process button[data-arrow='next']", // i prioritize the specific selector from block-process.js
         "button.process-arrow.process-arrow--right.process-arrow--scrolling",
         "button[data-testid='arrow-next'][data-arrow='next']",
         "button.process-arrow[aria-label='Next']",
@@ -423,12 +424,27 @@
             processButton.offsetParent !== null &&
             isInViewport(processButton, iframeWin)
           ) {
-            console.log(
-              `⚙️ Clicking process arrow: ${selector} (click ${clickCount + 1})`
-            );
-            processButton.click();
+            // i use rapid-fire clicking for the specific data-arrow="next" button from block-process.js
+            if (selector === ".block-process button[data-arrow='next']") {
+              console.log(
+                `⚙️ Found data-arrow="next" button, using rapid-fire clicking (20 clicks with 50ms intervals)`
+              );
+              for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                  if (processButton.offsetParent !== null) {
+                    processButton.click();
+                  }
+                }, i * 50);
+              }
+              clickCount += 20;
+            } else {
+              console.log(
+                `⚙️ Clicking process arrow: ${selector} (click ${clickCount + 1})`
+              );
+              processButton.click();
+              clickCount++;
+            }
             buttonClicked = true;
-            clickCount++;
             break;
           }
         }
