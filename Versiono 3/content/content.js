@@ -253,7 +253,7 @@
       });
 
       // i wait a bit for the scroll to complete
-      setTimeout(resolve, 300);
+      setTimeout(resolve, 75); // aggressive speed: reduced to 75ms
     });
   }
 
@@ -2079,7 +2079,7 @@
       currentIndex++;
 
       // i continue navigation with faster delay for general blocks
-      const delay = isKnowledgeBlock(category) ? 500 : 100; // reduced from 200ms to 100ms for general blocks
+      const delay = isKnowledgeBlock(category) ? 500 : 25; // aggressive speed: reduced to 25ms for general blocks
       setTimeout(navigateToNextSection, delay);
     } catch (err) {
       console.error("❌ Error in navigation:", err);
