@@ -418,7 +418,7 @@
         // i look for process arrow buttons to click
         let buttonClicked = false;
         for (const selector of PROCESS_SELECTORS) {
-          const processButton = element.querySelector(selector);
+          const processButton = iframeDoc.querySelector(selector);
           if (
             processButton &&
             processButton.offsetParent !== null &&
