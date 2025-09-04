@@ -3,12 +3,17 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.5.3
 // @description  Auto-selects correct answers using regex pattern matching with multi-answer checkbox support - All sections included
-// @match        *://*/*
+// @match        *://skillsline.com/*
 // @grant        none
 // ==/UserScript==
 
 (function () {
   "use strict";
+
+  // i only want this to run on skillsline.com
+  if (!window.location.hostname.includes("skillsline.com")) {
+    return;
+  }
 
   const CHECK_INTERVAL_MS = 200;
   let nextClickTimeout = null;

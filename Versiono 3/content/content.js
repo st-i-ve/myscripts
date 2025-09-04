@@ -419,9 +419,12 @@
         let buttonClicked = false;
         for (const selector of PROCESS_SELECTORS) {
           const processButton = iframeDoc.querySelector(selector);
+          console.log(`🔍 Trying selector: ${selector}, found: ${!!processButton}`);
+          if (processButton) {
+            console.log(`📍 Button visibility - offsetParent: ${!!processButton.offsetParent}, inViewport: ${isInViewport(processButton, iframeWin)}`);
+          }
           if (
             processButton &&
-            processButton.offsetParent !== null &&
             isInViewport(processButton, iframeWin)
           ) {
             // i use rapid-fire clicking for the specific data-arrow="next" button from block-process.js
@@ -431,9 +434,7 @@
               );
               for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
-                  if (processButton.offsetParent !== null) {
-                    processButton.click();
-                  }
+                  processButton.click();
                 }, i * 50);
               }
               clickCount += 20;
