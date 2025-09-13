@@ -3,13 +3,12 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.5.3
 // @description  Auto-selects correct answers using regex pattern matching with multi-answer checkbox support - All sections included
-// @match        *://ibmskillsbuild.skillsline.com/*
+// @match        https://ibmskillsbuild.skillsline.com
 // @grant        none
 // ==/UserScript==
 
 (function () {
   "use strict";
-
 
   const CHECK_INTERVAL_MS = 200;
   let nextClickTimeout = null;
