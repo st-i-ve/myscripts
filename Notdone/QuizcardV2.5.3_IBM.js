@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.5.3
 // @description  Auto-selects correct answers using regex pattern matching with multi-answer checkbox support - All sections included
-// @match        *://skillsline.com/*
+// @match        *://ibmskillsbuild.skillsline.com/*
 // @grant        none
 // ==/UserScript==
 
