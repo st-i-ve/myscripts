@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Paste Board Assistant
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  A paste board for storing and inserting user information
+// @version      2.0
+// @description  A paste board for storing and copying user information
 // @author       You
 // @match        *://*/*
 // @grant        GM_setValue
@@ -17,12 +17,12 @@
   GM_addStyle(`
         #pasteBoardContainer {
             position: fixed;
-            bottom: 5%;
+            bottom: 7%;
             right: 20px;
             z-index: 10000;
             font-family: Arial, sans-serif;
         }
-        
+
         #pasteBoardButton {
             width: 50px;
             height: 50px;
@@ -37,7 +37,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         #pasteBoardPopup {
             position: absolute;
             bottom: 60px;
@@ -49,12 +49,12 @@
             display: none;
             overflow: hidden;
         }
-        
+
         .popup-header {
             display: flex;
             border-bottom: 1px solid #eee;
         }
-        
+
         .tab-button {
             flex: 1;
             padding: 12px;
@@ -63,32 +63,32 @@
             cursor: pointer;
             font-weight: bold;
         }
-        
+
         .tab-button.active {
             background: white;
             border-bottom: 2px solid #4285f4;
         }
-        
+
         .tab-content {
             padding: 15px;
             max-height: 300px;
             overflow-y: auto;
         }
-        
+
         .tab-pane {
             display: none;
         }
-        
+
         .tab-pane.active {
             display: block;
         }
-        
+
         #inputForm {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        
+
         #inputForm textarea {
             height: 200px;
             padding: 10px;
@@ -97,7 +97,7 @@
             resize: vertical;
             font-family: monospace;
         }
-        
+
         #saveButton {
             padding: 10px;
             background-color: #4285f4;
@@ -106,7 +106,7 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         .data-item {
             display: flex;
             justify-content: space-between;
@@ -114,19 +114,19 @@
             padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
-        
+
         .data-label {
             font-weight: bold;
             min-width: 80px;
         }
-        
+
         .data-value {
             flex: 1;
             margin: 0 10px;
             word-break: break-all;
         }
-        
-        .insert-button {
+
+        .copy-button {
             background: #4285f4;
             color: white;
             border: none;
@@ -135,9 +135,27 @@
             cursor: pointer;
             font-size: 12px;
         }
-        
-        .insert-button:hover {
+
+        .copy-button:hover {
             background: #3367d6;
+        }
+
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            z-index: 10001;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .copy-notification.show {
+            opacity: 1;
         }
     `);
 
@@ -221,6 +239,12 @@
   // Add to document
   document.body.appendChild(container);
 
+  // Create notification element
+  const notification = document.createElement("div");
+  notification.className = "copy-notification";
+  notification.textContent = "Copied to clipboard!";
+  document.body.appendChild(notification);
+
   // Tab switching functionality
   const tabButtons = [inputTabButton, dataTabButton];
   const tabPanes = [inputTab, dataTab];
@@ -290,14 +314,7 @@
       if (separatorIndex === -1) continue;
 
       const key = line.substring(0, separatorIndex).trim();
-      let value = line.substring(separatorIndex + 1).trim();
-
-      // Special handling for name to split into first and last
-      if (key.toLowerCase() === "name") {
-        const nameParts = value.split(" ");
-        data["firstName"] = nameParts[0] || "";
-        data["lastName"] = nameParts.slice(1).join(" ") || "";
-      }
+      const value = line.substring(separatorIndex + 1).trim();
 
       data[key.toLowerCase()] = value;
     }
@@ -319,8 +336,6 @@
     const data = JSON.parse(storedData);
     const fields = [
       { key: "name", label: "Name" },
-      { key: "firstname", label: "First Name" },
-      { key: "lastname", label: "Last Name" },
       { key: "email", label: "Email" },
       { key: "ethnicity", label: "Ethnicity" },
       { key: "state", label: "State" },
@@ -345,73 +360,56 @@
         valueSpan.className = "data-value";
         valueSpan.textContent = data[field.key];
 
-        const insertButton = document.createElement("button");
-        insertButton.className = "insert-button";
-        insertButton.textContent = "Insert";
-        insertButton.dataset.value = data[field.key];
+        const copyButton = document.createElement("button");
+        copyButton.className = "copy-button";
+        copyButton.textContent = "Copy";
+        copyButton.dataset.value = data[field.key];
 
-        insertButton.addEventListener("click", () => {
-          simulateTyping(data[field.key]);
+        copyButton.addEventListener("click", () => {
+          copyToClipboard(data[field.key]);
         });
 
         itemDiv.appendChild(labelSpan);
         itemDiv.appendChild(valueSpan);
-        itemDiv.appendChild(insertButton);
+        itemDiv.appendChild(copyButton);
 
         dataContainer.appendChild(itemDiv);
       }
     });
   }
 
-  // Simulate typing into the active field
-  function simulateTyping(text) {
-    const activeElement = document.activeElement;
+  // Copy text to clipboard
+  function copyToClipboard(text) {
+    // Create a temporary textarea element
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
 
-    if (
-      !activeElement ||
-      (activeElement.tagName !== "INPUT" &&
-        activeElement.tagName !== "TEXTAREA" &&
-        !activeElement.isContentEditable)
-    ) {
-      alert("Please click on an input field first.");
-      return;
-    }
+    document.body.appendChild(textarea);
+    textarea.select();
 
     try {
-      // For regular input and textarea elements
-      if (
-        activeElement.tagName === "INPUT" ||
-        activeElement.tagName === "TEXTAREA"
-      ) {
-        const start = activeElement.selectionStart;
-        const end = activeElement.selectionEnd;
-        const value = activeElement.value;
-
-        activeElement.value =
-          value.substring(0, start) + text + value.substring(end);
-        activeElement.selectionStart = activeElement.selectionEnd =
-          start + text.length;
-
-        // Trigger input event for React and other frameworks
-        const event = new Event("input", { bubbles: true });
-        activeElement.dispatchEvent(event);
+      const successful = document.execCommand("copy");
+      if (successful) {
+        showNotification("Copied to clipboard!");
+      } else {
+        showNotification("Failed to copy to clipboard");
       }
-      // For contenteditable elements
-      else if (activeElement.isContentEditable) {
-        const selection = window.getSelection();
-        if (selection.rangeCount) {
-          selection.deleteFromDocument();
-          selection.getRangeAt(0).insertNode(document.createTextNode(text));
-        }
-      }
-
-      // Focus back on the element
-      activeElement.focus();
-    } catch (e) {
-      console.error("Error inserting text:", e);
-      alert(
-        "Could not insert text. Please ensure you have an input field focused."
-      );
+    } catch (err) {
+      showNotification("Failed to copy to clipboard: " + err);
     }
+
+    document.body.removeChild(textarea);
+  }
+
+  // Show notification
+  function showNotification(message) {
+    notification.textContent = message;
+    notification.classList.add("show");
+
+    setTimeout(() => {
+      notification.classList.remove("show");
+    }, 2000);
   }
 })();
