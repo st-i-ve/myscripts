@@ -1,16 +1,3 @@
-{
-  /* <button
-  type="submit"
-  class="styles_button__fF84e"
-  style="width: 100%; cursor: none;"
->
-  <span class="styles_placeholder__znOGn"></span>
-  <span class="styles_label__ilDO2">Submit</span>
-  <span class="styles_placeholder__znOGn"></span>
-</button>; */
-}
-
-// button B
 // ==UserScript==
 // @name         New Userscript
 // @namespace    http://tampermonkey.net/
@@ -25,39 +12,8 @@
 (function () {
   "use strict";
 
-  // Function to create a stack data structure
-  function createStack() {
-    const items = [];
-    return {
-      push: function (element) {
-        items.push(element);
-      },
-      pop: function () {
-        if (this.isEmpty()) {
-          return "Underflow";
-        }
-        return items.pop();
-      },
-      peek: function () {
-        return items[items.length - 1];
-      },
-      isEmpty: function () {
-        return items.length === 0;
-      },
-      size: function () {
-        return items.length;
-      },
-      print: function () {
-        console.log(
-          "Task Stack contents:",
-          items.map((item) => item.title)
-        );
-      },
-      getItems: function () {
-        return [...items];
-      },
-    };
-  }
+  let previousCompletionState = null;
+  let hasInitialized = false;
 
   // Function to check if a task is completed
   function isTaskCompleted(taskElement) {
@@ -81,7 +37,7 @@
       }
     }
 
-    // Additional checks for other completion indicators
+    // Additional checks for completion indicators in classes
     const completedStyles = [
       "complete",
       "completed",
@@ -97,178 +53,160 @@
       }
     }
 
-    // Check parent elements for completion indicators
-    let parent = taskElement.parentElement;
-    while (parent) {
-      for (const cls of parent.classList) {
-        if (
-          completedStyles.some((style) => cls.toLowerCase().includes(style))
-        ) {
-          return true;
-        }
-      }
-      parent = parent.parentElement;
-    }
-
     return false;
   }
 
-  // Function to find and process task items with completion status
-  function processTaskItems() {
-    // Find the container
+  // Function to get current completion state
+  function getCompletionState() {
     const container = document.querySelector(".styles_taskContainer__9ZuGd");
+    if (!container) return null;
 
-    if (!container) {
-      console.log("Task container not found");
-      return null;
-    }
-
-    // Create a new stack
-    const taskStack = createStack();
-
-    // Find all task items within the container
     const taskItems = container.querySelectorAll(".styles_task__QUAyl");
+    const completionState = {
+      total: taskItems.length,
+      completed: 0,
+      tasks: [],
+    };
 
-    console.log(`📋 Found ${taskItems.length} task items:`);
-
-    let completedCount = 0;
-
-    // Process each task item
     taskItems.forEach((taskItem, index) => {
       const header = taskItem.querySelector(".styles_taskHeader__qAGq4 h3");
       const isCompleted = isTaskCompleted(taskItem);
 
       if (isCompleted) {
-        completedCount++;
+        completionState.completed++;
       }
 
-      const taskData = {
-        element: taskItem,
+      completionState.tasks.push({
         index: index,
         title: header ? header.textContent.trim() : `Task ${index + 1}`,
         isCompleted: isCompleted,
-        completionIndicator: isCompleted ? "✅" : "❌",
-      };
-
-      taskStack.push(taskData);
-
-      // Log individual task status
-      console.log(
-        `   ${index + 1}. ${taskData.completionIndicator} "${
-          taskData.title
-        }" - ${isCompleted ? "COMPLETED" : "PENDING"}`
-      );
+      });
     });
 
-    // Log completion summary
-    console.log("\n📊 COMPLETION SUMMARY:");
-    console.log(`   ${completedCount}/${taskItems.length} tasks completed`);
+    return completionState;
+  }
+
+  // Function to log completion status
+  function logCompletionStatus(state, isChange = false) {
+    if (!state || state.total === 0) return;
+
+    if (isChange) {
+      console.log("\n🔄 TASK COMPLETION CHANGE DETECTED");
+    } else {
+      console.log("📋 TASK COMPLETION STATUS");
+    }
+
+    console.log(`   ${state.completed}/${state.total} tasks completed`);
     console.log(
-      `   Progress: ${Math.round((completedCount / taskItems.length) * 100)}%`
+      `   Progress: ${Math.round((state.completed / state.total) * 100)}%`
     );
 
-    // Visual feedback in console
-    if (completedCount === taskItems.length) {
+    // Log individual task status
+    state.tasks.forEach((task) => {
+      console.log(`   ${task.isCompleted ? "✅" : "❌"} ${task.title}`);
+    });
+
+    if (state.completed === state.total) {
       console.log("   🎉 All tasks completed!");
-    } else if (completedCount > 0) {
+    } else if (state.completed > 0) {
       console.log("   ⏳ Keep going!");
     } else {
       console.log("   🚦 No tasks completed yet");
     }
-
-    return {
-      stack: taskStack,
-      completed: completedCount,
-      total: taskItems.length,
-      percentage: Math.round((completedCount / taskItems.length) * 100),
-    };
   }
 
-  // Function to monitor for completion changes
-  function monitorCompletionChanges() {
-    console.log("\n👀 Monitoring for completion changes...");
+  // Function to check for completion changes
+  function checkForCompletionChanges() {
+    const currentState = getCompletionState();
 
-    let lastCompletionState = null;
+    if (!currentState) return;
 
-    const checkForChanges = function () {
-      const result = processTaskItems();
-
-      if (
-        result &&
-        lastCompletionState !== null &&
-        lastCompletionState.completed !== result.completed
-      ) {
-        console.log("\n🔄 CHANGE DETECTED! Completion status updated.");
-        console.log(
-          `   Was: ${lastCompletionState.completed}/${lastCompletionState.total}`
-        );
-        console.log(`   Now: ${result.completed}/${result.total}`);
+    // Check if this is the first run
+    if (!previousCompletionState) {
+      previousCompletionState = currentState;
+      if (!hasInitialized) {
+        logCompletionStatus(currentState, false);
+        hasInitialized = true;
       }
-
-      lastCompletionState = result;
-    };
-
-    // Check every 2 seconds for changes
-    setInterval(checkForChanges, 2000);
-  }
-
-  // Function to add visual indicators to tasks
-  function addVisualIndicators(taskStack) {
-    if (!taskStack) return;
-
-    const tasks = taskStack.getItems();
-
-    tasks.forEach((task) => {
-      // Add visual indicator
-      const indicator = document.createElement("span");
-      indicator.style.marginLeft = "10px";
-      indicator.style.fontWeight = "bold";
-      indicator.textContent = task.isCompleted ? "✅" : "⏳";
-      indicator.title = task.isCompleted ? "Completed" : "Pending";
-
-      // Add to the task header if possible
-      const header = task.element.querySelector(".styles_taskHeader__qAGq4 h3");
-      if (header && !header.querySelector(".completion-indicator")) {
-        header.appendChild(indicator);
-      }
-    });
-  }
-
-  // Main function to initialize everything
-  function initializeTaskChecker() {
-    console.log("🚀 Initializing Task Completion Checker...");
-
-    const result = processTaskItems();
-
-    if (result && result.stack.size() > 0) {
-      addVisualIndicators(result.stack);
-      monitorCompletionChanges();
-
-      // Store for debugging
-      window.taskCompletion = result;
-
-      console.log("\n✨ Task monitoring active!");
-    } else {
-      console.log("❌ No tasks found. Retrying in 2 seconds...");
-      setTimeout(initializeTaskChecker, 2000);
+      return;
     }
+
+    // Check if completion count has changed
+    if (previousCompletionState.completed !== currentState.completed) {
+      logCompletionStatus(currentState, true);
+      previousCompletionState = currentState;
+    }
+
+    // Check if individual task status changed (in case total count stays same but different tasks)
+    let taskStatusChanged = false;
+    for (let i = 0; i < currentState.tasks.length; i++) {
+      if (
+        previousCompletionState.tasks[i] &&
+        previousCompletionState.tasks[i].isCompleted !==
+          currentState.tasks[i].isCompleted
+      ) {
+        taskStatusChanged = true;
+        break;
+      }
+    }
+
+    if (taskStatusChanged) {
+      logCompletionStatus(currentState, true);
+      previousCompletionState = currentState;
+    }
+  }
+
+  // Main initialization function
+  function initializeMonitor() {
+    console.log("🚀 Initializing Task Completion Monitor...");
+
+    // Initial check
+    checkForCompletionChanges();
+
+    // Set up interval to check for changes every second
+    setInterval(checkForCompletionChanges, 1000);
+
+    console.log("👀 Monitoring for completion changes...");
   }
 
   // Wait for page to load
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeTaskChecker);
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(initializeMonitor, 1000);
+    });
   } else {
-    initializeTaskChecker();
+    setTimeout(initializeMonitor, 1000);
   }
 
-  // Observe DOM changes
-  const observer = new MutationObserver(function () {
-    console.log("🔄 DOM changed - checking tasks...");
-    setTimeout(initializeTaskChecker, 500);
+  // MutationObserver to detect DOM changes that might affect completion status
+  const observer = new MutationObserver(function (mutations) {
+    let shouldCheck = false;
+
+    mutations.forEach((mutation) => {
+      if (mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0) {
+        shouldCheck = true;
+      }
+
+      // Check if attributes changed that might affect completion status
+      if (
+        mutation.type === "attributes" &&
+        (mutation.attributeName === "class" ||
+          mutation.attributeName === "style")
+      ) {
+        shouldCheck = true;
+      }
+    });
+
+    if (shouldCheck) {
+      setTimeout(checkForCompletionChanges, 300);
+    }
   });
 
+  // Start observing
   observer.observe(document.body, {
     childList: true,
     subtree: true,
+    attributes: true,
+    attributeFilter: ["class", "style"],
   });
 })();
