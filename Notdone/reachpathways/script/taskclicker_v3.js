@@ -89,9 +89,9 @@
     return tasks;
   }
 
-  // Function to find and click the "Mark as Complete" button
-  function clickMarkCompleteButton() {
-    // Look for the button inside the task controls container
+  // Function to find and click the appropriate completion button
+  function clickCompletionButton() {
+    // First check if there's a "Mark as Complete" button
     const markCompleteBtn = document.querySelector(
       ".styles_taskControls__lYLu8 button.styles_button__fF84e"
     );
@@ -105,24 +105,65 @@
       }
     }
 
+    // If no "Mark as Complete" button, look for a "Submit" button in a form
+    const submitForm = document.querySelector(
+      ".styles_taskControls__lYLu8 form.styles_main__g_s38"
+    );
+    if (submitForm) {
+      const submitBtn = submitForm.querySelector("button.styles_button__fF84e");
+      if (submitBtn) {
+        const btnText = submitBtn.querySelector(".styles_label__ilDO2");
+        if (btnText && btnText.textContent.includes("Submit")) {
+          console.log('✅ Clicking "Submit" button');
+
+          // Check if there's a textarea that needs to be filled
+          const textarea = submitForm.querySelector("textarea");
+          if (textarea && !textarea.value.trim()) {
+            // Try to find a link in the task details that could be used as response
+            const linkElement = document.querySelector(
+              ".styles_defaultLink__AIksh"
+            );
+            if (linkElement && linkElement.href) {
+              console.log(`📝 Filling response with: ${linkElement.href}`);
+              textarea.value = linkElement.href;
+            } else {
+              // Fill with a placeholder if no link found
+              textarea.value = "Task completed using automation script";
+            }
+          }
+
+          submitBtn.click();
+          return true;
+        }
+      }
+    }
+
     // Alternative search if not found in the specific container
     const allButtons = document.querySelectorAll("button.styles_button__fF84e");
     for (const button of allButtons) {
       const btnText = button.querySelector(".styles_label__ilDO2");
-      if (btnText && btnText.textContent.includes("Mark as Complete")) {
-        console.log('✅ Found "Mark as Complete" button (alternative search)');
-        button.click();
-        return true;
+      if (btnText) {
+        if (btnText.textContent.includes("Mark as Complete")) {
+          console.log(
+            '✅ Found "Mark as Complete" button (alternative search)'
+          );
+          button.click();
+          return true;
+        } else if (btnText.textContent.includes("Submit")) {
+          console.log('✅ Found "Submit" button (alternative search)');
+          button.click();
+          return true;
+        }
       }
     }
 
-    console.log('❌ "Mark as Complete" button not found');
-    console.log(
-      "   Searching for elements with class: styles_taskControls__lYLu8"
-    );
+    console.log("❌ No completion button found");
     console.log(
       "   Available buttons:",
-      document.querySelectorAll("button.styles_button__fF84e").length
+      Array.from(allButtons).map((btn) => {
+        const text = btn.querySelector(".styles_label__ilDO2");
+        return text ? text.textContent : "No text";
+      })
     );
     return false;
   }
@@ -141,13 +182,13 @@
     const nextTask = incompleteTasks[0];
     console.log(`📋 Attempting to complete: "${nextTask.title}"`);
 
-    // Click the task to activate it (this should make the Mark as Complete button visible)
+    // Click the task to activate it (this should make the completion button visible)
     nextTask.element.click();
     console.log("👆 Clicked task");
 
-    // Wait for UI to update, then click the mark complete button
+    // Wait for UI to update, then click the appropriate button
     setTimeout(() => {
-      const success = clickMarkCompleteButton();
+      const success = clickCompletionButton();
 
       if (success) {
         // Check if task was actually marked complete after a delay
