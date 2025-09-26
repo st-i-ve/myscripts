@@ -13,5 +13,5 @@
     // Refresh the page every 30 seconds (30,000 milliseconds)
     setTimeout(() => {
         location.reload();
-    }, 30000);
+    }, 60000);
 })();
